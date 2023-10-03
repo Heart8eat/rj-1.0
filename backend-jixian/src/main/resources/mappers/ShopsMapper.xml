@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rj.backendjixian.mapper.ShopMapper">
+    <resultMap id="BaseResultMap" type="com.rj.backendjixian.entity.ShopEntity">
+        <id column="id" jdbcType="CHAR" property="id"/>
+        <result column="name" jdbcType="CHAR" property="name"/>
+        <result column="introduction" jdbcType="CHAR" property="introduction"/>
+        <result column="merchants_id" jdbcType="CHAR" property="merchantsId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        `id`, `name`, `introduction`, `merchants_id`
+    </sql>
+
+</mapper>
