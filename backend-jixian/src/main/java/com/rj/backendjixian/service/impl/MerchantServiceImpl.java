@@ -1,11 +1,11 @@
 package com.rj.backendjixian.service.impl;
 
 
-import org.springframework.stereotype.Service;
-import com.rj.backendjixian.service.IMerchantService;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.entity.MerchantEntity;
 import com.rj.backendjixian.mapper.MerchantMapper;
-import com.mybatisflex.spring.service.impl.ServiceImpl;
+import com.rj.backendjixian.service.IMerchantService;
+import org.springframework.stereotype.Service;
 
 /**
  * 服务层实现。

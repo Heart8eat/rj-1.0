@@ -1,8 +1,8 @@
 package com.rj.backendjixian.service;
 
 
-import com.rj.backendjixian.entity.ShopEntity;
 import com.mybatisflex.core.service.IService;
+import com.rj.backendjixian.entity.ShopEntity;
 
 /**
  * 服务层。

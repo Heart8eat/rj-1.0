@@ -1,11 +1,11 @@
 package com.rj.backendjixian.service.impl;
 
 
-import org.springframework.stereotype.Service;
-import com.rj.backendjixian.service.IBuyerService;
+import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.entity.BuyerEntity;
 import com.rj.backendjixian.mapper.BuyerMapper;
-import com.mybatisflex.spring.service.impl.ServiceImpl;
+import com.rj.backendjixian.service.IBuyerService;
+import org.springframework.stereotype.Service;
 
 
 @Service

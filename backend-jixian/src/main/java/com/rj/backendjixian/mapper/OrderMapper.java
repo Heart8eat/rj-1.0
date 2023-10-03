@@ -1,7 +1,7 @@
 package com.rj.backendjixian.mapper;
 
-import com.rj.backendjixian.entity.OrderEntity;
 import com.mybatisflex.core.BaseMapper;
+import com.rj.backendjixian.entity.OrderEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

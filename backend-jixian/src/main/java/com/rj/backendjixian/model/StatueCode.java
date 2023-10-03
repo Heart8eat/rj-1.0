@@ -1,7 +1,6 @@
 package com.rj.backendjixian.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 @AllArgsConstructor
 public enum StatueCode implements IStatueCode{
