@@ -1,8 +1,8 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.rj.backendjixian.entity.GoodEntity;
-import com.rj.backendjixian.model.Response;
+import com.rj.backendjixian.model.dto.Response;
+import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.service.IGoodService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -99,7 +99,7 @@ public class GoodController {
      * 分页查询
      *
      * @param pageNumber 页码
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      * @return 分页对象
      */
     @GetMapping("/page")
@@ -110,7 +110,7 @@ public class GoodController {
     })
     public Response<Page<GoodEntity>> page(@RequestParam int pageNumber,
                                            @RequestParam int pageSize) {
-        Page<GoodEntity> page=Page.of(pageNumber,pageSize);
+        Page<GoodEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(goodService.page(page));
     }
 }

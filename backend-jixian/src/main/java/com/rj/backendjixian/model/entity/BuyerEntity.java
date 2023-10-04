@@ -1,4 +1,4 @@
-package com.rj.backendjixian.entity;
+package com.rj.backendjixian.model.entity;
 
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
@@ -6,10 +6,13 @@ import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import com.mybatisflex.core.keygen.KeyGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
+
 
 /**
  * 实体类。
@@ -21,21 +24,30 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "商铺")
-@Table(value = "shops")
-public class ShopEntity {
+@Schema(name = "buyer")
+@Table(value = "buyers")
+public class BuyerEntity {
 
     @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
     private String id;
 
     @Column(value = "name")
+    @NotBlank(message = "名字为必填项")
+    @Schema(example = "Tom")
     private String name;
 
-    @Column(value = "introduction")
-    private String introduction;
+    @Column(value = "password")
+    @Schema(example = "1234567890")
+    private String password;
 
-    @Column(value = "merchants_id")
-    private String merchantsId;
+    @Column(value = "address")
+    @Schema(example = "杭州")
+    private String address;
+
+    @Column(value = "phone")
+    @Schema(example = "14816714403")
+    @Length(min = 11, max = 11, message = "电话的长度为11")
+    private String phone;
 
 
 }

@@ -1,9 +1,9 @@
-package com.rj.backendjixian.model;
+package com.rj.backendjixian.model.dto;
 
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum StatueCode implements IStatueCode{
+public enum StatueCode implements IStatueCode {
     SUCCESS(200, "操作成功"),
     FAILED(500, "操作失败"),
     VALIDATE_FAILED(404, "参数检验失败"),

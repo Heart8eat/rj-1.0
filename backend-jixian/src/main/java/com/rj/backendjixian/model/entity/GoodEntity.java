@@ -1,4 +1,4 @@
-package com.rj.backendjixian.entity;
+package com.rj.backendjixian.model.entity;
 
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
@@ -21,27 +21,31 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "订单")
-@Table(value = "orders")
-public class OrderEntity {
+@Schema(name = "good")
+@Table(value = "goods")
+public class GoodEntity {
 
     @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
     private String id;
 
-    @Column(value = "status")
-    private Integer status;
+    @Column(value = "price")
+    private Float price;
 
-    @Column(value = "create_time")
-    private String createTime;
+    @Column(value = "name")
+    private String name;
 
-    @Column(value = "finish_time")
-    private String finishTime;
+    @Column(value = "image")
+    private String image;
 
-    @Column(value = "buyer_id")
-    private String buyerId;
+    @Column(value = "quantity")
+    private Integer quantity;
 
     @Column(value = "shop_id")
     private String shopId;
+
+    @Column(value = "status")
+    @Schema(description = "0为下架，1为上架 ，2为冻结")
+    private Integer status;
 
 
 }

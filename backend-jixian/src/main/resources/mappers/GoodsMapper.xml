@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rj.backendjixian.mapper.GoodMapper">
-    <resultMap id="BaseResultMap" type="com.rj.backendjixian.entity.GoodEntity">
+    <resultMap id="BaseResultMap" type="com.rj.backendjixian.model.entity.GoodEntity">
         <id column="id" jdbcType="CHAR" property="id"/>
         <result column="price" jdbcType="REAL" property="price"/>
         <result column="name" jdbcType="CHAR" property="name"/>
@@ -13,7 +13,8 @@
         <result column="status" jdbcType="INTEGER" property="status"/>
     </resultMap>
     <sql id="Base_Column_List">
-        `id`, `price`, `name`, `image`, `quantity`, `shop_id`, `status`
+        `id`
+        , `price`, `name`, `image`, `quantity`, `shop_id`, `status`
     </sql>
 
 </mapper>

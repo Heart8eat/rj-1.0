@@ -11,7 +11,8 @@
         <result column="phone" jdbcType="CHAR" property="phone"/>
     </resultMap>
     <sql id="Base_Column_List">
-        `id`, `name`, `password`, `address`, `phone`
+        `id`
+        , `name`, `password`, `address`, `phone`
     </sql>
 
 </mapper>

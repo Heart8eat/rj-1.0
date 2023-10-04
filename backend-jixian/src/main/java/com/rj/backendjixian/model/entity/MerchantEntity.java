@@ -1,4 +1,4 @@
-package com.rj.backendjixian.entity;
+package com.rj.backendjixian.model.entity;
 
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
@@ -11,35 +11,31 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+/**
+ * 实体类。
+ *
+ * @author mybatis-flex-helper automatic generation
+ * @since 1.0
+ */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "商品")
-@Table(value = "goods")
-public class GoodEntity {
+@Schema(name = "merchant")
+@Table(value = "merchants")
+public class MerchantEntity {
 
     @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
     private String id;
 
-    @Column(value = "price")
-    private Float price;
-
     @Column(value = "name")
     private String name;
 
-    @Column(value = "image")
-    private String image;
+    @Column(value = "password")
+    private String password;
 
-    @Column(value = "quantity")
-    private Integer quantity;
-
-    @Column(value = "shop_id")
-    private String shopId;
-
-    @Column(value = "status")
-    private Integer status;
+    @Column(value = "phone")
+    private String phone;
 
 
 }

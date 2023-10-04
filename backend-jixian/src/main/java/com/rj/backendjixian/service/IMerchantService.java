@@ -2,7 +2,7 @@ package com.rj.backendjixian.service;
 
 
 import com.mybatisflex.core.service.IService;
-import com.rj.backendjixian.entity.MerchantEntity;
+import com.rj.backendjixian.model.entity.MerchantEntity;
 
 /**
  * 服务层。

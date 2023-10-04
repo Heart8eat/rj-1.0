@@ -1,6 +1,5 @@
-package com.rj.backendjixian.model;
+package com.rj.backendjixian.model.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,20 +7,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(name = "统一返回体")
-public class Response<T>{
-    @Schema(example = "200")
+public class Response<T> {
     private long code;
-    @Schema(example = "操作成功")
     private String message;
     private T data;
+
     /**
      * 成功无返回
-     *
      */
     public static <T> Response<T> success() {
-        return new Response<T>(StatueCode.SUCCESS.getCode(), StatueCode.SUCCESS.getMessage(),null);
+        return new Response<T>(StatueCode.SUCCESS.getCode(), StatueCode.SUCCESS.getMessage(), null);
     }
+
     /**
      * 成功返回结果
      *
@@ -30,11 +27,12 @@ public class Response<T>{
     public static <T> Response<T> success(T data) {
         return new Response<T>(StatueCode.SUCCESS.getCode(), StatueCode.SUCCESS.getMessage(), data);
     }
+
     /**
      * 成功返回结果
      *
-     * @param data 获取的数据
-     * @param  message 提示信息
+     * @param data    获取的数据
+     * @param message 提示信息
      */
     public static <T> Response<T> success(T data, String message) {
         return new Response<T>(StatueCode.SUCCESS.getCode(), message, data);
@@ -42,6 +40,7 @@ public class Response<T>{
 
     /**
      * 失败返回结果
+     *
      * @param errorCode 错误码
      */
     public static <T> Response<T> failed(IStatueCode errorCode) {
@@ -50,15 +49,17 @@ public class Response<T>{
 
     /**
      * 失败返回结果
+     *
      * @param errorCode 错误码
-     * @param message 错误信息
+     * @param message   错误信息
      */
-    public static <T> Response<T> failed(IStatueCode errorCode,String message) {
+    public static <T> Response<T> failed(IStatueCode errorCode, String message) {
         return new Response<T>(errorCode.getCode(), message, null);
     }
 
     /**
      * 失败返回结果
+     *
      * @param message 提示信息
      */
     public static <T> Response<T> failed(String message) {
@@ -81,6 +82,7 @@ public class Response<T>{
 
     /**
      * 参数验证失败返回结果
+     *
      * @param message 提示信息
      */
     public static <T> Response<T> validateFailed(String message) {

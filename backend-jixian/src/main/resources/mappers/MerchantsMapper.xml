@@ -3,14 +3,15 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rj.backendjixian.mapper.MerchantMapper">
-    <resultMap id="BaseResultMap" type="com.rj.backendjixian.entity.MerchantEntity">
+    <resultMap id="BaseResultMap" type="com.rj.backendjixian.model.entity.MerchantEntity">
         <id column="id" jdbcType="CHAR" property="id"/>
         <result column="name" jdbcType="CHAR" property="name"/>
         <result column="password" jdbcType="CHAR" property="password"/>
         <result column="phone" jdbcType="CHAR" property="phone"/>
     </resultMap>
     <sql id="Base_Column_List">
-        `id`, `name`, `password`, `phone`
+        `id`
+        , `name`, `password`, `phone`
     </sql>
 
 </mapper>

@@ -1,4 +1,4 @@
-package com.rj.backendjixian.entity;
+package com.rj.backendjixian.model.entity;
 
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
@@ -21,21 +21,28 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "商品订单关联")
-@Table(value = "goods_orders")
-public class GoodOrderEntity {
+@Schema(name = "order")
+@Table(value = "orders")
+public class OrderEntity {
 
     @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
-    private String goodId;
+    private String id;
 
-    @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
-    private String orderId;
+    @Column(value = "status")
+    @Schema(description = "0为 ，1为 ，2为 ")
+    private Integer status;
 
-    @Column(value = "quantity")
-    private Integer quantity;
+    @Column(value = "create_time", onInsertValue = "datetime('now','localtime')")
+    private String createTime;
 
-    @Column(value = "sum")
-    private Float sum;
+    @Column(value = "finish_time")
+    private String finishTime;
+
+    @Column(value = "buyer_id")
+    private String buyerId;
+
+    @Column(value = "shop_id")
+    private String shopId;
 
 
 }

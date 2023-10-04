@@ -2,8 +2,8 @@ package com.rj.backendjixian.service.impl;
 
 
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import com.rj.backendjixian.entity.MerchantEntity;
 import com.rj.backendjixian.mapper.MerchantMapper;
+import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.service.IMerchantService;
 import org.springframework.stereotype.Service;
 

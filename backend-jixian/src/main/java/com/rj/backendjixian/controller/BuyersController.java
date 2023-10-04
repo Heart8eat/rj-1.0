@@ -1,8 +1,8 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.rj.backendjixian.entity.BuyerEntity;
-import com.rj.backendjixian.model.Response;
+import com.rj.backendjixian.model.dto.Response;
+import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.service.IBuyerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -38,7 +39,7 @@ public class BuyersController {
      */
     @PostMapping("/save")
     @Operation(summary = "添加")
-    public Response<Boolean> save(@RequestBody BuyerEntity buyer) {
+    public Response<Boolean> save(@Schema() @Validated @RequestBody BuyerEntity buyer) {
         return Response.success(buyerService.save(buyer));
     }
 
@@ -104,7 +105,7 @@ public class BuyersController {
      * 分页查询
      *
      * @param pageNumber 页码
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      * @return 分页对象
      */
     @GetMapping("/page")
@@ -115,7 +116,7 @@ public class BuyersController {
     })
     public Response<Page<BuyerEntity>> page(@RequestParam int pageNumber,
                                             @RequestParam int pageSize) {
-        Page<BuyerEntity> page=Page.of(pageNumber,pageSize);
+        Page<BuyerEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(buyerService.page(page));
     }
 }

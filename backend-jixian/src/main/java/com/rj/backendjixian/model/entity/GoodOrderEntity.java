@@ -1,4 +1,4 @@
-package com.rj.backendjixian.entity;
+package com.rj.backendjixian.model.entity;
 
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
@@ -21,24 +21,21 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "买家")
-@Table(value = "buyers")
-public class BuyerEntity {
+@Schema(name = "goodOrder")
+@Table(value = "goods_orders")
+public class GoodOrderEntity {
 
     @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
-    private String id;
+    private String goodId;
 
-    @Column(value = "name")
-    private String name;
+    @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
+    private String orderId;
 
-    @Column(value = "password")
-    private String password;
+    @Column(value = "quantity")
+    private Integer quantity;
 
-    @Column(value = "address")
-    private String address;
-
-    @Column(value = "phone")
-    private String phone;
+    @Column(value = "sum")
+    private Float sum;
 
 
 }

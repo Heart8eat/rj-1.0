@@ -1,8 +1,8 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.rj.backendjixian.entity.MerchantEntity;
-import com.rj.backendjixian.model.Response;
+import com.rj.backendjixian.model.dto.Response;
+import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.service.IMerchantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -104,7 +104,7 @@ public class MerchantController {
      * 分页查询
      *
      * @param pageNumber 页码
-     * @param pageSize 每页大小
+     * @param pageSize   每页大小
      * @return 分页对象
      */
     @GetMapping("/page")
@@ -115,7 +115,7 @@ public class MerchantController {
     })
     public Response<Page<MerchantEntity>> page(@RequestParam int pageNumber,
                                                @RequestParam int pageSize) {
-        Page<MerchantEntity> page=Page.of(pageNumber,pageSize);
+        Page<MerchantEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(merchantsService.page(page));
     }
 }
