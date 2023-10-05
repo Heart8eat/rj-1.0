@@ -23,3 +23,7 @@ springdoc:
   # 是否启用接口文档
   api-docs:
     enabled: true
+files:
+  upload:
+    fileUploadPath: upload
+    permittedFileType: jpg,jpeg,ico,tiff,gif,svg,webp,png,bmp
