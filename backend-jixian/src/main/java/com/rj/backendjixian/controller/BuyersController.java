@@ -1,7 +1,7 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.rj.backendjixian.model.dto.Response;
+import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.service.IBuyerService;
 import io.swagger.v3.oas.annotations.Operation;

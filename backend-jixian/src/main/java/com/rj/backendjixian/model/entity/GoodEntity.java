@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "good")
+@Schema(name = "GoodEntity")
 @Table(value = "goods")
 public class GoodEntity {
 

@@ -1,7 +1,7 @@
 package com.rj.backendjixian.handler;
 
-import com.rj.backendjixian.model.dto.Response;
-import com.rj.backendjixian.model.dto.StatueCode;
+import com.rj.backendjixian.model.vo.Response;
+import com.rj.backendjixian.model.vo.StatueCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.UncategorizedSQLException;
@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-;import java.io.IOException;
+import java.io.IOException;
+
+;
 
 @RestControllerAdvice
 @Slf4j

@@ -1,4 +1,4 @@
-package com.rj.backendjixian.model.dto;
+package com.rj.backendjixian.model.vo;
 
 public interface IStatueCode {
     /**

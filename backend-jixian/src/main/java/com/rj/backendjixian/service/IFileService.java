@@ -8,4 +8,5 @@ import java.util.List;
 public interface IFileService {
     String upload(MultipartFile file) throws IOException;
     List<String> batchUpload(MultipartFile[] files) throws IOException;
+    byte[] getFileByName(String name) throws IOException;
 }

@@ -1,6 +1,7 @@
 package com.rj.backendjixian.service.impl;
 
 import cn.hutool.core.io.FileTypeUtil;
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
@@ -68,5 +69,20 @@ public class FileServiceImpl implements IFileService {
             fileNames.add(upload(file));
         }
         return fileNames;
+    }
+
+    @Override
+    public byte[] getFileByName(String name) throws IOException {
+        File uploadParentFile = new File(fileUploadConfig.getFileUploadPath());
+        File[] exitsFiles=uploadParentFile.listFiles();
+        if(exitsFiles==null){
+            throw new IOException("没有任何上传的文件");
+        }
+        for (File f:exitsFiles) {
+            if(f.getName().equals(name)){
+                return FileUtil.getInputStream(f).readAllBytes();
+            }
+        }
+        throw new IOException("不存在该文件");
     }
 }
