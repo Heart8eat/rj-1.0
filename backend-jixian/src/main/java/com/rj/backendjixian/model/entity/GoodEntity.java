@@ -47,5 +47,28 @@ public class GoodEntity {
     @Schema(description = "0为下架，1为上架 ，2为冻结")
     private Integer status;
 
+    @Column(value = "type")
+    @Schema(description = "类别")
+    private String type;
+
+    @Column(value = "variety")
+    @Schema(description = "品种")
+    private String variety;
+
+    @Column(value = "weight")
+    @Schema(description = "重量")
+    private String weight;
+
+    @Column(value = "store")
+    @Schema(description = "贮藏方式")
+    private String store;
+
+    @Column(value = "source")
+    @Schema(description = "产地")
+    private String source;
+
+    @Column(value = "entrance")
+    @Schema(description = "进口/国产")
+    private String entrance;
 
 }
