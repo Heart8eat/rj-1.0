@@ -1,16 +1,11 @@
 package com.rj.backendjixian.model.vo;
 
 import cn.hutool.core.util.StrUtil;
-import com.mybatisflex.annotation.Column;
-import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
-import com.mybatisflex.core.keygen.KeyGenerators;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 /**
  * 用户浏览商品页面商品简略数据类。
