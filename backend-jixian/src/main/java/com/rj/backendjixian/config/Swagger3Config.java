@@ -40,6 +40,7 @@ public class Swagger3Config {
                 .pathsToMatch("/buyers/**")
                 .build();
     }
+
     @Bean
     public GroupedOpenApi goodApi() {
         return GroupedOpenApi.builder()
@@ -47,6 +48,7 @@ public class Swagger3Config {
                 .pathsToMatch("/goods/**")
                 .build();
     }
+
     @Bean
     public GroupedOpenApi merchantApi() {
         return GroupedOpenApi.builder()
@@ -54,6 +56,7 @@ public class Swagger3Config {
                 .pathsToMatch("/merchants/**")
                 .build();
     }
+
     @Bean
     public GroupedOpenApi orderApi() {
         return GroupedOpenApi.builder()
@@ -61,6 +64,7 @@ public class Swagger3Config {
                 .pathsToMatch("/orders/**")
                 .build();
     }
+
     @Bean
     public GroupedOpenApi shopApi() {
         return GroupedOpenApi.builder()

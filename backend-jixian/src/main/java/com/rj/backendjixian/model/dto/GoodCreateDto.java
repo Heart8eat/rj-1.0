@@ -2,6 +2,7 @@ package com.rj.backendjixian.model.dto;
 
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class GoodCreateDto {
+    @NotBlank(message = "商铺id不能为空")
     private String shopId;
 
     private Float price;
@@ -47,18 +49,15 @@ public class GoodCreateDto {
     @Schema(description = "进口/国产")
     private String entrance;
 
-    @Schema(description = "上架日期")
-    private String shelfDate;
-    public GoodEntity dto2Entity(){
-        GoodEntity goodEntity=new GoodEntity();
-        goodEntity.setImage(String.join(",",this.image));
+    public GoodEntity dto2Entity() {
+        GoodEntity goodEntity = new GoodEntity();
+        goodEntity.setImage(String.join(",", this.image));
         goodEntity.setName(this.name);
         goodEntity.setEntrance(this.entrance);
         goodEntity.setPrice(this.price);
         goodEntity.setQuantity(this.quantity);
         goodEntity.setSource(this.source);
         goodEntity.setQuantity(this.quantity);
-        goodEntity.setShelfDate(this.shelfDate);
         goodEntity.setStore(this.store);
         goodEntity.setVariety(this.variety);
         goodEntity.setType(this.type);

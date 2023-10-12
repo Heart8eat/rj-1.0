@@ -1,31 +1,23 @@
 package com.rj.backendjixian.model.vo;
 
+import cn.hutool.core.util.StrUtil;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
-/**
- * 商品详情页面数据类
- *
- * @author 毛天航
- * @since 1.0
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoodDetailsVo {
-    private Float price;
+public class HistoryGoodVo {
 
     private String name;
 
-    private List<String> image;
-//    库存暂时没有
-//    private Integer quantity;
+    private String image;
+
 
     @Schema(description = "类别")
     private String type;
@@ -53,15 +45,15 @@ public class GoodDetailsVo {
     @Schema(description = "上架日期")
     private String shelfDate;
 
-    public GoodDetailsVo(GoodEntity goodEntity) {
-        this.entrance = goodEntity.getEntrance();
-        this.shelfDate = goodEntity.getShelfDate();
-        this.store = goodEntity.getStore();
-        this.price = goodEntity.getPrice();
-        this.variety = goodEntity.getVariety();
-        this.image = List.of(StringUtils.split(goodEntity.getImage(), ","));
+    public HistoryGoodVo(GoodEntity goodEntity) {
         this.name = goodEntity.getName();
-        this.type = goodEntity.getType();
-        this.weight = goodEntity.getWeight();
+        this.image = StrUtil.split(goodEntity.getImage(), ",").get(0);
+        this.type=goodEntity.getType();
+        this.variety=goodEntity.getVariety();
+        this.weight=goodEntity.getWeight();
+        this.store=goodEntity.getStore();
+        this.source=goodEntity.getSource();
+        this.entrance=goodEntity.getEntrance();
+        this.shelfDate=goodEntity.getShelfDate();
     }
 }

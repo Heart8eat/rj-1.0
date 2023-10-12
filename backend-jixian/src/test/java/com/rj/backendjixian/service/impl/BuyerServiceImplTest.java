@@ -7,13 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+
 @SpringBootTest
 class BuyerServiceImplTest {
     @Autowired
     IBuyerService buyerService;
+
     @Test
     void getBuyerOrders() {
-        List<OrderVo> list=buyerService.getBuyerOrders("e9656b856f874e838449fa88fcef60ac");
+        List<OrderVo> list = buyerService.getBuyerOrders("e9656b856f874e838449fa88fcef60ac");
         list.forEach(System.out::println);
     }
 }

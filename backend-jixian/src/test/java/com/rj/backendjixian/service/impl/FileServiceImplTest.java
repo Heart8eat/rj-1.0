@@ -15,19 +15,20 @@ import java.io.IOException;
 class FileServiceImplTest {
     @Autowired
     IFileService fileService;
+
     @Test
     void upload() throws IOException {
         BufferedInputStream in = FileUtil.getInputStream("C:\\Users\\tiantian\\Pictures\\屏幕截图 2023-03-09 112615.png");
-        MultipartFile file=new MockMultipartFile("1",in);
+        MultipartFile file = new MockMultipartFile("1", in);
         fileService.upload(file);
     }
 
     @Test
     void uploadList() throws IOException {
         BufferedInputStream in1 = FileUtil.getInputStream("C:\\Users\\tiantian\\Pictures\\屏幕截图 2023-03-09 114836.png");
-        MultipartFile file1=new MockMultipartFile("1",in1);
+        MultipartFile file1 = new MockMultipartFile("1", in1);
         BufferedInputStream in2 = FileUtil.getInputStream("C:\\Users\\tiantian\\Pictures\\屏幕截图 2023-03-09 112615.png");
-        MultipartFile file2=new MockMultipartFile("1",in2);
-        fileService.batchUpload(new MultipartFile[]{file1,file2});
+        MultipartFile file2 = new MockMultipartFile("1", in2);
+        fileService.batchUpload(new MultipartFile[]{file1, file2});
     }
 }

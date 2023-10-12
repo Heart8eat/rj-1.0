@@ -44,16 +44,18 @@ public class GlobalExceptionHandler {
         log.error("发生参数验证错误异常:-------------->{}", message);
         return Response.validateFailed(message);
     }
+
     @ExceptionHandler(value = UncategorizedSQLException.class)
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     public Response<Void> uncategorizedSQLExceptionHandler(UncategorizedSQLException e) {
         log.error("发生数据库错误异常:-------------->{}\n" +
-                "发生异常的sql语句:-------------->{}", e.getMessage(),e.getSql());
+                "发生异常的sql语句:-------------->{}", e.getMessage(), e.getSql());
         return Response.validateFailed(e.getMessage());
     }
+
     @ExceptionHandler(value = IOException.class)
     public Response<Void> iOExceptionHandler(IOException e) {
-        log.error("发生IO错误异常:-------------->{}\n" ,e.getMessage());
-        return Response.failed(StatueCode.NOT_ACCEPTABLE,e.getMessage());
+        log.error("发生IO错误异常:-------------->{}\n", e.getMessage());
+        return Response.failed(StatueCode.NOT_ACCEPTABLE, e.getMessage());
     }
 }

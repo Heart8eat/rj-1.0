@@ -10,7 +10,7 @@ public enum StatueCode implements IStatueCode {
     VALIDATE_FAILED(404, "参数检验失败"),
     UNAUTHORIZED(401, "暂未登录或token已经过期"),
     FORBIDDEN(403, "没有相关权限"),
-    NOT_ACCEPTABLE(406,"不支持该类型文件");
+    NOT_ACCEPTABLE(406, "不支持该类型文件");
 
 
     private final long code;

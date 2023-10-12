@@ -6,8 +6,8 @@ import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.vo.GoodBriefVo;
 import com.rj.backendjixian.model.vo.GoodDetailsVo;
+import com.rj.backendjixian.model.vo.HistoryGoodVo;
 import com.rj.backendjixian.model.vo.Response;
-import com.rj.backendjixian.service.IFileService;
 import com.rj.backendjixian.service.IGoodService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,10 +16,8 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,36 +31,29 @@ public class GoodController {
 
     @Autowired
     private IGoodService goodService;
-    @Autowired
-    private IFileService fileService;
+
+
     /**
      * 添加
-     * @param imageName
-     * @return 字节流
-     */
-    @GetMapping(path = "/image/{imageName}",produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
-    @Operation(summary = "请求商品图片")
-    public byte[] getImageByName(@PathVariable String imageName) throws IOException {
-      return fileService.getFileByName(imageName);
-    }
-    /**
-     * 添加
+     *
      * @param good
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
     @PostMapping("/save")
     @Operation(summary = "添加")
-    public Response<Boolean> save(GoodEntity good) {
+    public Response<Boolean> save(@RequestBody GoodEntity good) {
         return Response.success(goodService.save(good));
     }
+
     /**
      * 创建商品
+     *
      * @param good
      * @return {@code true} 创建成功，{@code false} 创建失败
      */
     @PostMapping("/create")
     @Operation(summary = "创建商品")
-    public Response<Boolean> create(GoodCreateDto good) {
+    public Response<Boolean> create(@RequestBody GoodCreateDto good) {
         return Response.success(goodService.save(good.dto2Entity()));
     }
 
@@ -100,19 +91,42 @@ public class GoodController {
      *
      * @return 所有上架商品
      */
-    @GetMapping("/listGoodBrief")
+    @GetMapping("/getGoodBriefList")
     @Operation(summary = "查询所有上架商品的简略信息")
-    public Response<List<GoodBriefVo>> listGoodBrief() {
-        QueryWrapper queryWrapper=QueryWrapper.create()
-                .select(GOOD_ENTITY.ID,GOOD_ENTITY.NAME,GOOD_ENTITY.PRICE,
+    public Response<List<GoodBriefVo>> getGoodBriefList() {
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(GOOD_ENTITY.ID, GOOD_ENTITY.NAME, GOOD_ENTITY.PRICE,
                         GOOD_ENTITY.IMAGE)
                 .from(GOOD_ENTITY)
                 .where(GOOD_ENTITY.STATUS.eq(1));
-        List<GoodEntity> goodEntities=goodService.list(queryWrapper);
-        List<GoodBriefVo> goodBriefVos=goodEntities.stream()
+        List<GoodEntity> goodEntities = goodService.list(queryWrapper);
+        List<GoodBriefVo> goodBriefVos = goodEntities.stream()
                 .map(GoodBriefVo::new).toList();
         return Response.success(goodBriefVos);
     }
+    /**
+     * 查询历史商品页面接口
+     * @param shop_id 店铺id
+     * @return 所有历史商品
+     */
+    @GetMapping("/getHistoryGoodList")
+    @Operation(summary = "查询所有历史商品")
+    @Parameters(value = {
+            @Parameter(name = "shop_id", description = "商铺id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<List<HistoryGoodVo>> getHistoryGoodList(@RequestParam Serializable shop_id) {
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(GOOD_ENTITY.NAME, GOOD_ENTITY.IMAGE,GOOD_ENTITY.ENTRANCE,GOOD_ENTITY.SHELF_DATE,
+                        GOOD_ENTITY.SOURCE,GOOD_ENTITY.STORE,GOOD_ENTITY.TYPE,GOOD_ENTITY.VARIETY,
+                        GOOD_ENTITY.WEIGHT)
+                .from(GOOD_ENTITY)
+                .where(GOOD_ENTITY.SHOP_ID.eq(shop_id).and(GOOD_ENTITY.STATUS.eq(0)));
+        List<GoodEntity> goodEntities = goodService.list(queryWrapper);
+        List<HistoryGoodVo> historyGoodVos = goodEntities.stream()
+                .map(HistoryGoodVo::new).toList();
+        return Response.success(historyGoodVos);
+    }
+
 
 
     /**

@@ -71,7 +71,7 @@ public class GoodEntity {
     @Schema(description = "进口/国产")
     private String entrance;
 
-    @Column(value = "shelf_date")
+    @Column(value = "shelf_date", onInsertValue = "datetime('now')")
     @Schema(description = "上架时间")
     private String shelfDate;
 
