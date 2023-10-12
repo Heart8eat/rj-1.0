@@ -40,13 +40,34 @@ public class Swagger3Config {
                 .pathsToMatch("/buyers/**")
                 .build();
     }
-
     @Bean
-    public GroupedOpenApi otherApi() {
+    public GroupedOpenApi goodApi() {
         return GroupedOpenApi.builder()
-                .group("其他接口")
-                .pathsToMatch("/**")
+                .group("商品接口")
+                .pathsToMatch("/goods/**")
                 .build();
     }
+    @Bean
+    public GroupedOpenApi merchantApi() {
+        return GroupedOpenApi.builder()
+                .group("商家接口")
+                .pathsToMatch("/merchants/**")
+                .build();
+    }
+    @Bean
+    public GroupedOpenApi orderApi() {
+        return GroupedOpenApi.builder()
+                .group("订单接口")
+                .pathsToMatch("/orders/**")
+                .build();
+    }
+    @Bean
+    public GroupedOpenApi shopApi() {
+        return GroupedOpenApi.builder()
+                .group("商铺接口")
+                .pathsToMatch("/shops/**")
+                .build();
+    }
+
 
 }

@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * 实体类。
  *
@@ -70,5 +72,9 @@ public class GoodEntity {
     @Column(value = "entrance")
     @Schema(description = "进口/国产")
     private String entrance;
+
+    @Column(value = "shelf_date")
+    @Schema(description = "上架时间")
+    private String shelfDate;
 
 }

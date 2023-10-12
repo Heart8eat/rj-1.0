@@ -37,5 +37,4 @@ public class ShopEntity {
     @Column(value = "merchants_id")
     private String merchantsId;
 
-
 }
