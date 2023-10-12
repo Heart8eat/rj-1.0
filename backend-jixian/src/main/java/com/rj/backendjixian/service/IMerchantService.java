@@ -11,5 +11,5 @@ import com.rj.backendjixian.model.entity.MerchantEntity;
  * @since 1.0
  */
 public interface IMerchantService extends IService<MerchantEntity> {
-
+    MerchantEntity login(String name, String password);
 }

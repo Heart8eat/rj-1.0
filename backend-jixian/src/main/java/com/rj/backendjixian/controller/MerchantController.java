@@ -4,6 +4,9 @@ import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IMerchantService;
+import com.rj.backendjixian.util.JwtUtil;
+import com.rj.backendjixian.util.LoginToken;
+import com.rj.backendjixian.util.PassToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -77,6 +80,7 @@ public class MerchantController {
      *
      * @return 所有数据
      */
+    @LoginToken
     @GetMapping("/list")
     @Operation(summary = "查询所有")
     public Response<List<MerchantEntity>> list() {
@@ -117,5 +121,24 @@ public class MerchantController {
                                                @RequestParam int pageSize) {
         Page<MerchantEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(merchantsService.page(page));
+    }
+
+    /**
+     *  卖家登录
+     */
+    @GetMapping("/login")
+    @Operation(summary = "登录")
+    @Parameters(value = {
+            @Parameter(name = "name", description = "名字", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "password", description = "密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    @PassToken
+    public Object login(@RequestParam(value = "name")String name,
+                        @RequestParam(value = "password")String password){
+        MerchantEntity merchantEntity = merchantsService.login(name, password);
+
+        String jwtToken = JwtUtil.createToken(merchantEntity);
+
+        return jwtToken;
     }
 }
