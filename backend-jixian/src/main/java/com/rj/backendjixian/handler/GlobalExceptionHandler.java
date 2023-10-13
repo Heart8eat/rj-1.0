@@ -2,6 +2,7 @@ package com.rj.backendjixian.handler;
 
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.StatueCode;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.UncategorizedSQLException;
@@ -57,5 +58,10 @@ public class GlobalExceptionHandler {
     public Response<Void> iOExceptionHandler(IOException e) {
         log.error("发生IO错误异常:-------------->{}\n", e.getMessage());
         return Response.failed(StatueCode.NOT_ACCEPTABLE, e.getMessage());
+    }
+    @ExceptionHandler(value = JwtException.class)
+    public Response<String> jwtExceptionHandler(JwtException e) {
+        log.error("发生token验证错误异常:-------------->{}\n", e.getMessage());
+        return Response.unauthorized(e.getMessage());
     }
 }

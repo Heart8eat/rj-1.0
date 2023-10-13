@@ -2,8 +2,11 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.model.entity.MerchantEntity;
+import com.rj.backendjixian.model.entity.ShopEntity;
+import com.rj.backendjixian.model.vo.MerchantDetailsVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IMerchantService;
+import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
 import com.rj.backendjixian.util.LoginToken;
 import com.rj.backendjixian.util.PassToken;
@@ -12,6 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -81,6 +85,7 @@ public class MerchantController {
      * @return 所有数据
      */
     @LoginToken
+    @SecurityRequirement(name = "token")
     @GetMapping("/list")
     @Operation(summary = "查询所有")
     public Response<List<MerchantEntity>> list() {
@@ -89,18 +94,19 @@ public class MerchantController {
 
 
     /**
-     * 根据主键获取详细信息。
+     * 获取登录商家的详细信息。
      *
-     * @param id merchants主键
      * @return 详情
+     *
      */
-    @GetMapping("/getInfo/{id}")
-    @Operation(summary = "根据主键获取详细信息")
-    @Parameters(value = {
-            @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
-    })
-    public Response<MerchantEntity> getInfo(@PathVariable Serializable id) {
-        return Response.success(merchantsService.getById(id));
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    @GetMapping("/getInfo")
+    @Operation(summary = "获取登录商家的详细信息")
+    public Response<MerchantDetailsVo> getInfo() {
+        MerchantEntity merchant= (MerchantEntity) Context.get("merchant");
+        ShopEntity shop=(ShopEntity) Context.get("shop");
+        return Response.success(new MerchantDetailsVo(merchant,shop));
     }
 
 

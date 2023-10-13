@@ -4,16 +4,20 @@ import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
+import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.model.vo.GoodBriefVo;
 import com.rj.backendjixian.model.vo.GoodDetailsVo;
 import com.rj.backendjixian.model.vo.HistoryGoodVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IGoodService;
+import com.rj.backendjixian.util.Context;
+import com.rj.backendjixian.util.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +31,7 @@ import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_EN
 @RestController
 @RequestMapping("/goods")
 @Tag(name = "商品接口")
+@SecurityRequirement(name = "token")
 public class GoodController {
 
     @Autowired
@@ -51,6 +56,7 @@ public class GoodController {
      * @param good
      * @return {@code true} 创建成功，{@code false} 创建失败
      */
+    @LoginToken
     @PostMapping("/create")
     @Operation(summary = "创建商品")
     public Response<Boolean> create(@RequestBody GoodCreateDto good) {
@@ -63,6 +69,7 @@ public class GoodController {
      * @param id 主键
      * @return {@code true} 删除成功，{@code false} 删除失败
      */
+    @LoginToken
     @DeleteMapping("/remove/{id}")
     @Operation(summary = "根据主键删除")
     @Parameters(value = {
@@ -79,6 +86,7 @@ public class GoodController {
      * @param good
      * @return {@code true} 更新成功，{@code false} 更新失败
      */
+    @LoginToken
     @PutMapping("/update")
     @Operation(summary = "根据主键更新")
     public Response<Boolean> update(@RequestBody GoodEntity good) {
@@ -91,40 +99,27 @@ public class GoodController {
      *
      * @return 所有上架商品
      */
+    @LoginToken
     @GetMapping("/getGoodBriefList")
     @Operation(summary = "查询所有上架商品的简略信息")
     public Response<List<GoodBriefVo>> getGoodBriefList() {
-        QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(GOOD_ENTITY.ID, GOOD_ENTITY.NAME, GOOD_ENTITY.PRICE,
-                        GOOD_ENTITY.IMAGE)
-                .from(GOOD_ENTITY)
-                .where(GOOD_ENTITY.STATUS.eq(1));
-        List<GoodEntity> goodEntities = goodService.list(queryWrapper);
-        List<GoodBriefVo> goodBriefVos = goodEntities.stream()
-                .map(GoodBriefVo::new).toList();
-        return Response.success(goodBriefVos);
+        return Response.success(goodService.getGoodBriefList());
     }
     /**
      * 查询历史商品页面接口
-     * @param shop_id 店铺id
      * @return 所有历史商品
      */
+    @LoginToken
+    @SecurityRequirement(name = "token")
     @GetMapping("/getHistoryGoodList")
     @Operation(summary = "查询所有历史商品")
-    @Parameters(value = {
-            @Parameter(name = "shop_id", description = "商铺id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
-    })
-    public Response<List<HistoryGoodVo>> getHistoryGoodList(@RequestParam Serializable shop_id) {
-        QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(GOOD_ENTITY.NAME, GOOD_ENTITY.IMAGE,GOOD_ENTITY.ENTRANCE,GOOD_ENTITY.SHELF_DATE,
-                        GOOD_ENTITY.SOURCE,GOOD_ENTITY.STORE,GOOD_ENTITY.TYPE,GOOD_ENTITY.VARIETY,
-                        GOOD_ENTITY.WEIGHT)
-                .from(GOOD_ENTITY)
-                .where(GOOD_ENTITY.SHOP_ID.eq(shop_id).and(GOOD_ENTITY.STATUS.eq(0)));
-        List<GoodEntity> goodEntities = goodService.list(queryWrapper);
-        List<HistoryGoodVo> historyGoodVos = goodEntities.stream()
-                .map(HistoryGoodVo::new).toList();
-        return Response.success(historyGoodVos);
+//    @Parameters(value = {
+//            @Parameter(name = "shop_id", description = "商铺id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+//    })
+    public Response<List<HistoryGoodVo>> getHistoryGoodList() {
+        ShopEntity shop= (ShopEntity) Context.get("shop");
+        String shop_id=shop.getId();
+        return Response.success(goodService.getHistoryGoodList(shop_id));
     }
 
 
@@ -135,6 +130,7 @@ public class GoodController {
      * @param id goods主键
      * @return 详情
      */
+    @LoginToken
     @GetMapping("/getGoodDetails/{id}")
     @Operation(summary = "根据主键获取商品详细信息")
     @Parameters(value = {
@@ -152,6 +148,7 @@ public class GoodController {
      * @param pageSize   每页大小
      * @return 分页对象
      */
+    @LoginToken
     @GetMapping("/page")
     @Operation(summary = "分页查询")
     @Parameters(value = {
