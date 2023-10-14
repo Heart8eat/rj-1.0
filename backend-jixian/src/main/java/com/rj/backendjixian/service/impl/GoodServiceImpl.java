@@ -42,4 +42,12 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
         return goodEntities.stream()
                 .map(GoodBriefVo::new).toList();
     }
+
+    @Override
+    public Boolean changeGoodStatue(String id,int statue) {
+        return this.updateChain()
+                .set(GOOD_ENTITY.STATUS,statue)
+                .where(GOOD_ENTITY.ID.eq(id))
+                .update();
+    }
 }

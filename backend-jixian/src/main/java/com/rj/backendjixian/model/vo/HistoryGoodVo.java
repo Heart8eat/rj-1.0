@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryGoodVo {
+    private String id;
 
     private String name;
 
@@ -37,6 +38,7 @@ public class HistoryGoodVo {
     private String shelfDate;
 
     public HistoryGoodVo(GoodEntity goodEntity) {
+        this.id=goodEntity.getId();
         this.name = goodEntity.getName();
         this.image = StrUtil.split(goodEntity.getImage(), ",").get(0);
         this.type=goodEntity.getType();

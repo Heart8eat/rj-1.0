@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.Serializable;
 import java.util.List;
 
+import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
+
 
 @RestController
 @RequestMapping("/goods")
@@ -118,7 +120,20 @@ public class GoodController {
         String shop_id=shop.getId();
         return Response.success(goodService.getHistoryGoodList(shop_id));
     }
-
+    /**
+     * 更改商品状态接口
+     * @return ture false
+     */
+    @LoginToken
+    @PutMapping("/changeGoodStatue/{id}")
+    @Operation(summary = " 更改商品状态")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string")),
+            @Parameter(name = "statue", description = "", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
+    })
+    public Response<Boolean> freeze(@PathVariable Serializable id,@RequestParam int statue) {
+        return Response.success(goodService.changeGoodStatue((String) id,statue));
+    }
 
 
     /**

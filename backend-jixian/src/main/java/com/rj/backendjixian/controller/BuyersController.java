@@ -4,11 +4,13 @@ import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IBuyerService;
+import com.rj.backendjixian.util.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/buyers")
 @Tag(name = "买家接口")
+@SecurityRequirement(name = "token")
 public class BuyersController {
 
     @Autowired
@@ -39,6 +42,7 @@ public class BuyersController {
      */
     @PostMapping("/save")
     @Operation(summary = "添加")
+    @LoginToken
     public Response<Boolean> save(@Schema() @Validated @RequestBody BuyerEntity buyer) {
         return Response.success(buyerService.save(buyer));
     }
@@ -55,6 +59,7 @@ public class BuyersController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
+    @LoginToken
     public Response<Boolean> remove(@PathVariable Serializable id) {
         return Response.success(buyerService.removeById(id));
     }
@@ -68,6 +73,7 @@ public class BuyersController {
      */
     @PutMapping("/update")
     @Operation(summary = "根据主键更新")
+    @LoginToken
     public Response<Boolean> update(@RequestBody BuyerEntity buyer) {
         return Response.success(buyerService.updateById(buyer));
     }
@@ -80,6 +86,7 @@ public class BuyersController {
      */
     @GetMapping("/list")
     @Operation(summary = "查询所有")
+    @LoginToken
     public Response<List<BuyerEntity>> list() {
         return Response.success(buyerService.list());
     }
@@ -96,6 +103,7 @@ public class BuyersController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
+    @LoginToken
     public Response<BuyerEntity> getInfo(@PathVariable Serializable id) {
         return Response.success(buyerService.getById(id));
     }
@@ -114,6 +122,7 @@ public class BuyersController {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
+    @LoginToken
     public Response<Page<BuyerEntity>> page(@RequestParam int pageNumber,
                                             @RequestParam int pageSize) {
         Page<BuyerEntity> page = Page.of(pageNumber, pageSize);
