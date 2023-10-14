@@ -2,8 +2,10 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.model.entity.OrderEntity;
+import com.rj.backendjixian.model.vo.HistoryOrderVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IOrderService;
+import com.rj.backendjixian.util.PassToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -117,5 +119,24 @@ public class OrderController {
                                             @RequestParam int pageSize) {
         Page<OrderEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(ordersService.page(page));
+    }
+
+
+    /**
+     *
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping("/HistoryOrders/{id}")
+    @Operation(summary = "根据商铺ID获取历史订单")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "商铺id", required = true, in = ParameterIn.PATH, schema = @Schema(type = "String"))
+    })
+    @PassToken
+    public List<HistoryOrderVo> HistoryOrders(@PathVariable Serializable id){
+        List<HistoryOrderVo> list = ordersService.getHistoryOrders(id.toString());
+
+        return list;
     }
 }

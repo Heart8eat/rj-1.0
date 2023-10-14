@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "OrderVo")
+@Schema(description = "OrderVo")
 public class OrderVo {
     private String id;
     private Integer status;

@@ -141,4 +141,10 @@ public class MerchantController {
 
         return jwtToken;
     }
+
+    @PutMapping("/UpdatePassword")
+    @Operation(summary = "更改密码")
+    public Response<Integer> updatePassword(@RequestBody MerchantEntity merchant){
+        return Response.success((merchantsService.update(merchant)));
+    }
 }

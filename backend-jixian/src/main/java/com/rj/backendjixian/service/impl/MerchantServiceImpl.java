@@ -24,4 +24,11 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, MerchantEnt
         MerchantEntity merchantEntity = merchantMapper.login(name, password);
         return merchantEntity;
     }
+
+    @Override
+    public int update(MerchantEntity merchantEntity) {
+        return mapper.update(merchantEntity);
+    }
+
+
 }
