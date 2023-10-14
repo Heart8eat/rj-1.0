@@ -1,9 +1,5 @@
 package com.rj.backendjixian.model.vo;
 
-import com.mybatisflex.annotation.Column;
-import com.mybatisflex.annotation.Id;
-import com.mybatisflex.annotation.KeyType;
-import com.mybatisflex.core.keygen.KeyGenerators;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
 import lombok.AllArgsConstructor;

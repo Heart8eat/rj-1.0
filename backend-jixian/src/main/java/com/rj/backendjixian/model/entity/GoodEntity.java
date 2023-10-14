@@ -63,16 +63,11 @@ public class GoodEntity {
     @Schema(description = "贮藏方式")
     private String store;
 
-    @Column(value = "source")
-    @Schema(description = "产地")
-    private String source;
-
-    @Column(value = "entrance")
-    @Schema(description = "进口/国产")
-    private String entrance;
-
     @Column(value = "shelf_date", onInsertValue = "datetime('now')")
     @Schema(description = "上架时间")
     private String shelfDate;
 
+    @Column(value = "description")
+    @Schema(description = "商品描述(可选)")
+    private String description;
 }

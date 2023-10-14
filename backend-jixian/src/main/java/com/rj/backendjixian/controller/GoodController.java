@@ -1,7 +1,6 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.mybatisflex.core.query.QueryWrapper;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
@@ -24,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.util.List;
-
-import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
 
 
 @RestController

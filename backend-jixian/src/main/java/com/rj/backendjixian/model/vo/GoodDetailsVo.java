@@ -1,11 +1,11 @@
 package com.rj.backendjixian.model.vo;
 
+import cn.hutool.core.util.StrUtil;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -46,22 +46,20 @@ public class GoodDetailsVo {
     @Schema(description = "产地")
     private String source;
 
+//    @Schema(description = "商品描述(可选)")
+//    private String description;
 
-    @Schema(description = "进口/国产")
-    private String entrance;
 
-    @Schema(description = "上架日期")
-    private String shelfDate;
+
 
     public GoodDetailsVo(GoodEntity goodEntity) {
-        this.entrance = goodEntity.getEntrance();
-        this.shelfDate = goodEntity.getShelfDate();
         this.store = goodEntity.getStore();
         this.price = goodEntity.getPrice();
         this.variety = goodEntity.getVariety();
-        this.image = List.of(StringUtils.split(goodEntity.getImage(), ","));
+        this.image = StrUtil.split(goodEntity.getImage(), ",");
         this.name = goodEntity.getName();
         this.type = goodEntity.getType();
         this.weight = goodEntity.getWeight();
+//        this.description=goodEntity.getDescription();
     }
 }
