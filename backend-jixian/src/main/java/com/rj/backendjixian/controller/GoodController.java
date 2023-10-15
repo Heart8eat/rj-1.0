@@ -1,7 +1,6 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.mybatisflex.core.query.QueryWrapper;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.OrderEntity;
@@ -122,7 +121,20 @@ public class GoodController {
         String shop_id=shop.getId();
         return Response.success(goodService.getHistoryGoodList(shop_id));
     }
-
+    /**
+     * 更改商品状态接口
+     * @return ture false
+     */
+    @LoginToken
+    @PutMapping("/changeGoodStatue/{id}")
+    @Operation(summary = " 更改商品状态")
+    @Parameters(value = {
+            @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string")),
+            @Parameter(name = "statue", description = "", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
+    })
+    public Response<Boolean> freeze(@PathVariable Serializable id,@RequestParam int statue) {
+        return Response.success(goodService.changeGoodStatue((String) id,statue));
+    }
 
 
     /**

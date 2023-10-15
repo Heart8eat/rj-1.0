@@ -9,6 +9,7 @@ import com.rj.backendjixian.service.IOrderService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.LoginToken;
 import com.rj.backendjixian.util.PassToken;
+import com.rj.backendjixian.util.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -31,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 @Tag(name = "订单接口")
+@SecurityRequirement(name = "token")
 public class OrderController {
 
     @Autowired
@@ -44,6 +46,7 @@ public class OrderController {
      */
     @PostMapping("/save")
     @Operation(summary = "添加")
+    @LoginToken
     public Response<Boolean> save(@RequestBody OrderEntity order) {
         return Response.success(ordersService.save(order));
     }
@@ -60,6 +63,7 @@ public class OrderController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
+    @LoginToken
     public Response<Boolean> remove(@PathVariable Serializable id) {
         return Response.success(ordersService.removeById(id));
     }
@@ -73,6 +77,7 @@ public class OrderController {
      */
     @PutMapping("/update")
     @Operation(summary = "根据主键更新")
+    @LoginToken
     public Response<Boolean> update(@RequestBody OrderEntity order) {
         return Response.success(ordersService.updateById(order));
     }
@@ -85,6 +90,7 @@ public class OrderController {
      */
     @GetMapping("/list")
     @Operation(summary = "查询所有")
+    @LoginToken
     public Response<List<OrderEntity>> list() {
         return Response.success(ordersService.list());
     }
@@ -101,6 +107,7 @@ public class OrderController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
+    @LoginToken
     public Response<OrderEntity> getInfo(@PathVariable Serializable id) {
         return Response.success(ordersService.getById(id));
     }
@@ -119,6 +126,7 @@ public class OrderController {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
+    @LoginToken
     public Response<Page<OrderEntity>> page(@RequestParam int pageNumber,
                                             @RequestParam int pageSize) {
         Page<OrderEntity> page = Page.of(pageNumber, pageSize);

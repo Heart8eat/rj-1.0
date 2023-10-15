@@ -1,5 +1,6 @@
 package com.rj.backendjixian.model.dto;
 
+
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -41,28 +42,22 @@ public class GoodCreateDto {
     @Schema(description = "贮藏方式")
     private String store;
 
-
-    @Schema(description = "产地")
-    private String source;
-
-
-    @Schema(description = "进口/国产")
-    private String entrance;
+    @Schema(description = "商品描述(可选)")
+    private String description;
 
     public GoodEntity dto2Entity() {
         GoodEntity goodEntity = new GoodEntity();
         goodEntity.setImage(String.join(",", this.image));
         goodEntity.setName(this.name);
-        goodEntity.setEntrance(this.entrance);
         goodEntity.setPrice(this.price);
         goodEntity.setQuantity(this.quantity);
-        goodEntity.setSource(this.source);
         goodEntity.setQuantity(this.quantity);
         goodEntity.setStore(this.store);
         goodEntity.setVariety(this.variety);
         goodEntity.setType(this.type);
         goodEntity.setShopId(this.shopId);
         goodEntity.setWeight(this.weight);
+        goodEntity.setDescription(this.description);
         goodEntity.setStatus(1);
         return goodEntity;
     }

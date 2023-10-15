@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryGoodVo {
+    private String id;
 
     private String name;
 
@@ -33,25 +34,17 @@ public class HistoryGoodVo {
     private String store;
 
 
-    @Schema(description = "产地")
-    private String source;
-
-
-    @Schema(description = "进口/国产")
-    private String entrance;
-
     @Schema(description = "上架日期")
     private String shelfDate;
 
     public HistoryGoodVo(GoodEntity goodEntity) {
+        this.id=goodEntity.getId();
         this.name = goodEntity.getName();
         this.image = StrUtil.split(goodEntity.getImage(), ",").get(0);
         this.type=goodEntity.getType();
         this.variety=goodEntity.getVariety();
         this.weight=goodEntity.getWeight();
         this.store=goodEntity.getStore();
-        this.source=goodEntity.getSource();
-        this.entrance=goodEntity.getEntrance();
         this.shelfDate=goodEntity.getShelfDate();
     }
 }

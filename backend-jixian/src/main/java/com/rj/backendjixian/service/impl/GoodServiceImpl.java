@@ -21,8 +21,8 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     public List<HistoryGoodVo> getHistoryGoodList(String shop_id) {
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(GOOD_ENTITY.NAME, GOOD_ENTITY.IMAGE,GOOD_ENTITY.ENTRANCE,GOOD_ENTITY.SHELF_DATE,
-                        GOOD_ENTITY.SOURCE,GOOD_ENTITY.STORE,GOOD_ENTITY.TYPE,GOOD_ENTITY.VARIETY,
+                .select(GOOD_ENTITY.NAME, GOOD_ENTITY.IMAGE,GOOD_ENTITY.SHELF_DATE,
+                        GOOD_ENTITY.STORE,GOOD_ENTITY.TYPE,GOOD_ENTITY.VARIETY,
                         GOOD_ENTITY.WEIGHT)
                 .from(GOOD_ENTITY)
                 .where(GOOD_ENTITY.SHOP_ID.eq(shop_id).and(GOOD_ENTITY.STATUS.eq(0)));
@@ -49,4 +49,10 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     }
 
 
+    public Boolean changeGoodStatue(String id,int statue) {
+        return this.updateChain()
+                .set(GOOD_ENTITY.STATUS,statue)
+                .where(GOOD_ENTITY.ID.eq(id))
+                .update();
+    }
 }

@@ -12,5 +12,9 @@ import java.util.List;
 public interface IGoodService extends IService<GoodEntity> {
     List<HistoryGoodVo> getHistoryGoodList(String shop_id);
     List<GoodBriefVo> getGoodBriefList();
+
     int update(GoodEntity goodEntity);
+
+
+    Boolean changeGoodStatue(String id, int statue);
 }
