@@ -19,4 +19,6 @@ public interface IOrderService extends IService<OrderEntity> {
     //传入一个shops的id，从goods、          buyers、         orders表中
     //  分别取出      name、image;   name、address、phone；   pay；
     List<HistoryOrderVo> getHistoryOrders(String id);
+
+    int update(OrderEntity orderEntity);
 }

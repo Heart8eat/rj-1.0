@@ -5,7 +5,6 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.MerchantMapper;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.service.IMerchantService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,12 +15,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, MerchantEntity> implements IMerchantService {
-    @Autowired
-    MerchantMapper merchantMapper;
-
+    
     @Override
     public MerchantEntity login(String name, String password) {
-        MerchantEntity merchantEntity = merchantMapper.login(name, password);
+        MerchantEntity merchantEntity = mapper.login(name, password);
         return merchantEntity;
     }
 

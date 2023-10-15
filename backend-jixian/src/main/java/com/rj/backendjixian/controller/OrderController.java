@@ -1,16 +1,20 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.entity.OrderEntity;
 import com.rj.backendjixian.model.vo.HistoryOrderVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IOrderService;
+import com.rj.backendjixian.util.Context;
+import com.rj.backendjixian.util.LoginToken;
 import com.rj.backendjixian.util.PassToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -123,7 +127,7 @@ public class OrderController {
 
 
     /**
-     *
+     *  获取历史订单
      *
      * @param id
      * @return
@@ -138,5 +142,26 @@ public class OrderController {
         List<HistoryOrderVo> list = ordersService.getHistoryOrders(id.toString());
 
         return list;
+    }
+
+    /**
+     * 根据id更改订单状态
+     * @param status
+     * @param id
+     * @return
+     */
+    @PutMapping("/UpdateStatus")
+    @Operation(summary = "更改状态")
+    @SecurityRequirement(name = "token")
+    @LoginToken
+    @Parameters(value = {
+            @Parameter(name = "status", description = "订单状态", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+            @Parameter(name = "id", description = "订单id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<Integer> updateStatus(@RequestParam int status,@RequestParam String id){
+        OrderEntity orderEntity = ordersService.getById(id) ;
+        orderEntity.setStatus(status);
+
+        return Response.success((ordersService.update(orderEntity)));
     }
 }

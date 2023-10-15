@@ -2,17 +2,30 @@ package com.rj.backendjixian.util;
 
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import io.jsonwebtoken.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
-
+@Component
 public class JwtUtil {
 
-    final static String SecretKey = "123456789";       //密钥
-    final static long Token_EXP = 1000 * 60 * 60 * 24;       //时间 一天
+    private static String SecretKey;  //密钥
+    private static long Token_EXP;       //时间 一天
     final static String id = "b81a68711ee74c8cba1791f4b0f3d096";
     final static String name = "m1";
+    //通过配置文件注入密钥和过期时间
+    @Value("${jwt.SecretKey}")
+    public  void setSecretKey(String secretKey) {
+        SecretKey = secretKey;
+    }
+    @Value("${jwt.Token_EXP}")
+    public  void setToken_EXP(long token_EXP) {
+        Token_EXP = token_EXP;
+    }
+
     /**
      * 生成token
      * @param merchant

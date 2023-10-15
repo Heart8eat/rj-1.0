@@ -20,10 +20,12 @@ springdoc:
   # 文档地址
   swagger-ui:
     path: /docs
+    # 持久化认证数据，如果设置为 true，它会保留授权数据并且不会在浏览器关闭/刷新时丢失
+    persistAuthorization: true
   # 是否启用接口文档
   api-docs:
     enabled: true
-files:
-  upload:
-    fileUploadPath: upload
-    permittedFileType: jpg,jpeg,ico,tiff,gif,svg,webp,png,bmp
+
+jwt:
+  SecretKey: 123456789 #密钥
+  Token_EXP: "#{1000 * 60 * 60 * 24}" #过期时间 1天

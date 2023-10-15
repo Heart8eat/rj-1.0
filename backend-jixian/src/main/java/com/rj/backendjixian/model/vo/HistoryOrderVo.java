@@ -14,6 +14,9 @@ public class HistoryOrderVo {
     @Schema(description = "商品名字")
     private String name;
 
+    @Schema(description = "订单状态")
+    private String status;
+
     @Schema(description = "图片")
     private String image;
 

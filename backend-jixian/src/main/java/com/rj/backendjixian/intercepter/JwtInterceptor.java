@@ -1,28 +1,44 @@
 package com.rj.backendjixian.intercepter;
 
+import cn.hutool.core.util.StrUtil;
+import com.rj.backendjixian.model.entity.MerchantEntity;
+import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.service.IMerchantService;
+import com.rj.backendjixian.service.IShopService;
+import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
 import com.rj.backendjixian.util.LoginToken;
 import com.rj.backendjixian.util.PassToken;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.lang.reflect.Method;
 
-public class JwtIntercepter implements HandlerInterceptor {
+import static com.rj.backendjixian.model.entity.table.ShopEntityTableDef.SHOP_ENTITY;
+
+@Slf4j
+@Component
+public class JwtInterceptor implements HandlerInterceptor {
     @Autowired
-    private IMerchantService merchantService;
+    IMerchantService merchantService;
+    @Autowired
+    IShopService shopService;
+
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpServletResponseWrapper wrapper = new HttpServletResponseWrapper(response);
-        String token = request.getHeader("token");      //取token
+        String token = request.getHeader("Authorization");      //取token
 //        String token_test = "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJiODFhNjg3MTFlZTc0YzhjYmExNzkxZjRiMGYzZDA5NiIsInN1YiI6Im0xIiwiaWF0IjoxNjk3MDgxNDAyLCJleHAiOjE2OTcxNjc4MDJ9.A1EUf4gtyGv_nx_REbhkv32W1lJNrdsWmcMO3Ae0rHk";
 
         //如果不是映射到方法直接通过
@@ -37,7 +53,7 @@ public class JwtIntercepter implements HandlerInterceptor {
         if (method.isAnnotationPresent(PassToken.class)) {
             PassToken passTokenAnnotation = method.getAnnotation(PassToken.class);
             if (passTokenAnnotation.required()) {
-                System.out.println("pass token");
+                log.info("pass token");
                 return true;
             }
         }
@@ -46,13 +62,22 @@ public class JwtIntercepter implements HandlerInterceptor {
         if (method.isAnnotationPresent(LoginToken.class)) {
             LoginToken LoginTokenAnnotation = method.getAnnotation(LoginToken.class);
             if (LoginTokenAnnotation.required()) {
-
-                if (token == null) {
-                    throw new RuntimeException("no token info.");
+                if (StrUtil.isEmpty(token)) {
+                    throw new JwtException("no token info.");
                 }
+                // 检查token前缀是否正确
+                if (!token.startsWith("Bearer ")){
+                    throw new MalformedJwtException("token prefix must be Bearer!");
+                }
+                token=token.replace("Bearer ","");
 
                 Claims resToken = JwtUtil.parseToken(token);
-                System.out.println(resToken);
+                // 将商家的详细信息放入上下文
+                MerchantEntity merchant=merchantService.getById(resToken.getId());
+                ShopEntity shop=shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
+                Context.put("merchant",merchant);
+                Context.put("shop",shop);
+                log.info(resToken.toString());
                 return true;
             }
             return true;
@@ -78,13 +103,13 @@ public class JwtIntercepter implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        System.out.println("拦截器处理结束...");
+        log.info("拦截器处理结束...");
         HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        System.out.println("请求结束...");
+        log.info("请求结束...");
         HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
 
     }

@@ -29,7 +29,7 @@ public class OrderEntity {
     private String id;
 
     @Column(value = "status")
-    @Schema(description = "0为 ，1为 ，2为 ")
+    @Schema(description = "0为 下单未完成，1为 完成")
     private Integer status;
 
     @Column(value = "create_time", onInsertValue = "datetime('now','localtime')")
