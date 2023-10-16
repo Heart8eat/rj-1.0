@@ -25,10 +25,10 @@ import lombok.NoArgsConstructor;
 @Table(value = "goods_orders")
 public class GoodOrderEntity {
 
-    @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
+    @Column(value = "good_id")
     private String goodId;
 
-    @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
+    @Column(value = "order_id")
     private String orderId;
 
     @Column(value = "quantity")

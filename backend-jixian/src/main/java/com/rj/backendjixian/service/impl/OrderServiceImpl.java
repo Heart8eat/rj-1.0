@@ -39,11 +39,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
         return mapper.selectListByQueryAs(queryWrapper, HistoryOrderVo.class,
                 ordersfieldQueryBuilder -> ordersfieldQueryBuilder
                     .field(HistoryOrderVo::getBuyer)
-                    .queryWrapper(HistoryOrderVo -> QueryWrapper.create()
+                    .queryWrapper(historyOrderVo -> QueryWrapper.create()
                         .from(BUYER_ENTITY)
-                        .select(BUYER_ENTITY.ALL_COLUMNS)
-                        .leftJoin(ORDER_ENTITY).on(ORDER_ENTITY.BUYER_ID.eq(BUYER_ENTITY.ID))
-                        .where(ORDER_ENTITY.SHOP_ID.eq(id))));
+                        .select(BUYER_ENTITY.ID, BUYER_ENTITY.NAME, BUYER_ENTITY.ADDRESS, BUYER_ENTITY.PHONE)
+                        .where(BUYER_ENTITY.ID.eq(historyOrderVo.getBuyer_id()))));
+//                        .leftJoin(ORDER_ENTITY).on(ORDER_ENTITY.BUYER_ID.eq(BUYER_ENTITY.ID)) ));
+//                        .where(ORDER_ENTITY.SHOP_ID.eq(id))));
     }
 
     //更新order

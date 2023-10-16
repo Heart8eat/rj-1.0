@@ -142,16 +142,17 @@ public class OrderController {
      * @param id
      * @return
      */
-    @RequestMapping("/HistoryOrders/{id}")
+    @GetMapping("/HistoryOrders/{id}")
     @Operation(summary = "根据商铺ID获取历史订单")
     @Parameters(value = {
-            @Parameter(name = "id", description = "商铺id", required = true, in = ParameterIn.PATH, schema = @Schema(type = "String"))
+            @Parameter(name = "id", description = "商铺id", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
+    @SecurityRequirement(name = "token")
     @PassToken
-    public List<HistoryOrderVo> HistoryOrders(@PathVariable Serializable id){
+    public Response<List<HistoryOrderVo>> HistoryOrders(@PathVariable Serializable id){
         List<HistoryOrderVo> list = ordersService.getHistoryOrders(id.toString());
 
-        return list;
+        return Response.success(list);
     }
 
     /**
@@ -175,6 +176,10 @@ public class OrderController {
         return Response.success((ordersService.update(orderEntity)));
     }
 
+    /**
+     * 通过前端返回的GoodOrderDto类创建新订单
+     */
+
     @Autowired
     IGoodOrderService goodOrderService;
 
@@ -187,6 +192,7 @@ public class OrderController {
         orderEntity.setStatus(0);
         orderEntity.setBuyerId(goodOrderDto.getBuyerId());
         orderEntity.setShopId(goodOrderDto.getShopId());
+        ordersService.save(orderEntity);
 
         GoodOrderEntity goodOrderEntity = new GoodOrderEntity();
         goodOrderEntity.setOrderId(orderEntity.getId());
@@ -194,7 +200,7 @@ public class OrderController {
         goodOrderEntity.setQuantity(goodOrderDto.getQuantity());
         goodOrderEntity.setSum(goodOrderDto.getSum());
 
-        return Response.success(ordersService.save(orderEntity) && goodOrderService.save(goodOrderEntity));
+        return Response.success(goodOrderService.save(goodOrderEntity));
     }
 
 }

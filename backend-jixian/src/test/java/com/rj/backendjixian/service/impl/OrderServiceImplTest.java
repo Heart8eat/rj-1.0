@@ -1,5 +1,6 @@
 package com.rj.backendjixian.service.impl;
 
+import com.mybatisflex.core.keygen.KeyGenerators;
 import com.rj.backendjixian.model.entity.GoodOrderEntity;
 import com.rj.backendjixian.model.entity.OrderEntity;
 import com.rj.backendjixian.model.vo.HistoryOrderVo;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.crypto.KeyGenerator;
 import java.util.List;
 
 @SpringBootTest
@@ -30,8 +32,8 @@ public class OrderServiceImplTest {
         String buyerId = "a1619e4e9a734e1c9cf1e6ba759667b9";
         String shopId = "630e807bdf604941b89192af2eb7396e";
         String goodId = "999eb2a9a68242589a504f6d24dfd5e7";
-        Float sum = 100f;
-        int quantity = 10;
+        Float sum = 200f;
+        int quantity = 20;
 
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setStatus(0);
@@ -40,6 +42,8 @@ public class OrderServiceImplTest {
 
         GoodOrderEntity goodOrderEntity = new GoodOrderEntity();
         goodOrderEntity.setOrderId(orderEntity.getId());
+        System.out.println("orderID:" + orderEntity.getId());
+        System.out.println("goodorderID:" + goodOrderEntity.getOrderId());
         goodOrderEntity.setGoodId(goodId);
         goodOrderEntity.setQuantity(quantity);
         goodOrderEntity.setSum(sum);

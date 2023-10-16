@@ -23,6 +23,9 @@ public class HistoryOrderVo {
     @Schema(description = "支付方式")
     private String pay = "手动支付";
 
+    @Schema(description = "买家ID")
+    private String buyer_id;
+
     @Schema(description = "买家")
     private BuyerEntity buyer;
 
