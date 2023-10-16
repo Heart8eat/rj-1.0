@@ -84,19 +84,6 @@ public class JwtInterceptor implements HandlerInterceptor {
         }
 
         return true;
-/*
-        if (token_test==null) {
-//                wrapper.sendRedirect("fail/token/null");
-            System.out.println("null token");
-            return false;
-        }
-        if (null == JwtUtil.parseToken(token_test)) {
-//          wrapper.sendRedirect("fail/token/invalid");
-            System.out.println("invalid token");
-            return false;
-        }
-        System.out.println("valid token");
-        return true;*/
     }
 
 

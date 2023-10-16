@@ -1,10 +1,11 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.rj.backendjixian.model.entity.MerchantEntity;
-import com.rj.backendjixian.model.entity.OrderEntity;
+import com.rj.backendjixian.model.dto.GoodOrderDto;
+import com.rj.backendjixian.model.entity.*;
 import com.rj.backendjixian.model.vo.HistoryOrderVo;
 import com.rj.backendjixian.model.vo.Response;
+import com.rj.backendjixian.service.IGoodOrderService;
 import com.rj.backendjixian.service.IOrderService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.LoginToken;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.List;
 
@@ -172,4 +174,27 @@ public class OrderController {
 
         return Response.success((ordersService.update(orderEntity)));
     }
+
+    @Autowired
+    IGoodOrderService goodOrderService;
+
+    @PostMapping("/newOrder")
+    @Operation(summary = "生成订单")
+    @SecurityRequirement(name = "token")
+    @LoginToken
+    public Response<Boolean> newOrder(@RequestBody GoodOrderDto goodOrderDto){
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setStatus(0);
+        orderEntity.setBuyerId(goodOrderDto.getBuyerId());
+        orderEntity.setShopId(goodOrderDto.getShopId());
+
+        GoodOrderEntity goodOrderEntity = new GoodOrderEntity();
+        goodOrderEntity.setOrderId(orderEntity.getId());
+        goodOrderEntity.setGoodId(goodOrderDto.getGoodId());
+        goodOrderEntity.setQuantity(goodOrderDto.getQuantity());
+        goodOrderEntity.setSum(goodOrderDto.getSum());
+
+        return Response.success(ordersService.save(orderEntity) && goodOrderService.save(goodOrderEntity));
+    }
+
 }
