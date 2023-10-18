@@ -43,12 +43,9 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                 .map(GoodBriefVo::new).toList();
     }
 
+
+
     @Override
-    public int update(GoodEntity goodEntity) {
-        return mapper.update(goodEntity);
-    }
-
-
     public Boolean changeGoodStatue(String id,int statue) {
         return this.updateChain()
                 .set(GOOD_ENTITY.STATUS,statue)

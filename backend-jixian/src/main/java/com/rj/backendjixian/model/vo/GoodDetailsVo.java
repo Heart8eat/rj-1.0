@@ -43,11 +43,10 @@ public class GoodDetailsVo {
     private String store;
 
 
-    @Schema(description = "产地")
-    private String source;
 
-//    @Schema(description = "商品描述(可选)")
-//    private String description;
+
+    @Schema(description = "商品描述(可选)")
+    private String description;
 
 
 
@@ -60,6 +59,6 @@ public class GoodDetailsVo {
         this.name = goodEntity.getName();
         this.type = goodEntity.getType();
         this.weight = goodEntity.getWeight();
-//        this.description=goodEntity.getDescription();
+        this.description=goodEntity.getDescription();
     }
 }

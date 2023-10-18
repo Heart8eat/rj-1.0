@@ -37,7 +37,6 @@ public class JwtUtil {
                 .setIssuedAt(new Date())        //登录时间
                 .signWith(SignatureAlgorithm.HS256, SecretKey)
                 .setExpiration(new Date(new Date().getTime() + Token_EXP));      //设置过期时间
-        System.out.println(jwtBuilder.compact());
         return jwtBuilder.compact();
     }
 

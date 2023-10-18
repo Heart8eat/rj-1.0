@@ -12,8 +12,5 @@ import org.apache.ibatis.annotations.*;
  */
 @Mapper
 public interface MerchantMapper extends BaseMapper<MerchantEntity> {
-    @Select("select * from merchants where name = #{name} and password = #{password}")
-    MerchantEntity login(@Param("name")String name, @Param("password")String password);
-
 
 }

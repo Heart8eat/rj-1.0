@@ -17,13 +17,13 @@ public class MerchantDetailsVo {
     private String password;
 
     private String phone;
-    //暂时使用shop_id
-    private ShopEntity shop;
+
+    private String shop_id;
 
     public MerchantDetailsVo(MerchantEntity merchant,ShopEntity shop) {
         this.name = merchant.getName();
         this.password=merchant.getPassword();
         this.phone=merchant.getPhone();
-        this.shop=shop;
+        this.shop_id=shop.getId();
     }
 }

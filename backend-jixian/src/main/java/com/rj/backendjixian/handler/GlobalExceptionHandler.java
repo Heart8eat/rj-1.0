@@ -1,5 +1,6 @@
 package com.rj.backendjixian.handler;
 
+import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.StatueCode;
 import io.jsonwebtoken.JwtException;
@@ -60,8 +61,14 @@ public class GlobalExceptionHandler {
         return Response.failed(StatueCode.NOT_ACCEPTABLE, e.getMessage());
     }
     @ExceptionHandler(value = JwtException.class)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public Response<String> jwtExceptionHandler(JwtException e) {
         log.error("发生token验证错误异常:-------------->{}\n", e.getMessage());
         return Response.unauthorized(e.getMessage());
+    }
+    @ExceptionHandler(value = LoginException.class)
+    public Response<String> loginExceptionHandler(LoginException e) {
+        log.error("发生登录失败异常:-------------->{}\n", e.getMessage());
+        return Response.success(e.getMessage());
     }
 }

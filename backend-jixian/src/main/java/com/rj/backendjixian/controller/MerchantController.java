@@ -1,10 +1,12 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.model.vo.MerchantDetailsVo;
 import com.rj.backendjixian.model.vo.Response;
+import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IMerchantService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
@@ -142,13 +144,11 @@ public class MerchantController {
             @Parameter(name = "password", description = "密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
     @PassToken
-    public Object login(@RequestParam(value = "name")String name,
-                        @RequestParam(value = "password")String password){
+    public Response<TokenVo> login(@RequestParam(value = "name")String name,
+                                   @RequestParam(value = "password")String password) throws LoginException {
         MerchantEntity merchantEntity = merchantsService.login(name, password);
 
-        String jwtToken = JwtUtil.createToken(merchantEntity);
-
-        return jwtToken;
+        return Response.success(new TokenVo(JwtUtil.createToken(merchantEntity),"Bearer"));
     }
 
     /**
@@ -162,7 +162,6 @@ public class MerchantController {
     @LoginToken
     public Response<Integer> updatePassword(@RequestBody String password){
         MerchantEntity merchant = (MerchantEntity) Context.get("merchant");
-        System.out.println(merchant);
         merchant.setPassword(password);
         return Response.success((merchantsService.update(merchant)));
     }

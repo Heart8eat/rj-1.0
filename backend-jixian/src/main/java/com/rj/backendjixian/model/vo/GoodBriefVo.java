@@ -32,5 +32,6 @@ public class GoodBriefVo {
         this.id = goodEntity.getId();
         this.price = goodEntity.getPrice();
         this.image = StrUtil.split(goodEntity.getImage(), ",").get(0);
+        this.name=goodEntity.getName();
     }
 }

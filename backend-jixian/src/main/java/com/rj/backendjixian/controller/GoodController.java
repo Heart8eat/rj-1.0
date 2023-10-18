@@ -174,24 +174,5 @@ public class GoodController {
         return Response.success(goodService.page(page));
     }
 
-    /**
-     * 根据id更改商品状态
-     * @param status
-     * @param id
-     * @return
-     */
-    @PutMapping("/UpdateStatus")
-    @Operation(summary = "更改商品状态")
-    @SecurityRequirement(name = "token")
-    @LoginToken
-    @Parameters(value = {
-            @Parameter(name = "status", description = "商品状态", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
-            @Parameter(name = "id", description = "商品id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
-    })
-    public Response<Integer> updateStatus(@RequestParam int status,@RequestParam String id){
-        GoodEntity goodEntity = goodService.getById(id) ;
-        goodEntity.setStatus(status);
 
-        return Response.success((goodService.update(goodEntity)));
-    }
 }
