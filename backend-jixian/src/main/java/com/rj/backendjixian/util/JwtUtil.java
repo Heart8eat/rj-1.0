@@ -8,22 +8,22 @@ import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-@Component
+//@Component
 public class JwtUtil {
 
-    private static String SecretKey;  //密钥
-    private static long Token_EXP;       //时间 一天
+    private static final String SecretKey = "123456789";  //密钥
+    private static final long Token_EXP = 1000 * 60 * 60 * 24;       //时间 一天
     final static String id = "b81a68711ee74c8cba1791f4b0f3d096";
     final static String name = "m1";
     //通过配置文件注入密钥和过期时间
-    @Value("${jwt.SecretKey}")
-    public  void setSecretKey(String secretKey) {
-        SecretKey = secretKey;
-    }
-    @Value("${jwt.Token_EXP}")
-    public  void setToken_EXP(long token_EXP) {
-        Token_EXP = token_EXP;
-    }
+//    @Value("${jwt.SecretKey}")
+//    public  void setSecretKey(String secretKey) {
+//        SecretKey = secretKey;
+//    }
+//    @Value("${jwt.Token_EXP}")
+//    public  void setToken_EXP(long token_EXP) {
+//        Token_EXP = token_EXP;
+//    }
 
     /**
      * 生成token
