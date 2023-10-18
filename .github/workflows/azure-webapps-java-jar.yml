@@ -23,7 +23,7 @@ env:
   AZURE_WEBAPP_NAME: rj-1.0    # set this to the name of your Azure Web App
   JAVA_VERSION: '17'                  # set this to the Java version to use
   DISTRIBUTION: zulu                  # set this to the Java distribution
-  AZURE_WEBAPP_PUBLISH_PROFILE:<publishData>
+  AZURE_WEBAPP_PUBLISH_PROFILE: <publishData>
     <publishProfile
         profileName="app-rj-231018142430 - Web Deploy"
         publishMethod="MSDeploy"
