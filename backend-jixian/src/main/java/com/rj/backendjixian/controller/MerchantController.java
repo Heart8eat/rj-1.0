@@ -34,6 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/merchants")
 @Tag(name = "商家接口")
+@CrossOrigin
 public class MerchantController {
 
     @Autowired

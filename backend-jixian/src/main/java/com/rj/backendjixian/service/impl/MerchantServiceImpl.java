@@ -25,7 +25,7 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, MerchantEnt
         if(merchantEntity!=null && merchantEntity.getPassword().equals(password)){
             return merchantEntity;
         }
-        throw new LoginException("用户名或密码错误");
+        throw new LoginException("用户名或密码错误",name);
     }
 
     @Override

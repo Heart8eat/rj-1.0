@@ -28,6 +28,7 @@ import java.util.List;
 @RequestMapping("/shops")
 @Tag(name = "商铺接口")
 @SecurityRequirement(name = "token")
+@CrossOrigin
 public class ShopController {
 
     @Autowired

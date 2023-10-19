@@ -35,6 +35,7 @@ import java.util.List;
 @RequestMapping("/orders")
 @Tag(name = "订单接口")
 @SecurityRequirement(name = "token")
+@CrossOrigin
 public class OrderController {
 
     @Autowired

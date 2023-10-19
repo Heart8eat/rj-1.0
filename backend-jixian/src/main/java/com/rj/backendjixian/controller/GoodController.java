@@ -32,6 +32,7 @@ import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_EN
 @RequestMapping("/goods")
 @Tag(name = "商品接口")
 @SecurityRequirement(name = "token")
+@CrossOrigin
 public class GoodController {
 
     @Autowired

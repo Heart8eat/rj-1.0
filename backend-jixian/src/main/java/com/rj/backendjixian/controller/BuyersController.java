@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping("/buyers")
 @Tag(name = "买家接口")
 @SecurityRequirement(name = "token")
+@CrossOrigin
 public class BuyersController {
 
     @Autowired

@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(value = LoginException.class)
     public Response<String> loginExceptionHandler(LoginException e) {
-        log.error("发生登录失败异常:-------------->{}\n", e.getMessage());
+        log.error("发生登录失败异常:-------------->{}尝试登录失败\n,错误信息:{}\n",e.getLoginName(), e.getMessage());
         return Response.success(e.getMessage());
     }
 }
