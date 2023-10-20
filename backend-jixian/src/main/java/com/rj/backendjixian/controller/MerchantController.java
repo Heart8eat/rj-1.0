@@ -2,6 +2,7 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.exception.LoginException;
+import com.rj.backendjixian.model.dto.MerchantUpdateDto;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.model.vo.MerchantDetailsVo;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -154,16 +156,16 @@ public class MerchantController {
 
     /**
      * 更改商家密码
-     * @param password
+     * @param merchantUpdateDto
      * @return
      */
-    @PutMapping("/UpdatePassword")
+    @PutMapping("/updatePassword")
     @Operation(summary = "更改密码")
     @SecurityRequirement(name = "token")
     @LoginToken
-    public Response<Integer> updatePassword(@RequestBody String password){
-        MerchantEntity merchant = (MerchantEntity) Context.get("merchant");
-        merchant.setPassword(password);
-        return Response.success((merchantsService.update(merchant)));
+    public Response<Boolean> updatePassword(@Valid @RequestBody MerchantUpdateDto merchantUpdateDto){
+        MerchantEntity merchant=(MerchantEntity) Context.get("merchant");
+        merchantUpdateDto.setId(merchant.getId());
+        return Response.success((merchantsService.updatePassword(merchantUpdateDto)));
     }
 }
