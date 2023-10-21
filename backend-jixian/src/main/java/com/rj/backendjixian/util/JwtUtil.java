@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
-@Component
+//@Component
 public class JwtUtil {
 
     private static String key = "tCo2ZgpY9JdzSVbuJ25f1r77NXJXti7g" ;  //密钥
