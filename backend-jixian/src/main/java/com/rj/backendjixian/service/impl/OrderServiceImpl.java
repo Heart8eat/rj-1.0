@@ -4,12 +4,9 @@ package com.rj.backendjixian.service.impl;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.OrderMapper;
-import com.rj.backendjixian.model.entity.GoodOrderEntity;
 import com.rj.backendjixian.model.entity.OrderEntity;
 import com.rj.backendjixian.model.vo.HistoryOrderVo;
-import com.rj.backendjixian.service.IGoodOrderService;
 import com.rj.backendjixian.service.IOrderService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

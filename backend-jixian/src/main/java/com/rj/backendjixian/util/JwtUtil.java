@@ -1,50 +1,68 @@
 package com.rj.backendjixian.util;
 
 import com.rj.backendjixian.model.entity.MerchantEntity;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
-//@Component
+@Component
 public class JwtUtil {
 
-    private static final String SecretKey = "123456789";  //密钥
-    private static final long Token_EXP = 1000 * 60 * 60 * 24;       //时间 一天
-    final static String id = "b81a68711ee74c8cba1791f4b0f3d096";
-    final static String name = "m1";
+    private static String key = "tCo2ZgpY9JdzSVbuJ25f1r77NXJXti7g" ;  //密钥
+    private static long Token_EXP =1000 * 60 * 60 * 24 ;       //时间 一天
+
     //通过配置文件注入密钥和过期时间
-//    @Value("${jwt.SecretKey}")
+//    @Value("${jwt.key}")
 //    public  void setSecretKey(String secretKey) {
-//        SecretKey = secretKey;
+//        key = secretKey;
 //    }
 //    @Value("${jwt.Token_EXP}")
 //    public  void setToken_EXP(long token_EXP) {
 //        Token_EXP = token_EXP;
 //    }
-
+    /**
+     * 获取转换后的私钥对象
+     * @return
+     */
+    public static SecretKey getSecretKey(){
+        return Keys.hmacShaKeyFor(key.getBytes());
+    }
     /**
      * 生成token
      * @param merchant
      * @return
      */
     public static String createToken(MerchantEntity merchant){
+
         JwtBuilder jwtBuilder = Jwts.builder()
-                .setId(merchant.getId()+"")     //卖家id
-                .setSubject(merchant.getName())     //卖家名
-                .setIssuedAt(new Date())        //登录时间
-                .signWith(SignatureAlgorithm.HS256, SecretKey)
-                .setExpiration(new Date(new Date().getTime() + Token_EXP));      //设置过期时间
+                .header()//头部信息
+                .add("alg", "HS256") // 加密算法
+                .add("typ", "JWT") //类别
+                .and()
+                .id(merchant.getId()) //卖家id
+                .subject(merchant.getName())//卖家名
+                .issuedAt(new Date())//登录时间
+                .expiration(new Date(new Date().getTime() + Token_EXP))//设置过期时间
+                .signWith(getSecretKey());
         return jwtBuilder.compact();
     }
 
     public static Claims parseToken(String jwt){
+
         return Jwts.parser()
-                .setSigningKey(SecretKey)
-                .parseClaimsJws(jwt)
-                .getBody();
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(jwt)
+                .getPayload();
+
     }
 
     /**
@@ -74,13 +92,6 @@ public class JwtUtil {
     }
 
 
-    public static void main(String[] args) throws Exception{
-        MerchantEntity merchantEntity = new MerchantEntity(id, name,null,null);
-        String a = createToken(merchantEntity);
-        Claims c = parseToken(a);
-        System.out.println(c.getId());
-        System.out.println(c.getSubject());
 
-    }
 
 }
