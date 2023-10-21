@@ -66,6 +66,8 @@ public class MerchantController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
+    @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Boolean> remove(@PathVariable Serializable id) {
         return Response.success(merchantsService.removeById(id));
     }
@@ -79,6 +81,8 @@ public class MerchantController {
      */
     @PutMapping("/update")
     @Operation(summary = "根据主键更新")
+    @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Boolean> update(@RequestBody MerchantEntity merchant) {
         return Response.success(merchantsService.updateById(merchant));
     }
@@ -128,6 +132,8 @@ public class MerchantController {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
+    @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Page<MerchantEntity>> page(@RequestParam int pageNumber,
                                                @RequestParam int pageSize) {
         Page<MerchantEntity> page = Page.of(pageNumber, pageSize);

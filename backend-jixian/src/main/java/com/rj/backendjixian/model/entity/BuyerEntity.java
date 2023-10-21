@@ -6,6 +6,7 @@ import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import com.mybatisflex.core.keygen.KeyGenerators;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,22 +33,18 @@ public class BuyerEntity {
     private String id;
 
     @Column(value = "name")
-    @NotBlank(message = "名字为必填项")
-    @Schema(example = "Tom")
     private String name;
 
     @Column(value = "password")
-    @Schema(example = "1234567890")
     private String password;
 
     @Column(value = "address")
-    @Schema(example = "杭州")
     private String address;
 
     @Column(value = "phone")
-    @Schema(example = "14816714403")
-    @Length(min = 11, max = 11, message = "电话的长度为11")
     private String phone;
+    @Column(value = "email")
+    private String email;
 
 
 }

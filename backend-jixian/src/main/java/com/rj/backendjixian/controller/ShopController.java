@@ -27,7 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/shops")
 @Tag(name = "商铺接口")
-@SecurityRequirement(name = "token")
+//@SecurityRequirement(name = "token")
 @CrossOrigin
 public class ShopController {
 
@@ -42,7 +42,7 @@ public class ShopController {
      */
     @PostMapping("/save")
     @Operation(summary = "添加")
-    @LoginToken
+//    @LoginToken
     public Response<Boolean> save(@RequestBody ShopEntity shop) {
         return Response.success(shopsService.save(shop));
     }
@@ -59,7 +59,7 @@ public class ShopController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
-    @LoginToken
+//    @LoginToken
     public Response<Boolean> remove(@PathVariable Serializable id) {
         return Response.success(shopsService.removeById(id));
     }
@@ -73,7 +73,7 @@ public class ShopController {
      */
     @PutMapping("/update")
     @Operation(summary = "根据主键更新")
-    @LoginToken
+//    @LoginToken
     public Response<Boolean> update(@RequestBody ShopEntity shop) {
         return Response.success(shopsService.updateById(shop));
     }
@@ -86,7 +86,7 @@ public class ShopController {
      */
     @GetMapping("/list")
     @Operation(summary = "查询所有")
-    @LoginToken
+//    @LoginToken
     public Response<List<ShopEntity>> list() {
         return Response.success(shopsService.list());
     }
@@ -103,7 +103,7 @@ public class ShopController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
-    @LoginToken
+//    @LoginToken
     public Response<ShopEntity> getInfo(@PathVariable Serializable id) {
         return Response.success(shopsService.getById(id));
     }
@@ -122,7 +122,7 @@ public class ShopController {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
-    @LoginToken
+//    @LoginToken
     public Response<Page<ShopEntity>> page(@RequestParam int pageNumber,
                                            @RequestParam int pageSize) {
         Page<ShopEntity> page = Page.of(pageNumber, pageSize);

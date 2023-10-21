@@ -1,6 +1,8 @@
 package com.rj.backendjixian.model.entity;
 
 import com.mybatisflex.annotation.Column;
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -21,10 +23,11 @@ import lombok.NoArgsConstructor;
 @Schema(name = "goodOrder")
 @Table(value = "goods_orders")
 public class GoodOrderEntity {
-
+    @Id(keyType = KeyType.None)
     @Column(value = "good_id")
     private String goodId;
 
+    @Id(keyType = KeyType.None)
     @Column(value = "order_id")
     private String orderId;
 
