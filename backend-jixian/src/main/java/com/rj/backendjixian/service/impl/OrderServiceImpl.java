@@ -28,7 +28,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
     @Override
     public List<HistoryOrderVo> getHistoryOrders(String id) {
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(GOOD_ENTITY.NAME, ORDER_ENTITY.BUYER_ID, GOOD_ENTITY.IMAGE, ORDER_ENTITY.STATUS)
+                .select(GOOD_ORDER_ENTITY.ORDER_ID,GOOD_ENTITY.NAME, ORDER_ENTITY.BUYER_ID, GOOD_ENTITY.IMAGE, ORDER_ENTITY.STATUS)
                 .from(GOOD_ORDER_ENTITY).as("go")
                 .where(ORDER_ENTITY.SHOP_ID.eq(id))
                 .leftJoin(GOOD_ENTITY).as("g").on(GOOD_ORDER_ENTITY.GOOD_ID.eq(GOOD_ENTITY.ID))
