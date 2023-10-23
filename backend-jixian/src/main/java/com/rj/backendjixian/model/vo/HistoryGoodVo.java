@@ -37,6 +37,9 @@ public class HistoryGoodVo {
     @Schema(description = "上架日期")
     private String shelfDate;
 
+    @Schema(description = "0为下架，1为上架 ，2为冻结")
+    private Integer status;
+
     public HistoryGoodVo(GoodEntity goodEntity) {
         this.id=goodEntity.getId();
         this.name = goodEntity.getName();
@@ -46,5 +49,6 @@ public class HistoryGoodVo {
         this.weight=goodEntity.getWeight();
         this.store=goodEntity.getStore();
         this.shelfDate=goodEntity.getShelfDate();
+        this.status=goodEntity.getStatus();
     }
 }

@@ -9,7 +9,6 @@ import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IGoodOrderService;
 import com.rj.backendjixian.service.IOrderService;
 import com.rj.backendjixian.util.LoginToken;
-import com.rj.backendjixian.util.PassToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
