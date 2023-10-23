@@ -1,6 +1,5 @@
 package com.rj.backendjixian.model.vo;
 
-import com.rj.backendjixian.controller.BuyersController;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

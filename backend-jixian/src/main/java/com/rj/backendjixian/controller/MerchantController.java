@@ -2,6 +2,7 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.exception.LoginException;
+import com.rj.backendjixian.model.dto.MerchantUpdateDto;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.model.vo.MerchantDetailsVo;
@@ -19,6 +20,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/merchants")
 @Tag(name = "商家接口")
+@CrossOrigin
 public class MerchantController {
 
     @Autowired
@@ -63,6 +66,8 @@ public class MerchantController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
+    @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Boolean> remove(@PathVariable Serializable id) {
         return Response.success(merchantsService.removeById(id));
     }
@@ -76,6 +81,8 @@ public class MerchantController {
      */
     @PutMapping("/update")
     @Operation(summary = "根据主键更新")
+    @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Boolean> update(@RequestBody MerchantEntity merchant) {
         return Response.success(merchantsService.updateById(merchant));
     }
@@ -125,6 +132,8 @@ public class MerchantController {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
+    @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Page<MerchantEntity>> page(@RequestParam int pageNumber,
                                                @RequestParam int pageSize) {
         Page<MerchantEntity> page = Page.of(pageNumber, pageSize);
@@ -153,16 +162,16 @@ public class MerchantController {
 
     /**
      * 更改商家密码
-     * @param password
+     * @param merchantUpdateDto
      * @return
      */
-    @PutMapping("/UpdatePassword")
+    @PutMapping("/updatePassword")
     @Operation(summary = "更改密码")
     @SecurityRequirement(name = "token")
     @LoginToken
-    public Response<Integer> updatePassword(@RequestBody String password){
-        MerchantEntity merchant = (MerchantEntity) Context.get("merchant");
-        merchant.setPassword(password);
-        return Response.success((merchantsService.update(merchant)));
+    public Response<Boolean> updatePassword(@Valid @RequestBody MerchantUpdateDto merchantUpdateDto){
+        MerchantEntity merchant=(MerchantEntity) Context.get("merchant");
+        merchantUpdateDto.setId(merchant.getId());
+        return Response.success((merchantsService.updatePassword(merchantUpdateDto)));
     }
 }

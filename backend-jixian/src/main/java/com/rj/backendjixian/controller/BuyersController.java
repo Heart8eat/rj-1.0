@@ -1,6 +1,7 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IBuyerService;
@@ -28,7 +29,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/buyers")
 @Tag(name = "买家接口")
-@SecurityRequirement(name = "token")
+@CrossOrigin
 public class BuyersController {
 
     @Autowired
@@ -40,11 +41,10 @@ public class BuyersController {
      * @param buyer
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
-    @PostMapping("/save")
-    @Operation(summary = "添加")
-    @LoginToken
-    public Response<Boolean> save(@Schema() @Validated @RequestBody BuyerEntity buyer) {
-        return Response.success(buyerService.save(buyer));
+    @PostMapping("/create")
+    @Operation(summary = "添加买家信息")
+    public Response<Boolean> create( @Validated @RequestBody BuyerCreateDto buyer) {
+        return Response.success(buyerService.save(buyer.dto2Entity()));
     }
 
 
@@ -60,6 +60,7 @@ public class BuyersController {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
     @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Boolean> remove(@PathVariable Serializable id) {
         return Response.success(buyerService.removeById(id));
     }
@@ -74,6 +75,7 @@ public class BuyersController {
     @PutMapping("/update")
     @Operation(summary = "根据主键更新")
     @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Boolean> update(@RequestBody BuyerEntity buyer) {
         return Response.success(buyerService.updateById(buyer));
     }
@@ -87,6 +89,7 @@ public class BuyersController {
     @GetMapping("/list")
     @Operation(summary = "查询所有")
     @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<List<BuyerEntity>> list() {
         return Response.success(buyerService.list());
     }
@@ -103,7 +106,7 @@ public class BuyersController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
-    @LoginToken
+//    @LoginToken
     public Response<BuyerEntity> getInfo(@PathVariable Serializable id) {
         return Response.success(buyerService.getById(id));
     }
@@ -123,6 +126,7 @@ public class BuyersController {
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
     @LoginToken
+    @SecurityRequirement(name = "token")
     public Response<Page<BuyerEntity>> page(@RequestParam int pageNumber,
                                             @RequestParam int pageSize) {
         Page<BuyerEntity> page = Page.of(pageNumber, pageSize);

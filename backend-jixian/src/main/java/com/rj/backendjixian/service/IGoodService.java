@@ -3,7 +3,6 @@ package com.rj.backendjixian.service;
 
 import com.mybatisflex.core.service.IService;
 import com.rj.backendjixian.model.entity.GoodEntity;
-import com.rj.backendjixian.model.entity.OrderEntity;
 import com.rj.backendjixian.model.vo.GoodBriefVo;
 import com.rj.backendjixian.model.vo.HistoryGoodVo;
 

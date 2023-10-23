@@ -1,8 +1,10 @@
 package com.rj.backendjixian.util;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
-
+@Component
 public class Context {
     private static final ThreadLocal<Map<String, Object>> contextThreadLocal = ThreadLocal.withInitial(HashMap::new);
 
