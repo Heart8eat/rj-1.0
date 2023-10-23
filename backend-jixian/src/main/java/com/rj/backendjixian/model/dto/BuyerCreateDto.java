@@ -1,6 +1,5 @@
 package com.rj.backendjixian.model.dto;
 
-import com.mybatisflex.annotation.Column;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;

@@ -21,11 +21,9 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     public List<HistoryGoodVo> getHistoryGoodList(String shop_id) {
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(GOOD_ENTITY.NAME, GOOD_ENTITY.IMAGE,GOOD_ENTITY.SHELF_DATE,
-                        GOOD_ENTITY.STORE,GOOD_ENTITY.TYPE,GOOD_ENTITY.VARIETY,
-                        GOOD_ENTITY.WEIGHT)
+                .select(GOOD_ENTITY.DEFAULT_COLUMNS)
                 .from(GOOD_ENTITY)
-                .where(GOOD_ENTITY.SHOP_ID.eq(shop_id).and(GOOD_ENTITY.STATUS.eq(0)));
+                .where(GOOD_ENTITY.SHOP_ID.eq(shop_id));
         List<GoodEntity> goodEntities = mapper.selectListByQuery(queryWrapper);
         return goodEntities.stream()
                 .map(HistoryGoodVo::new).toList();
