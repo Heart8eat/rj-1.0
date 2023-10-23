@@ -94,6 +94,7 @@ public class GoodController {
     public Response<List<GoodBriefVo>> getGoodBriefList() {
         return Response.success(goodService.getGoodBriefList());
     }
+
     /**
      * 查询历史商品页面接口
      * @return 所有历史商品
