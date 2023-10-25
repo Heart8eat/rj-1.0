@@ -1,5 +1,6 @@
 package com.rj.backendjixian.model.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Response<T> {
+    @Schema(description = "自定义响应码",requiredMode = Schema.RequiredMode.REQUIRED)
     private long code;
+    @Schema(description = "响应信息",requiredMode = Schema.RequiredMode.REQUIRED)
     private String message;
+    @Schema(description = "响应数据")
     private T data;
 
     /**

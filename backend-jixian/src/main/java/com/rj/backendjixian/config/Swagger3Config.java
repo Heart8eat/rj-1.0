@@ -26,7 +26,7 @@ public class Swagger3Config {
     private Info getInfo() {
         return new Info()
                 // 标题
-                .title("SpringDoc 接口文档")
+                .title("\"果购\"————水果在线商城 SpringDoc 接口文档")
                 // 简短描述
                 .description("基于OpenAPI 3的API文档生成工具")
                 // 公开的API的联系人信息
@@ -37,7 +37,8 @@ public class Swagger3Config {
 
     // 创建公开的API的联系人信息
     private Contact createCon() {
-        return new Contact();
+        return new Contact()
+                .name("何涛 毛天航");
     }
 
     @Bean
