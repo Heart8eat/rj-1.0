@@ -5,7 +5,6 @@ import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.entity.GoodOrderEntity;
 import com.rj.backendjixian.model.entity.OrderEntity;
 import com.rj.backendjixian.model.vo.HistoryOrderVo;
-import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IGoodOrderService;
 import com.rj.backendjixian.service.IGoodService;
 import com.rj.backendjixian.service.IOrderService;
