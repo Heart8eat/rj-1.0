@@ -43,21 +43,6 @@ public class OrderServiceImplTest {
 
 
     /**
-     * 测试查询历史订单
-     */
-    @Test
-    void getHistoryOrdersTest(){
-        list1.add( new HistoryOrderVo("f05b183312f444f19c5299ee04e67eee","康师傅","1","2.png",
-                        "手动支付","e9656b856f874e838449fa88fcef60ac", new BuyerEntity("e9656b856f874e838449fa88fcef60ac",
-                        "test",null,"慈溪","13819442222",null)));
-        list1.add(new HistoryOrderVo("1f673d8967e342c29382d85d7a9a9a0d","香蕉2","0","1.png","手动支付",
-                        "7b573034c4b14fb28695b90869477366",new BuyerEntity("7b573034c4b14fb28695b90869477366",
-                        "test233",null,"杭州","23219442222",null)));
-        List<HistoryOrderVo> list = orderService.getHistoryOrders(shop_id);
-        Assertions.assertEquals(list1,list);
-    }
-
-    /**
      * 测试更改订单状态
      */
     @Test
@@ -93,5 +78,22 @@ public class OrderServiceImplTest {
         goodOrderService.save(goodOrderEntity);
 
         Assertions.assertEquals(str,goodOrderEntity.getOrderId());
+    }
+
+    /**
+     * 测试查询历史订单
+     */
+    @Test
+    void getHistoryOrdersTest(){
+        //测试数据
+        list1.add( new HistoryOrderVo("f05b183312f444f19c5299ee04e67eee","康师傅","0","2.png",
+                "手动支付","e9656b856f874e838449fa88fcef60ac", new BuyerEntity("e9656b856f874e838449fa88fcef60ac",
+                "test",null,"慈溪","13819442222",null)));
+        list1.add(new HistoryOrderVo("1f673d8967e342c29382d85d7a9a9a0d","香蕉2","0","1.png","手动支付",
+                "7b573034c4b14fb28695b90869477366",new BuyerEntity("7b573034c4b14fb28695b90869477366",
+                "test233",null,"杭州","23219442222",null)));
+
+        List<HistoryOrderVo> list = orderService.getHistoryOrders(shop_id);
+        Assertions.assertEquals(list1,list);
     }
 }
