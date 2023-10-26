@@ -48,6 +48,7 @@ public class GoodController {
     @LoginToken
     @SecurityRequirement(name = "token")
     public Response<Boolean> create(@RequestBody GoodCreateDto good) {
+
         return Response.success(goodService.save(good.dto2Entity()));
     }
 
