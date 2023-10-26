@@ -46,7 +46,7 @@
             </el-col>
             <el-col :span="12">
                 <div class="sp-text2">
-                    总计：<span class="money">￥{{ product.price }}</span>
+                    总计：<span class="money">￥{{ sum }}</span>
                 </div>
             </el-col>
         </el-row>
@@ -71,7 +71,7 @@ export default {
         },
         updateSum() {
         // 在这里更新 sum 的值
-            this.sum = this.num * 39.9; // 使用 num 乘以 39.9 更新 sum 的值
+            this.sum = this.num * this.product.price;; // 使用 num 乘以 39.9 更新 sum 的值
         }
     },
     created() {
@@ -82,7 +82,7 @@ export default {
       
       // 发起HTTP请求获取数据
       axios.get(url)
-        .then(response => {
+        .then(response => { 
           console.log('成功获取数据：', response.data);
 
           this.product.name = response.data.data.name;

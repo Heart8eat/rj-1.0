@@ -10,7 +10,7 @@
             <div class="description-item">
                 <div class="item-text">
                    <span>商品名称：</span>
-                    <span class="item-text2">{{product.type}}</span>
+                    <span class="item-text2">{{product.name}}</span>
                 </div>
             </div>
             <div class="description-item">
@@ -30,7 +30,7 @@
             <div class="description-item">
                 <div class="item-text">
                    <span>类别：</span>
-                    <span class="item-text2">{{product.name}}</span>
+                    <span class="item-text2">{{product.type}}</span>
                 </div>
             </div>
         </div>
@@ -48,6 +48,14 @@
                 </div>
             </div>
         </div>
+        <div class="description-row">
+            <div class="description-item">
+                <div class="item-text">
+                   <span>其他信息：</span>
+                    <span class="item-text2">{{ product.description }}</span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -61,7 +69,8 @@ export default {
             type:'',
             variety:'',
             weight:'',
-            store:''
+            store:'',
+            description:''
         // Add more properties as needed
       },
     };
@@ -83,6 +92,7 @@ export default {
         this.product.variety = response.data.data.variety;
         this.product.weight = response.data.data.weight;
         this.product.store = response.data.data.store;
+        this.product.description = response.data.data.description;
     // 更新其他属性以匹配您的数据结构
     })
     .catch(error => {

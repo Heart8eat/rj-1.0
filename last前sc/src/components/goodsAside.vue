@@ -9,9 +9,9 @@
             <div class="info-bottom">
                 <div class="small-images">
                     <!-- 三张小图片并行排列 -->
-                    <img src="../assets/images/xigua1.jpg" alt="">
+                    <!-- <img src="../assets/images/xigua1.jpg" alt="">
                     <img src="../assets/images/xigua2.jpg" alt="">
-                    <img src="../assets/images/xigua3.jpg" alt="">
+                    <img src="../assets/images/xigua3.jpg" alt=""> -->
                 </div>
             </div>
             <div class="additional-info">

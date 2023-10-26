@@ -13,7 +13,7 @@ import Cookie from 'js-cookie';
 Vue.use(VueRouter)
 
 const routes = [
-    { path: '/zhuye', component: zhuye },
+    { path: '/zhuye',name: 'zhuye', component: zhuye },
     {
       path: '/goods/:productId',
       name: 'goods',
