@@ -12,7 +12,7 @@
                 </el-col>
                 <el-col :span="8">
                     <span class="books-text">
-                        配送信息
+                        配送信息dawdadaw
                     </span>
                 </el-col>    
             </el-row>
