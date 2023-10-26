@@ -64,8 +64,8 @@
                 <el-row>
                     <router-link to="/zhuye">
                         <el-button class="button1">取消</el-button>
-                        <el-button :plain="true" @click="open2" type="primary" class="button2">确定下单</el-button>
                     </router-link>
+                    <el-button :plain="true" @click="open2" type="primary" class="button2">确定下单</el-button>
                 </el-row>
             </el-container>
         </el-container>
@@ -134,7 +134,13 @@ export default {
                     this.savedData.address = this.formData.address;
                     this.savedData.phone = this.formData.phone;
                 // 关闭对话框
+                    this.$message({
+                        message: '恭喜你，保存成功',
+                        type: 'success'
+                    });
                     this.showBooksRightDialog = false;
+
+                    
                 } catch (error) {
                     // 请求失败，处理错误
                     console.error('保存失败:', error);
@@ -143,26 +149,36 @@ export default {
             }
         },
         async open2() {
-            try {
-                console.log(this.gorders)
-                const response = await axios.post('http://localhost:8080/orders/newOrder', {
-                    shopId:this.gorders.shopId,
-                    buyerId:this.gorders.buyerId,
-                    goodId:this.$route.params.productId,
-                    quantity:1,
-                    sum:20,
-                });
-            console.log('成功保存到数据库:', response.data);
-        } catch (error) {
-                    // 请求失败，处理错误
-                    console.error('保存失败:', error);
-                    // 可以显示错误消息或采取其他适当的措施
-                }
-            this.$message({
-            message: '恭喜你，下单成功',
-            type: 'success'
-            });
-         },
+            if(this.gorders.buyerId=== ""){
+                this.$message.error("地址信息不能为空");
+            }
+            else{
+                    try {
+                        console.log(this.gorders)
+                        const response = await axios.post('http://localhost:8080/orders/newOrder', {
+                            shopId:this.gorders.shopId,
+                            buyerId:this.gorders.buyerId,
+                            goodId:this.$route.params.productId,
+                            quantity:1,
+                            sum:20,
+                        });
+                        console.log('成功保存到数据库:', response.data);
+
+                        this.$router.push({ name: 'zhuye' });
+                    } 
+                    catch (error) {
+                            // 请求失败，处理错误
+                            console.error('保存失败:', error);
+                            // 可以显示错误消息或采取其他适当的措施
+                     }
+
+                    this.$message({
+                        message: '恭喜你，下单成功',
+                        type: 'success'
+                    });
+            }
+        }
+            
     }
 }
 </script>

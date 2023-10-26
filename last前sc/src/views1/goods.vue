@@ -13,7 +13,7 @@
                 <el-col :span="18">
                     <div class="GMain">
                        <goods-test :productId="$route.params.productId"/>
-                        <goods-test-3 />
+                        <!-- <goods-test-3 /> -->
                     </div>
                 </el-col>    
             </el-row>

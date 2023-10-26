@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
      * @return 统一返回体
      */
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+
     public Response<Void> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         ObjectError objectError = e.getBindingResult().getAllErrors().stream().findFirst().orElse(null);
         String message = objectError != null ? objectError.getDefaultMessage() : null;
@@ -48,7 +48,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(value = UncategorizedSQLException.class)
-    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+
     public Response<Void> uncategorizedSQLExceptionHandler(UncategorizedSQLException e) {
         log.error("发生数据库错误异常:-------------->{}\n" +
                 "发生异常的sql语句:-------------->{}", e.getMessage(), e.getSql());
@@ -61,7 +61,7 @@ public class GlobalExceptionHandler {
         return Response.failed(StatueCode.NOT_ACCEPTABLE, e.getMessage());
     }
     @ExceptionHandler(value = JwtException.class)
-    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+
     public Response<String> jwtExceptionHandler(JwtException e) {
         log.error("发生token验证错误异常:-------------->{}\n", e.getMessage());
         return Response.unauthorized(e.getMessage());

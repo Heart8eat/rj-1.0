@@ -124,7 +124,7 @@
                   <div style="display: flex; align-items: flex-start">
                     <h4 style="margin-left: 0; margin-top: 0">配送信息:</h4>
                     <el-tag class="tag1" style="margin-left: 20px"
-                      > <br />{{ order.buyer.address }}
+                      >{{ order.buyer.name }} {{ order.buyer.phone }}<br />{{ order.buyer.address }}
                     </el-tag>
                   </div>
                 </el-main>

@@ -61,7 +61,7 @@ public class GoodController {
     @LoginToken
     @SecurityRequirement(name = "token")
     @DeleteMapping("/remove/{id}")
-    @Operation(summary = "根据主键删除")
+    @Operation(summary = "根据主键删除", hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
@@ -79,7 +79,7 @@ public class GoodController {
     @LoginToken
     @SecurityRequirement(name = "token")
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新")
+    @Operation(summary = "根据主键更新",hidden = true)
     public Response<Boolean> update(@RequestBody GoodEntity good) {
         return Response.success(goodService.updateById(good));
     }
@@ -155,7 +155,7 @@ public class GoodController {
      */
 
     @GetMapping("/page")
-    @Operation(summary = "分页查询")
+    @Operation(summary = "分页查询",hidden = true)
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
