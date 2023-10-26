@@ -39,7 +39,7 @@ public class ShopController {
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
     @PostMapping("/save")
-    @Operation(summary = "添加")
+    @Operation(summary = "添加",hidden = true)
 //    @LoginToken
     public Response<Boolean> save(@RequestBody ShopEntity shop) {
         return Response.success(shopsService.save(shop));
@@ -53,7 +53,7 @@ public class ShopController {
      * @return {@code true} 删除成功，{@code false} 删除失败
      */
     @DeleteMapping("/remove/{id}")
-    @Operation(summary = "根据主键删除")
+    @Operation(summary = "根据主键删除",hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
@@ -70,7 +70,7 @@ public class ShopController {
      * @return {@code true} 更新成功，{@code false} 更新失败
      */
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新")
+    @Operation(summary = "根据主键更新",hidden = true)
 //    @LoginToken
     public Response<Boolean> update(@RequestBody ShopEntity shop) {
         return Response.success(shopsService.updateById(shop));
@@ -83,7 +83,7 @@ public class ShopController {
      * @return 所有数据
      */
     @GetMapping("/list")
-    @Operation(summary = "查询所有")
+    @Operation(summary = "查询所有",hidden = true)
 //    @LoginToken
     public Response<List<ShopEntity>> list() {
         return Response.success(shopsService.list());
@@ -97,7 +97,7 @@ public class ShopController {
      * @return 详情
      */
     @GetMapping("/getInfo/{id}")
-    @Operation(summary = "根据主键获取详细信息")
+    @Operation(summary = "根据主键获取详细信息",hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
@@ -115,7 +115,7 @@ public class ShopController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    @Operation(summary = "分页查询")
+    @Operation(summary = "分页查询",hidden = true)
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))

@@ -4,12 +4,15 @@ package com.rj.backendjixian.service.impl;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.BuyerMapper;
+import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.vo.OrderVo;
 import com.rj.backendjixian.service.IBuyerService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.mybatisflex.core.query.QueryMethods.sum;
 import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
@@ -42,5 +45,16 @@ public class BuyerServiceImpl extends ServiceImpl<BuyerMapper, BuyerEntity> impl
                                 .from(GOOD_ORDER_ENTITY)
                                 .select(sum(GOOD_ORDER_ENTITY.SUM))
                                 .where(GOOD_ORDER_ENTITY.ORDER_ID.eq(orderVo.getId()))));
+    }
+
+    @Override
+    public Map<String,String> createBuyer(BuyerCreateDto buyer) {
+        BuyerEntity buyerEntity=buyer.dto2Entity();
+        if(mapper.insert(buyerEntity)>0){
+            Map<String,String> map=new HashMap<>();
+            map.put("id",buyerEntity.getId());
+            return map;
+        }
+        return null;
     }
 }
