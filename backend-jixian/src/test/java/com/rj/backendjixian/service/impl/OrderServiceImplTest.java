@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.system.ApplicationHome;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -95,4 +96,5 @@ public class OrderServiceImplTest {
         List<HistoryOrderVo> list = orderService.getHistoryOrders(shop_id);
         Assertions.assertEquals(list1,list);
     }
+
 }

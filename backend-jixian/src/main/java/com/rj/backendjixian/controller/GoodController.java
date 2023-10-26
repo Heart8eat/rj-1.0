@@ -4,10 +4,7 @@ import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
-import com.rj.backendjixian.model.vo.GoodBriefVo;
-import com.rj.backendjixian.model.vo.GoodDetailsVo;
-import com.rj.backendjixian.model.vo.HistoryGoodVo;
-import com.rj.backendjixian.model.vo.Response;
+import com.rj.backendjixian.model.vo.*;
 import com.rj.backendjixian.service.IGoodService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.LoginToken;
@@ -19,8 +16,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
@@ -164,5 +165,15 @@ public class GoodController {
         return Response.success(goodService.page(page));
     }
 
+
+    @PostMapping(value = "/uploadImg", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "保存图片")
+    @Parameters(value = {
+            @Parameter(name = "imgFile", description = "图片", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "file")),
+            @Parameter(name = "id", description = "商品id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<ImageVo> uploadImg(@RequestParam Serializable id, @RequestPart("file") MultipartFile file) throws IOException {
+        return Response.success(goodService.uploadImg(file, id.toString()));
+    }
 
 }

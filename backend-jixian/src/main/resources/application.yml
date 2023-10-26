@@ -1,10 +1,19 @@
 server:
   port: 8080
+
 spring:
   datasource:
     # sqlite
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:src/jixian.db
+  mvc:
+#    URL访问地址
+    static-path-pattern: /upload/**
+  web:
+    resources:
+      static-locations: classpath:/static,classpath:/public,classpath:/resources,classpath:/META-INF/resources,file:upload
+  thymeleaf:
+    suffix: .jpg,.png,.jpeg
 
 
 mybatis-flex:
