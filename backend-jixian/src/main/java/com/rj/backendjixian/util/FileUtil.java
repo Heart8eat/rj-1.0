@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -50,6 +51,7 @@ public class FileUtil {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
+
     /**
      * uuidname
      * @param fileName
@@ -58,5 +60,28 @@ public class FileUtil {
     public static String getUUIDName(String fileName){
         String uuid = UUID.randomUUID().toString().replace("-","");
         return uuid + getSuffix(fileName);
+    }
+
+    /**
+     * 遍历递归删除文件
+     * @param dirFile 要被删除的文件或文件夹
+     * @return 成功返回true，失败返回true
+     */
+    public static boolean deleteFile(File dirFile) {
+        // 如果dir对应的文件不存在，则退出
+        if (!dirFile.exists()) {
+            return false;
+        }
+        // dir是文件，直接删除
+        if (dirFile.isFile()) {
+            return dirFile.delete();
+        } else {
+
+            for (File file : dirFile.listFiles()) {
+                deleteFile(file);
+            }
+        }
+
+        return dirFile.delete();
     }
 }

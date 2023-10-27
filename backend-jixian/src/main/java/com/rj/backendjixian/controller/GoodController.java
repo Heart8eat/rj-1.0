@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -43,14 +44,24 @@ public class GoodController {
      * @param good
      * @return {@code true} 创建成功，{@code false} 创建失败
      */
-    @PostMapping("/create")
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "创建商品")
     @LoginToken
     @SecurityRequirement(name = "token")
-    public Response<Boolean> create(@RequestBody GoodCreateDto good) {
-
-        return Response.success(goodService.save(good.dto2Entity()));
+    public Response<Map<String,String>> create(@RequestBody GoodCreateDto good){
+        return Response.success(goodService.createGood(good));
     }
+    /*
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "创建商品")
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    public Response<List<ImageVo>> create(GoodCreateDto good,
+                                          @RequestPart("file") MultipartFile[] files) throws IOException {
+        String id = goodService.createGood(good).get("goodId");
+        return Response.success(goodService.uploadImgs(files, id));
+    }
+*/
 
     /**
      * 根据主键删除
@@ -167,14 +178,30 @@ public class GoodController {
     }
 
 
+    /**
+     * 多图片上传测试接口
+     * @param id
+     * @param files
+     * @return
+     * @throws IOException
+     */
     @PostMapping(value = "/uploadImg", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "保存图片")
     @Parameters(value = {
-            @Parameter(name = "imgFile", description = "图片", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "file")),
+//            @Parameter(name = "imgFile", description = "图片", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "file")),
             @Parameter(name = "id", description = "商品id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
-    public Response<ImageVo> uploadImg(@RequestParam Serializable id, @RequestPart("file") MultipartFile file) throws IOException {
-        return Response.success(goodService.uploadImg(file, id.toString()));
+    public Response<List<ImageVo>> uploadImg(@RequestParam Serializable id,
+                                             @RequestPart("uploadFiles") MultipartFile[] files) throws IOException {
+        return Response.success(goodService.uploadImgs(files, id.toString()));
     }
 
+    @PostMapping(value = "/deleteImg")
+    @Operation(summary = "删除文件")
+    @Parameters(value = {
+            @Parameter(name = "uuid", description = "图片文件夹uuid", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<Boolean> deleteImg(@RequestParam Serializable uuid){
+        return Response.success((goodService.deleteImgs(uuid.toString())));
+    }
 }

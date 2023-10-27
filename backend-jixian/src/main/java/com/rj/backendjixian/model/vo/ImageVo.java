@@ -1,5 +1,6 @@
 package com.rj.backendjixian.model.vo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,25 +11,21 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Accessors(chain = true)
 public class ImageVo {
-    /**
-     * 0-正常  1-失败
-     */
+
+    //0-正常  1-失败
     private Integer statusCode;
-    /**
-     * 图片地址
-     */
+
+    @Schema(description = "图片地址")
     private String url;
-    /**
-     * 图片宽度
-     */
+
+    @Schema(description = "图片宽度")
     private Integer width;
-    /**
-     * 图片高度
-     */
+
+    @Schema(description = "图片高度")
     private Integer height;
 
     /**
-     * 失败
+     * 失败ImageVo创建
      * @return ImageVo
      */
     public static ImageVo fail(){
@@ -36,7 +33,7 @@ public class ImageVo {
     }
 
     /**
-     * 成功
+     * 成功ImageVo创建
      * @param url 图片地址
      * @param width 图片宽度
      * @param height 图片高度
