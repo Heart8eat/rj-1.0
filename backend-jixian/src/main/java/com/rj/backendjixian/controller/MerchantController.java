@@ -1,6 +1,7 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.aspect.annotation.WebLog;
 import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.dto.MerchantUpdateDto;
 import com.rj.backendjixian.model.entity.MerchantEntity;
@@ -153,6 +154,7 @@ public class MerchantController {
             @Parameter(name = "password", description = "密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
     @PassToken
+    @WebLog
     public Response<TokenVo> login(@RequestParam(value = "name")String name,
                                    @RequestParam(value = "password")String password) throws LoginException {
         MerchantEntity merchantEntity = merchantsService.login(name, password);

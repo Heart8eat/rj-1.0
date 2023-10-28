@@ -1,5 +1,6 @@
 package com.rj.backendjixian.config;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -15,7 +16,10 @@ import org.springframework.context.annotation.Configuration;
         type = SecuritySchemeType.HTTP,
         bearerFormat="JWT",
         name = "token",
-        scheme = "bearer")
+        scheme = "bearer",
+        paramName = "Authorization",
+        description = "jwt token",
+        in = SecuritySchemeIn.HEADER)
 public class Swagger3Config {
     @Bean
     public OpenAPI createApi() {
