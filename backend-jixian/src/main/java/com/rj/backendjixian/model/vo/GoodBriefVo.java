@@ -1,6 +1,5 @@
 package com.rj.backendjixian.model.vo;
 
-import cn.hutool.core.util.StrUtil;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -25,13 +24,12 @@ public class GoodBriefVo {
 
     private String name;
 
-    @Schema(description = "商品展示图片，默认为第一张图片")
-    private String image;
+    @Schema(description = "商品主图片")
+    private ImageVo image;
 
     public GoodBriefVo(GoodEntity goodEntity) {
         this.id = goodEntity.getId();
         this.price = goodEntity.getPrice();
-        this.image = StrUtil.split(goodEntity.getImage(), ",").get(0);
-        this.name=goodEntity.getName();
+        this.name = goodEntity.getName();
     }
 }

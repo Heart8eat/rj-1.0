@@ -5,12 +5,10 @@ import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.StatueCode;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.UncategorizedSQLException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
@@ -60,15 +58,17 @@ public class GlobalExceptionHandler {
         log.error("发生IO错误异常:-------------->{}\n", e.getMessage());
         return Response.failed(StatueCode.NOT_ACCEPTABLE, e.getMessage());
     }
+
     @ExceptionHandler(value = JwtException.class)
 
     public Response<String> jwtExceptionHandler(JwtException e) {
         log.error("发生token验证错误异常:-------------->{}\n", e.getMessage());
         return Response.unauthorized(e.getMessage());
     }
+
     @ExceptionHandler(value = LoginException.class)
     public Response<String> loginExceptionHandler(LoginException e) {
-        log.error("发生登录失败异常:-------------->{}尝试登录失败\n,错误信息:{}\n",e.getLoginName(), e.getMessage());
+        log.error("发生登录失败异常:-------------->{}尝试登录失败\n,错误信息:{}\n", e.getLoginName(), e.getMessage());
         return Response.success(e.getMessage());
     }
 }

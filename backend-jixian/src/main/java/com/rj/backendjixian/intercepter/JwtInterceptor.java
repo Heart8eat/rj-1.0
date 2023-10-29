@@ -66,17 +66,17 @@ public class JwtInterceptor implements HandlerInterceptor {
                     throw new JwtException("no token info.");
                 }
                 // 检查token前缀是否正确
-                if (!token.startsWith("Bearer ")){
+                if (!token.startsWith("Bearer ")) {
                     throw new MalformedJwtException("token prefix must be Bearer!");
                 }
-                token=token.replace("Bearer ","");
+                token = token.replace("Bearer ", "");
 
                 Claims resToken = JwtUtil.parseToken(token);
                 // 将商家的详细信息放入上下文
-                MerchantEntity merchant=merchantService.getById(resToken.getId());
-                ShopEntity shop=shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
-                Context.put("merchant",merchant);
-                Context.put("shop",shop);
+                MerchantEntity merchant = merchantService.getById(resToken.getId());
+                ShopEntity shop = shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
+                Context.put("merchant", merchant);
+                Context.put("shop", shop);
                 log.info(resToken.toString());
                 return true;
             }
@@ -85,7 +85,6 @@ public class JwtInterceptor implements HandlerInterceptor {
 
         return true;
     }
-
 
 
     @Override

@@ -12,5 +12,6 @@ import java.util.Map;
 
 public interface IBuyerService extends IService<BuyerEntity> {
     List<OrderVo> getBuyerOrders(String id);
-    Map<String,String> createBuyer(BuyerCreateDto buyer);
+
+    Map<String, String> createBuyer(BuyerCreateDto buyer);
 }

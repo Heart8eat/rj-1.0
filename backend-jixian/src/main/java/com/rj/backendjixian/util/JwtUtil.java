@@ -14,8 +14,8 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    private static String key = "tCo2ZgpY9JdzSVbuJ25f1r77NXJXti7g" ;  //密钥
-    private static long Token_EXP =1000 * 60 * 60 * 24 ;       //时间 一天
+    private static String key = "tCo2ZgpY9JdzSVbuJ25f1r77NXJXti7g";  //密钥
+    private static long Token_EXP = 1000 * 60 * 60 * 24;       //时间 一天
 
     //通过配置文件注入密钥和过期时间
 //    @Value("${jwt.key}")
@@ -26,19 +26,23 @@ public class JwtUtil {
 //    public  void setToken_EXP(long token_EXP) {
 //        Token_EXP = token_EXP;
 //    }
+
     /**
      * 获取转换后的私钥对象
+     *
      * @return
      */
-    public static SecretKey getSecretKey(){
+    public static SecretKey getSecretKey() {
         return Keys.hmacShaKeyFor(key.getBytes());
     }
+
     /**
      * 生成token
+     *
      * @param merchant
      * @return
      */
-    public static String createToken(MerchantEntity merchant){
+    public static String createToken(MerchantEntity merchant) {
 
         JwtBuilder jwtBuilder = Jwts.builder()
                 .header()//头部信息
@@ -53,7 +57,7 @@ public class JwtUtil {
         return jwtBuilder.compact();
     }
 
-    public static Claims parseToken(String jwt){
+    public static Claims parseToken(String jwt) {
 
         return Jwts.parser()
                 .verifyWith(getSecretKey())
@@ -65,6 +69,7 @@ public class JwtUtil {
 
     /**
      * 验证JWT
+     *
      * @param jwtStr
      * @return
      * @throws JSONException
@@ -88,8 +93,6 @@ public class JwtUtil {
         //返回success为null则校验失败
         return pojo;
     }
-
-
 
 
 }

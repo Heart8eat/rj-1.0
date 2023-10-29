@@ -50,7 +50,7 @@ public class MerchantController {
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
     @PostMapping("/save")
-    @Operation(summary = "添加",hidden = true)
+    @Operation(summary = "添加", hidden = true)
     public Response<Boolean> save(@RequestBody MerchantEntity merchant) {
         return Response.success(merchantsService.save(merchant));
     }
@@ -63,7 +63,7 @@ public class MerchantController {
      * @return {@code true} 删除成功，{@code false} 删除失败
      */
     @DeleteMapping("/remove/{id}")
-    @Operation(summary = "根据主键删除",hidden = true)
+    @Operation(summary = "根据主键删除", hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
@@ -81,7 +81,7 @@ public class MerchantController {
      * @return {@code true} 更新成功，{@code false} 更新失败
      */
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新",hidden = true)
+    @Operation(summary = "根据主键更新", hidden = true)
     @LoginToken
     @SecurityRequirement(name = "token")
     public Response<Boolean> update(@RequestBody MerchantEntity merchant) {
@@ -107,16 +107,15 @@ public class MerchantController {
      * 获取登录商家的详细信息。
      *
      * @return 详情
-     *
      */
     @LoginToken
     @SecurityRequirement(name = "token")
     @GetMapping("/getInfo")
     @Operation(summary = "获取登录商家的详细信息")
     public Response<MerchantDetailsVo> getInfo() {
-        MerchantEntity merchant= (MerchantEntity) Context.get("merchant");
-        ShopEntity shop=(ShopEntity) Context.get("shop");
-        return Response.success(new MerchantDetailsVo(merchant,shop));
+        MerchantEntity merchant = (MerchantEntity) Context.get("merchant");
+        ShopEntity shop = (ShopEntity) Context.get("shop");
+        return Response.success(new MerchantDetailsVo(merchant, shop));
     }
 
 
@@ -143,6 +142,7 @@ public class MerchantController {
 
     /**
      * 卖家登录
+     *
      * @param name
      * @param password
      * @return
@@ -155,15 +155,16 @@ public class MerchantController {
     })
     @PassToken
     @WebLog
-    public Response<TokenVo> login(@RequestParam(value = "name")String name,
-                                   @RequestParam(value = "password")String password) throws LoginException {
+    public Response<TokenVo> login(@RequestParam(value = "name") String name,
+                                   @RequestParam(value = "password") String password) throws LoginException {
         MerchantEntity merchantEntity = merchantsService.login(name, password);
 
-        return Response.success(new TokenVo(JwtUtil.createToken(merchantEntity),"Bearer"));
+        return Response.success(new TokenVo(JwtUtil.createToken(merchantEntity), "Bearer"));
     }
 
     /**
      * 更改商家密码
+     *
      * @param merchantUpdateDto
      * @return
      */
@@ -171,8 +172,8 @@ public class MerchantController {
     @Operation(summary = "更改密码")
     @SecurityRequirement(name = "token")
     @LoginToken
-    public Response<Boolean> updatePassword(@Valid @RequestBody MerchantUpdateDto merchantUpdateDto){
-        MerchantEntity merchant=(MerchantEntity) Context.get("merchant");
+    public Response<Boolean> updatePassword(@Valid @RequestBody MerchantUpdateDto merchantUpdateDto) {
+        MerchantEntity merchant = (MerchantEntity) Context.get("merchant");
         merchantUpdateDto.setId(merchant.getId());
         return Response.success((merchantsService.updatePassword(merchantUpdateDto)));
     }

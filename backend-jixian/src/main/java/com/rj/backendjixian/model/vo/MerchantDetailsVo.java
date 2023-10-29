@@ -20,10 +20,10 @@ public class MerchantDetailsVo {
 
     private String shop_id;
 
-    public MerchantDetailsVo(MerchantEntity merchant,ShopEntity shop) {
+    public MerchantDetailsVo(MerchantEntity merchant, ShopEntity shop) {
         this.name = merchant.getName();
-        this.password=merchant.getPassword();
-        this.phone=merchant.getPhone();
-        this.shop_id=shop.getId();
+        this.password = merchant.getPassword();
+        this.phone = merchant.getPhone();
+        this.shop_id = shop.getId();
     }
 }

@@ -1,6 +1,5 @@
 package com.rj.backendjixian.model.vo;
 
-import cn.hutool.core.util.StrUtil;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,7 @@ public class HistoryGoodVo {
 
     private String name;
 
-    private String image;
+    private ImageVo image;
 
 
     @Schema(description = "类别")
@@ -41,14 +40,12 @@ public class HistoryGoodVo {
     private Integer status;
 
     public HistoryGoodVo(GoodEntity goodEntity) {
-        this.id=goodEntity.getId();
+        this.id = goodEntity.getId();
         this.name = goodEntity.getName();
-        this.image = StrUtil.split(goodEntity.getImage(), ",").get(0);
-        this.type=goodEntity.getType();
-        this.variety=goodEntity.getVariety();
-        this.weight=goodEntity.getWeight();
-        this.store=goodEntity.getStore();
-        this.shelfDate=goodEntity.getShelfDate();
-        this.status=goodEntity.getStatus();
+        this.variety = goodEntity.getVariety();
+        this.weight = goodEntity.getWeight();
+        this.store = goodEntity.getStore();
+        this.shelfDate = goodEntity.getShelfDate();
+        this.status = goodEntity.getStatus();
     }
 }

@@ -32,6 +32,7 @@ public class WebLogAspect {
     @Pointcut("execution(public * com.rj.backendjixian.controller.MerchantController.*(..))")
     public void webLog() {
     }
+
     @Around("webLog()")
     public Object doAround(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
@@ -51,14 +52,14 @@ public class WebLogAspect {
         // 如果被WebLog注解则为webLog实体赋值
         if (method.isAnnotationPresent(WebLog.class)) {
             WebLog webLog = method.getAnnotation(WebLog.class);
-            if(webLog.isSaveResponseData()){
+            if (webLog.isSaveResponseData()) {
                 webLogEntity.setResult(result.toString());
             }
-            if(webLog.isSaveRequestData()){
+            if (webLog.isSaveRequestData()) {
                 webLogEntity.setParameter(request.getQueryString());
             }
-            if(method.isAnnotationPresent(Operation.class)){
-                Operation operation=method.getAnnotation(Operation.class);
+            if (method.isAnnotationPresent(Operation.class)) {
+                Operation operation = method.getAnnotation(Operation.class);
                 webLogEntity.setSummary(operation.summary());
                 webLogEntity.setDescription(operation.description());
 
@@ -67,11 +68,11 @@ public class WebLogAspect {
             String urlStr = request.getRequestURL().toString();
             webLogEntity.setBasePath(StrUtil.removeSuffix(urlStr, URLUtil.url(urlStr).getPath()));
             webLogEntity.setIp(request.getRemoteUser());
-            webLogEntity.setSpendTime(String.valueOf(endTime-startTime));
+            webLogEntity.setSpendTime(String.valueOf(endTime - startTime));
             webLogEntity.setMethod(method.getName());
             webLogEntity.setUri(request.getRequestURI());
             webLogEntity.setUrl(request.getRequestURL().toString());
-            log.info("{}",webLogEntity);
+            log.info("{}", webLogEntity);
         }
 
 

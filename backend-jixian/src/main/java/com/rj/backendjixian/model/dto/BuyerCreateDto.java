@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +30,8 @@ public class BuyerCreateDto {
     @Schema(example = "123456789@qq.com")
     @Email
     private String email;
-    public BuyerEntity dto2Entity(){
+
+    public BuyerEntity dto2Entity() {
         return BuyerEntity.builder()
                 .email(this.email)
                 .address(this.address)

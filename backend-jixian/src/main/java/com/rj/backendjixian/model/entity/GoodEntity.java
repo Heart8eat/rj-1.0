@@ -34,8 +34,6 @@ public class GoodEntity {
     @Column(value = "name")
     private String name;
 
-    @Column(value = "image")
-    private String image;
 
     @Column(value = "quantity")
     private Integer quantity;
@@ -47,9 +45,9 @@ public class GoodEntity {
     @Schema(description = "0为下架，1为上架 ，2为冻结")
     private Integer status;
 
-    @Column(value = "type")
-    @Schema(description = "类别")
-    private String type;
+    @Column(value = "type_id")
+    @Schema(description = "类别id")
+    private String typeId;
 
     @Column(value = "variety")
     @Schema(description = "品种")

@@ -35,6 +35,12 @@ import java.util.List;
 @CrossOrigin
 public class OrderController {
 
+    /**
+     * 通过前端返回的GoodOrderDto类创建新订单
+     */
+
+    @Autowired
+    IGoodOrderService goodOrderService;
     @Autowired
     private IOrderService ordersService;
 
@@ -45,12 +51,11 @@ public class OrderController {
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
     @PostMapping("/save")
-    @Operation(summary = "添加",hidden = true)
+    @Operation(summary = "添加", hidden = true)
 //    @LoginToken
     public Response<Boolean> save(@RequestBody OrderEntity order) {
         return Response.success(ordersService.save(order));
     }
-
 
     /**
      * 根据主键删除
@@ -59,7 +64,7 @@ public class OrderController {
      * @return {@code true} 删除成功，{@code false} 删除失败
      */
     @DeleteMapping("/remove/{id}")
-    @Operation(summary = "根据主键删除",hidden = true)
+    @Operation(summary = "根据主键删除", hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
@@ -68,7 +73,6 @@ public class OrderController {
         return Response.success(ordersService.removeById(id));
     }
 
-
     /**
      * 根据主键更新
      *
@@ -76,12 +80,11 @@ public class OrderController {
      * @return {@code true} 更新成功，{@code false} 更新失败
      */
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新",hidden = true)
+    @Operation(summary = "根据主键更新", hidden = true)
 //    @LoginToken
     public Response<Boolean> update(@RequestBody OrderEntity order) {
         return Response.success(ordersService.updateById(order));
     }
-
 
     /**
      * 查询所有
@@ -89,12 +92,11 @@ public class OrderController {
      * @return 所有数据
      */
     @GetMapping("/list")
-    @Operation(summary = "查询所有",hidden = true)
+    @Operation(summary = "查询所有", hidden = true)
 //    @LoginToken
     public Response<List<OrderEntity>> list() {
         return Response.success(ordersService.list());
     }
-
 
     /**
      * 根据主键获取详细信息。
@@ -103,7 +105,7 @@ public class OrderController {
      * @return 详情
      */
     @GetMapping("/getInfo/{id}")
-    @Operation(summary = "根据主键获取详细信息",hidden = true)
+    @Operation(summary = "根据主键获取详细信息", hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
@@ -111,7 +113,6 @@ public class OrderController {
     public Response<OrderEntity> getInfo(@PathVariable Serializable id) {
         return Response.success(ordersService.getById(id));
     }
-
 
     /**
      * 分页查询
@@ -121,7 +122,7 @@ public class OrderController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    @Operation(summary = "分页查询",hidden = true)
+    @Operation(summary = "分页查询", hidden = true)
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
@@ -133,9 +134,8 @@ public class OrderController {
         return Response.success(ordersService.page(page));
     }
 
-
     /**
-     *  获取历史订单
+     * 获取历史订单
      *
      * @param id
      * @return
@@ -147,7 +147,7 @@ public class OrderController {
     })
     @SecurityRequirement(name = "token")
     @LoginToken
-    public Response<List<HistoryOrderVo>> HistoryOrders(@PathVariable Serializable id){
+    public Response<List<HistoryOrderVo>> HistoryOrders(@PathVariable Serializable id) {
         List<HistoryOrderVo> list = ordersService.getHistoryOrders(id.toString());
 
         return Response.success(list);
@@ -155,6 +155,7 @@ public class OrderController {
 
     /**
      * 根据id更改订单状态
+     *
      * @param status
      * @param id
      * @return
@@ -167,24 +168,17 @@ public class OrderController {
             @Parameter(name = "status", description = "订单状态", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "id", description = "订单id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
-    public Response<Integer> updateStatus(@RequestParam int status,@RequestParam String id){
-        OrderEntity orderEntity = ordersService.getById(id) ;
+    public Response<Integer> updateStatus(@RequestParam int status, @RequestParam String id) {
+        OrderEntity orderEntity = ordersService.getById(id);
         orderEntity.setStatus(status);
 
         return Response.success((ordersService.update(orderEntity)));
     }
 
-    /**
-     * 通过前端返回的GoodOrderDto类创建新订单
-     */
-
-    @Autowired
-    IGoodOrderService goodOrderService;
-
     @PostMapping("/newOrder")
     @Operation(summary = "生成订单")
 
-    public Response<Boolean> newOrder(@RequestBody GoodOrderDto goodOrderDto){
+    public Response<Boolean> newOrder(@RequestBody GoodOrderDto goodOrderDto) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setStatus(0);
         orderEntity.setBuyerId(goodOrderDto.getBuyerId());

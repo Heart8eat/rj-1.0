@@ -15,11 +15,15 @@ import java.util.Map;
 
 
 public interface IGoodService extends IService<GoodEntity> {
-    List<HistoryGoodVo> getHistoryGoodList(String shop_id);
-    List<GoodBriefVo> getGoodBriefList();
+    List<HistoryGoodVo> getHistoryGoodList(String shop_id, String type, String name);
+
+    List<GoodBriefVo> getGoodBriefList(String type, String name);
+
     boolean deleteImgs(String id);
+
     List<ImageVo> uploadImgs(MultipartFile[] multipartFiles, String id) throws IOException;
-    Map<String,String> createGood(GoodCreateDto good);
+
+    Map<String, String> createGood(GoodCreateDto good);
 
     Boolean changeGoodStatue(String id, int statue);
 

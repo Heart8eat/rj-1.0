@@ -26,20 +26,22 @@ public class ImageVo {
 
     /**
      * 失败ImageVo创建
+     *
      * @return ImageVo
      */
-    public static ImageVo fail(){
-        return new ImageVo(1,null,null,null);
+    public static ImageVo fail() {
+        return new ImageVo(1, null, null, null);
     }
 
     /**
      * 成功ImageVo创建
-     * @param url 图片地址
-     * @param width 图片宽度
+     *
+     * @param url    图片地址
+     * @param width  图片宽度
      * @param height 图片高度
      * @return ImageVo
      */
-    public static ImageVo success(String url,Integer width,Integer height){
-        return new ImageVo(0,url,width,height);
+    public static ImageVo success(String url, Integer width, Integer height) {
+        return new ImageVo(0, url, width, height);
     }
 }

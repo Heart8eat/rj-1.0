@@ -13,6 +13,6 @@ public class MerchantUpdateDto {
     @Schema(description = "新密码")
     @NotBlank
     private String newPassword;
-    @Schema(hidden=true)
+    @Schema(hidden = true)
     private String id;
 }

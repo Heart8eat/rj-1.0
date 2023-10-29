@@ -9,8 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,7 +21,6 @@ public class GoodCreateDto {
 
     private String name;
 
-    private List<String> image;
 
     private Integer quantity;
 
@@ -45,15 +42,16 @@ public class GoodCreateDto {
     @Schema(description = "商品描述(可选)")
     private String description;
 
+    @Schema(description = "前端生成的id")
+    private String fakeId;
+
     public GoodEntity dto2Entity() {
         GoodEntity goodEntity = new GoodEntity();
-        goodEntity.setImage(String.join(",", this.image));
         goodEntity.setName(this.name);
         goodEntity.setPrice(this.price);
-        goodEntity.setQuantity(this.quantity!=null?this.quantity:1);
+        goodEntity.setQuantity(this.quantity != null ? this.quantity : 1);
         goodEntity.setStore(this.store);
         goodEntity.setVariety(this.variety);
-        goodEntity.setType(this.type);
         goodEntity.setShopId(this.shopId);
         goodEntity.setWeight(this.weight);
         goodEntity.setDescription(this.description);

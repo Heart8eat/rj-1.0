@@ -28,18 +28,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
     @Override
     public List<HistoryOrderVo> getHistoryOrders(String id) {
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(GOOD_ORDER_ENTITY.ORDER_ID,GOOD_ENTITY.NAME, ORDER_ENTITY.BUYER_ID, GOOD_ENTITY.IMAGE, ORDER_ENTITY.STATUS)
+                .select(GOOD_ORDER_ENTITY.ORDER_ID, GOOD_ENTITY.NAME, ORDER_ENTITY.BUYER_ID, ORDER_ENTITY.STATUS)
                 .from(GOOD_ORDER_ENTITY).as("go")
                 .where(ORDER_ENTITY.SHOP_ID.eq(id))
                 .leftJoin(GOOD_ENTITY).as("g").on(GOOD_ORDER_ENTITY.GOOD_ID.eq(GOOD_ENTITY.ID))
                 .leftJoin(ORDER_ENTITY).as("o").on(GOOD_ORDER_ENTITY.ORDER_ID.eq(ORDER_ENTITY.ID));
         return mapper.selectListByQueryAs(queryWrapper, HistoryOrderVo.class,
                 ordersfieldQueryBuilder -> ordersfieldQueryBuilder
-                    .field(HistoryOrderVo::getBuyer)
-                    .queryWrapper(historyOrderVo -> QueryWrapper.create()
-                        .from(BUYER_ENTITY)
-                        .select(BUYER_ENTITY.ID, BUYER_ENTITY.NAME, BUYER_ENTITY.ADDRESS, BUYER_ENTITY.PHONE)
-                        .where(BUYER_ENTITY.ID.eq(historyOrderVo.getBuyer_id()))));
+                        .field(HistoryOrderVo::getBuyer)
+                        .queryWrapper(historyOrderVo -> QueryWrapper.create()
+                                .from(BUYER_ENTITY)
+                                .select(BUYER_ENTITY.ID, BUYER_ENTITY.NAME, BUYER_ENTITY.ADDRESS, BUYER_ENTITY.PHONE)
+                                .where(BUYER_ENTITY.ID.eq(historyOrderVo.getBuyer_id()))));
 //                        .leftJoin(ORDER_ENTITY).on(ORDER_ENTITY.BUYER_ID.eq(BUYER_ENTITY.ID)) ));
 //                        .where(ORDER_ENTITY.SHOP_ID.eq(id))));
     }
@@ -49,7 +49,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
     public int update(OrderEntity orderEntity) {
         return mapper.update(orderEntity);
     }
-
 
 
 }

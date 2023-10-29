@@ -13,5 +13,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface PassToken {
 
-        boolean required() default true;
+    boolean required() default true;
 }

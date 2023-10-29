@@ -19,22 +19,21 @@ import static com.rj.backendjixian.model.entity.table.MerchantEntityTableDef.MER
  */
 @Service
 public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, MerchantEntity> implements IMerchantService {
-    
+
     @Override
     public MerchantEntity login(String name, String password) throws LoginException {
         MerchantEntity merchantEntity = mapper.selectOneByCondition(MERCHANT_ENTITY.NAME.eq(name));
-        if(merchantEntity!=null && merchantEntity.getPassword().equals(password)){
+        if (merchantEntity != null && merchantEntity.getPassword().equals(password)) {
             return merchantEntity;
         }
-        throw new LoginException("用户名或密码错误",name);
+        throw new LoginException("用户名或密码错误", name);
     }
 
 
-
     @Override
-    public boolean updatePassword(MerchantUpdateDto merchantUpdateDto ) {
+    public boolean updatePassword(MerchantUpdateDto merchantUpdateDto) {
         return this.updateChain()
-                .set(MERCHANT_ENTITY.PASSWORD,merchantUpdateDto.getNewPassword())
+                .set(MERCHANT_ENTITY.PASSWORD, merchantUpdateDto.getNewPassword())
                 .where(MERCHANT_ENTITY.ID.eq(merchantUpdateDto.getId()))
                 .update();
     }

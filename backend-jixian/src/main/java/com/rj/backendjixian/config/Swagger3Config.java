@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @SecurityScheme(
         type = SecuritySchemeType.HTTP,
-        bearerFormat="JWT",
+        bearerFormat = "JWT",
         name = "token",
         scheme = "bearer",
         paramName = "Authorization",
@@ -57,7 +57,7 @@ public class Swagger3Config {
     public GroupedOpenApi goodApi() {
         return GroupedOpenApi.builder()
                 .group("商品接口")
-                .pathsToMatch("/goods/**")
+                .pathsToMatch("/goods/**", "/goodType/**")
                 .build();
     }
 

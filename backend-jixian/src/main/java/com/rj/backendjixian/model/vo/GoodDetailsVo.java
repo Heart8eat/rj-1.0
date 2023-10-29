@@ -1,6 +1,6 @@
 package com.rj.backendjixian.model.vo;
 
-import cn.hutool.core.util.StrUtil;
+
 import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -22,8 +22,11 @@ public class GoodDetailsVo {
     private Float price;
 
     private String name;
+    @Schema(description = "主图片")
+    private ImageVo mainImage;
 
-    private List<String> image;
+    @Schema(description = "其他图片")
+    private List<ImageVo> image;
 //    库存暂时没有
 //    private Integer quantity;
 
@@ -43,22 +46,16 @@ public class GoodDetailsVo {
     private String store;
 
 
-
-
     @Schema(description = "商品描述(可选)")
     private String description;
-
-
 
 
     public GoodDetailsVo(GoodEntity goodEntity) {
         this.store = goodEntity.getStore();
         this.price = goodEntity.getPrice();
         this.variety = goodEntity.getVariety();
-        this.image = StrUtil.split(goodEntity.getImage(), ",");
         this.name = goodEntity.getName();
-        this.type = goodEntity.getType();
         this.weight = goodEntity.getWeight();
-        this.description=goodEntity.getDescription();
+        this.description = goodEntity.getDescription();
     }
 }

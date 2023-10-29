@@ -7,7 +7,7 @@ spring:
     driver-class-name: org.sqlite.JDBC
     url: jdbc:sqlite:src/jixian.db
   mvc:
-#    URL访问地址
+    #    URL访问地址
     static-path-pattern: /upload/**
   web:
     resources:

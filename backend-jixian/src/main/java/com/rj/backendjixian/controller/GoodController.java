@@ -20,7 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
@@ -37,18 +36,17 @@ public class GoodController {
     private IGoodService goodService;
 
 
-
     /**
      * 创建商品
      *
      * @param good
      * @return {@code true} 创建成功，{@code false} 创建失败
      */
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/create")
     @Operation(summary = "创建商品")
     @LoginToken
     @SecurityRequirement(name = "token")
-    public Response<Map<String,String>> create(@RequestBody GoodCreateDto good){
+    public Response<Map<String, String>> create(@RequestBody GoodCreateDto good) {
         return Response.success(goodService.createGood(good));
     }
     /*
@@ -90,7 +88,7 @@ public class GoodController {
     @LoginToken
     @SecurityRequirement(name = "token")
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新",hidden = true)
+    @Operation(summary = "根据主键更新", hidden = true)
     public Response<Boolean> update(@RequestBody GoodEntity good) {
         return Response.success(goodService.updateById(good));
     }
@@ -104,12 +102,13 @@ public class GoodController {
 
     @GetMapping("/getGoodBriefList")
     @Operation(summary = "查询所有上架商品的简略信息")
-    public Response<List<GoodBriefVo>> getGoodBriefList() {
-        return Response.success(goodService.getGoodBriefList());
+    public Response<List<GoodBriefVo>> getGoodBriefList(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
+        return Response.success(goodService.getGoodBriefList(type, name));
     }
 
     /**
      * 查询历史商品页面接口
+     *
      * @return 所有历史商品
      */
     @LoginToken
@@ -119,13 +118,15 @@ public class GoodController {
 //    @Parameters(value = {
 //            @Parameter(name = "shop_id", description = "商铺id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
 //    })
-    public Response<List<HistoryGoodVo>> getHistoryGoodList() {
-        ShopEntity shop= (ShopEntity) Context.get("shop");
-        String shop_id=shop.getId();
-        return Response.success(goodService.getHistoryGoodList(shop_id));
+    public Response<List<HistoryGoodVo>> getHistoryGoodList(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
+        ShopEntity shop = (ShopEntity) Context.get("shop");
+        String shop_id = shop.getId();
+        return Response.success(goodService.getHistoryGoodList(shop_id, type, name));
     }
+
     /**
      * 更改商品状态接口
+     *
      * @return ture false
      */
     @LoginToken
@@ -136,8 +137,8 @@ public class GoodController {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string")),
             @Parameter(name = "statue", description = "", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
-    public Response<Boolean> freeze(@PathVariable Serializable id,@RequestParam int statue) {
-        return Response.success(goodService.changeGoodStatue((String) id,statue));
+    public Response<Boolean> freeze(@PathVariable Serializable id, @RequestParam int statue) {
+        return Response.success(goodService.changeGoodStatue((String) id, statue));
     }
 
 
@@ -166,7 +167,7 @@ public class GoodController {
      */
 
     @GetMapping("/page")
-    @Operation(summary = "分页查询",hidden = true)
+    @Operation(summary = "分页查询", hidden = true)
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
@@ -180,6 +181,7 @@ public class GoodController {
 
     /**
      * 多图片上传测试接口
+     *
      * @param id
      * @param files
      * @return
@@ -201,7 +203,7 @@ public class GoodController {
     @Parameters(value = {
             @Parameter(name = "uuid", description = "图片文件夹uuid", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
-    public Response<Boolean> deleteImg(@RequestParam Serializable uuid){
+    public Response<Boolean> deleteImg(@RequestParam Serializable uuid) {
         return Response.success((goodService.deleteImgs(uuid.toString())));
     }
 }
