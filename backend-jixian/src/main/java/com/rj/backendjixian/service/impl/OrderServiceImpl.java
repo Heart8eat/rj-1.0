@@ -5,6 +5,7 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.OrderMapper;
 import com.rj.backendjixian.model.entity.OrderEntity;
+import com.rj.backendjixian.model.vo.GoodBriefVo;
 import com.rj.backendjixian.model.vo.HistoryOrderVo;
 import com.rj.backendjixian.service.IOrderService;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static com.rj.backendjixian.model.entity.table.BuyerEntityTableDef.BUYER_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
+import static com.rj.backendjixian.model.entity.table.GoodImageEntityTableDef.GOOD_IMAGE_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodOrderEntityTableDef.GOOD_ORDER_ENTITY;
 import static com.rj.backendjixian.model.entity.table.OrderEntityTableDef.ORDER_ENTITY;
 
@@ -39,7 +41,22 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
                         .queryWrapper(historyOrderVo -> QueryWrapper.create()
                                 .from(BUYER_ENTITY)
                                 .select(BUYER_ENTITY.ID, BUYER_ENTITY.NAME, BUYER_ENTITY.ADDRESS, BUYER_ENTITY.PHONE)
-                                .where(BUYER_ENTITY.ID.eq(historyOrderVo.getBuyer_id()))));
+                                .where(BUYER_ENTITY.ID.eq(historyOrderVo.getBuyer_id()))),
+                fieldQueryBuilder -> fieldQueryBuilder
+                        .field(HistoryOrderVo::getImage)
+                        .queryWrapper(historyOrderVo ->
+                                QueryWrapper.create()
+                                        .from(GOOD_IMAGE_ENTITY)
+                                        .select(GOOD_IMAGE_ENTITY.URL, GOOD_IMAGE_ENTITY.WIDTH, GOOD_IMAGE_ENTITY.HEIGHT)
+                                        .where(GOOD_IMAGE_ENTITY.GOOD_ID.in(
+                                                QueryWrapper.create()
+                                                        .select(GOOD_ORDER_ENTITY.GOOD_ID)
+                                                        .from(GOOD_ORDER_ENTITY)
+                                                        .where(GOOD_ORDER_ENTITY.ORDER_ID.eq(historyOrderVo.getOrder_id()))
+                                        ))
+                                        .and(GOOD_IMAGE_ENTITY.MAIN.eq(1))
+                        )
+        );
 //                        .leftJoin(ORDER_ENTITY).on(ORDER_ENTITY.BUYER_ID.eq(BUYER_ENTITY.ID)) ));
 //                        .where(ORDER_ENTITY.SHOP_ID.eq(id))));
     }

@@ -2,14 +2,18 @@ package com.rj.backendjixian.service.impl;
 
 
 import com.mybatisflex.core.query.QueryWrapper;
+import com.mybatisflex.core.row.Db;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.GoodImageMapper;
 import com.rj.backendjixian.mapper.GoodMapper;
+import com.rj.backendjixian.mapper.GoodTypeMapper;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
+import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.GoodImageEntity;
 import com.rj.backendjixian.model.vo.GoodBriefVo;
+import com.rj.backendjixian.model.vo.GoodDetailsVo;
 import com.rj.backendjixian.model.vo.HistoryGoodVo;
 import com.rj.backendjixian.model.vo.ImageVo;
 import com.rj.backendjixian.service.IGoodService;
@@ -32,6 +36,8 @@ import static com.rj.backendjixian.model.entity.table.GoodTypeEntityTableDef.GOO
 public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> implements IGoodService {
     @Autowired
     GoodImageMapper goodImageMapper;
+    @Autowired
+    GoodTypeMapper goodTypeMapper;
 
     @Override
     public List<HistoryGoodVo> getHistoryGoodList(String shop_id, String type, String name) {
@@ -89,6 +95,47 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                 .update();
     }
 
+    @Override
+    public GoodDetailsVo getGoodDetails(String id) {
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .select(GOOD_ENTITY.NAME, GOOD_ENTITY.WEIGHT, GOOD_ENTITY.VARIETY, GOOD_ENTITY.STORE,
+                        GOOD_ENTITY.SHELF_DATE, GOOD_ENTITY.ID,GOOD_TYPE_ENTITY.TYPE_NAME.as("type"))
+                .join(GOOD_TYPE_ENTITY).on(GOOD_TYPE_ENTITY.ID.eq(GOOD_ENTITY.TYPE_ID))
+                .from(GOOD_ENTITY)
+                .where(GOOD_ENTITY.ID.eq(id));
+        return mapper.selectListByQueryAs(queryWrapper,GoodDetailsVo.class,
+                fieldQueryBuilder ->fieldQueryBuilder
+                        .field(GoodDetailsVo::getMainImage)
+                        .queryWrapper(goodDetailsVo -> QueryWrapper.create()
+                                .select(GOOD_IMAGE_ENTITY.URL, GOOD_IMAGE_ENTITY.WIDTH, GOOD_IMAGE_ENTITY.HEIGHT)
+                                .from(GOOD_IMAGE_ENTITY)
+                                .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(goodDetailsVo.getId()))
+                                .and(GOOD_IMAGE_ENTITY.MAIN.eq(1))
+                        ),
+                fieldQueryBuilder ->fieldQueryBuilder
+                        .field(GoodDetailsVo::getImage)
+                        .queryWrapper(goodDetailsVo -> QueryWrapper.create()
+                                .select(GOOD_IMAGE_ENTITY.URL, GOOD_IMAGE_ENTITY.WIDTH, GOOD_IMAGE_ENTITY.HEIGHT)
+                                .from(GOOD_IMAGE_ENTITY)
+                                .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(goodDetailsVo.getId()))
+                                .and(GOOD_IMAGE_ENTITY.MAIN.eq(0))
+                        )
+        ).get(0);
+    }
+
+    @Override
+    public boolean publish(PublishGoodDto publishGoodDto) {
+        int[] row=Db.executeBatch(publishGoodDto.getIds(),GoodMapper.class,
+                (mapper,id)-> UpdateChain.of(mapper)
+                            .from(GOOD_ENTITY) //使用 mapper 参数，才能起到批量执行的效果
+                            .set(GOOD_ENTITY.STATUS, 1)
+                            .where(GOOD_ENTITY.ID.eq(id))
+                            .and(GOOD_ENTITY.STATUS.eq(0))
+                            .update()
+                );
+        return Arrays.stream(row).anyMatch(r->r>0);
+    }
+
     /**
      * 上传图片组
      *
@@ -98,7 +145,7 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
      * @throws IOException
      */
     @Override
-    public List<ImageVo> uploadImgs(MultipartFile[] multipartFiles, String id) throws IOException {
+    public List<ImageVo> uploadImgs(MultipartFile[] multipartFiles, String id, Integer main) throws IOException {
         //定义图片后缀格式
         String suffix = ".jpg,.png,.jpeg,.gif";
 
@@ -152,16 +199,18 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
             //文件上传
             File newFile = new File(file.getAbsolutePath() + "/" + fileName);
             multipartFile.transferTo(newFile);
+            //返回相对地址
+            String url ="/upload" + "/" + id + "/" + fileName;
             GoodImageEntity goodImage = GoodImageEntity
                     .builder()
-                    .url("/upload" + "/" + id + "/" + fileName)
+                    .url(url)
                     .width(imageWidth)
                     .height(imageHeight)
-                    .main(0)
+                    .main(main)
                     .goodId(id)
                     .build();
             goodImageMapper.insert(goodImage);
-            root.add(ImageVo.success(newFile.getAbsolutePath(), imageWidth, imageHeight));
+            root.add(ImageVo.success(url, imageWidth, imageHeight));
         }
 
 
@@ -193,6 +242,12 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     public Map<String, String> createGood(GoodCreateDto good) {
         GoodEntity goodEntity = good.dto2Entity();
+        QueryWrapper queryWrapper=QueryWrapper.create()
+                .from(GOOD_TYPE_ENTITY)
+                .select(GOOD_TYPE_ENTITY.ID)
+                .where(GOOD_TYPE_ENTITY.TYPE_NAME.eq(good.getType()));
+        String typeId=goodTypeMapper.selectObjectByQueryAs(queryWrapper,String.class);
+        goodEntity.setTypeId(typeId);
         if (mapper.insert(goodEntity) > 0) {
             // 把数据库中id为假id的更新为现在商品生成的id
             UpdateChain.create(goodImageMapper)

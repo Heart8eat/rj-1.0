@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GoodDetailsVo {
+    private String id;
     private Float price;
 
     private String name;

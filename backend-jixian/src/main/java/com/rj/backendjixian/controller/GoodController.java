@@ -2,6 +2,7 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
+import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.model.vo.*;
@@ -60,7 +61,18 @@ public class GoodController {
         return Response.success(goodService.uploadImgs(files, id));
     }
 */
-
+    /**
+     * 批量发布商品接口
+     *
+     * @return ture false
+     */
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    @PutMapping("/publish")
+    @Operation(summary = "批量发布商品")
+    public Response<Boolean> publish(@RequestBody PublishGoodDto publishGoodDto) {
+        return Response.success(goodService.publish(publishGoodDto));
+    }
     /**
      * 根据主键删除
      *
@@ -142,6 +154,7 @@ public class GoodController {
     }
 
 
+
     /**
      * 根据主键获取商品详细信息。
      *
@@ -154,7 +167,7 @@ public class GoodController {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
     public Response<GoodDetailsVo> getInfo(@PathVariable Serializable id) {
-        return Response.success(new GoodDetailsVo(goodService.getById(id)));
+        return Response.success(goodService.getGoodDetails(id.toString()));
     }
 
 
@@ -191,12 +204,14 @@ public class GoodController {
     @Operation(summary = "保存图片")
     @Parameters(value = {
 //            @Parameter(name = "imgFile", description = "图片", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "file")),
-            @Parameter(name = "id", description = "商品id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+            @Parameter(name = "id", description = "前端生成的id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "main", description = "1为主图片，0为其他图片", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
-    public Response<List<ImageVo>> uploadImg(@RequestParam Serializable id,
+    public Response<List<ImageVo>> uploadImg(@RequestParam Serializable id,@RequestParam Integer main,
                                              @RequestPart("uploadFiles") MultipartFile[] files) throws IOException {
-        return Response.success(goodService.uploadImgs(files, id.toString()));
+        return Response.success(goodService.uploadImgs(files, id.toString(), main!=null?main:0));
     }
+
 
     @PostMapping(value = "/deleteImg")
     @Operation(summary = "删除文件")

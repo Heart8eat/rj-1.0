@@ -55,7 +55,7 @@ public class GoodCreateDto {
         goodEntity.setShopId(this.shopId);
         goodEntity.setWeight(this.weight);
         goodEntity.setDescription(this.description);
-        goodEntity.setStatus(1);
+        goodEntity.setStatus(0);
         return goodEntity;
     }
 }

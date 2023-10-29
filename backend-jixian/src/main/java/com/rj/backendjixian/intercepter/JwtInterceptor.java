@@ -87,16 +87,16 @@ public class JwtInterceptor implements HandlerInterceptor {
     }
 
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        log.info("拦截器处理结束...");
-        HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        log.info("请求结束...");
-        HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
-
-    }
+//    @Override
+//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+//        log.info("拦截器处理结束...");
+//        HandlerInterceptor.super.postHandle(request, response, handler, modelAndView);
+//    }
+//
+//    @Override
+//    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+//        log.info("请求结束...");
+//        HandlerInterceptor.super.afterCompletion(request, response, handler, ex);
+//
+//    }
 }

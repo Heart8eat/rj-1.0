@@ -3,8 +3,10 @@ package com.rj.backendjixian.service;
 
 import com.mybatisflex.core.service.IService;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
+import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.vo.GoodBriefVo;
+import com.rj.backendjixian.model.vo.GoodDetailsVo;
 import com.rj.backendjixian.model.vo.HistoryGoodVo;
 import com.rj.backendjixian.model.vo.ImageVo;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +23,12 @@ public interface IGoodService extends IService<GoodEntity> {
 
     boolean deleteImgs(String id);
 
-    List<ImageVo> uploadImgs(MultipartFile[] multipartFiles, String id) throws IOException;
+    List<ImageVo> uploadImgs(MultipartFile[] multipartFiles, String id, Integer main) throws IOException;
 
     Map<String, String> createGood(GoodCreateDto good);
 
     Boolean changeGoodStatue(String id, int statue);
+    GoodDetailsVo getGoodDetails(String id);
+    boolean publish(PublishGoodDto publishGoodDto);
 
 }

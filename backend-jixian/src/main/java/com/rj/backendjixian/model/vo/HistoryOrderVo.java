@@ -19,7 +19,7 @@ public class HistoryOrderVo {
     private String status;
 
     @Schema(description = "图片")
-    private String image;
+    private ImageVo image;
 
     @Schema(description = "支付方式")
     private String pay = "手动支付";

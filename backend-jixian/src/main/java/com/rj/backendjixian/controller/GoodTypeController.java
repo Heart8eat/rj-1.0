@@ -23,6 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/goodType")
 @Tag(name = "商品类型接口")
+@CrossOrigin
 public class GoodTypeController {
 
     @Autowired
@@ -48,7 +49,7 @@ public class GoodTypeController {
      * @return {@code true} 删除成功，{@code false} 删除失败
      */
     @DeleteMapping("/remove/{id}")
-    @Operation(summary = "根据主键删除")
+    @Operation(summary = "根据主键删除",hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true)
     })
@@ -64,7 +65,7 @@ public class GoodTypeController {
      * @return {@code true} 更新成功，{@code false} 更新失败
      */
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新")
+    @Operation(summary = "根据主键更新",hidden = true)
     public Response<Boolean> update(@RequestBody GoodTypeEntity goodType) {
         return Response.success(goodTypeService.updateById(goodType));
     }
@@ -89,7 +90,7 @@ public class GoodTypeController {
      * @return 详情
      */
     @GetMapping("/getInfo/{id}")
-    @Operation(summary = "根据主键获取详细信息")
+    @Operation(summary = "根据主键获取详细信息",hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true)
     })
@@ -105,7 +106,7 @@ public class GoodTypeController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    @Operation(summary = "分页查询")
+    @Operation(summary = "分页查询",hidden = true)
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true),
             @Parameter(name = "pageSize", description = "每页大小", required = true)
