@@ -28,7 +28,9 @@ public interface IGoodService extends IService<GoodEntity> {
     Map<String, String> createGood(GoodCreateDto good);
 
     Boolean changeGoodStatue(String id, int statue);
+
     GoodDetailsVo getGoodDetails(String id);
+
     boolean publish(PublishGoodDto publishGoodDto);
 
 }

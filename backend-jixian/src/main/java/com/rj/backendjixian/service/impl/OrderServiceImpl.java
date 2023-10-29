@@ -5,7 +5,6 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.OrderMapper;
 import com.rj.backendjixian.model.entity.OrderEntity;
-import com.rj.backendjixian.model.vo.GoodBriefVo;
 import com.rj.backendjixian.model.vo.HistoryOrderVo;
 import com.rj.backendjixian.service.IOrderService;
 import org.springframework.stereotype.Service;

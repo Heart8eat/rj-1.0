@@ -99,12 +99,12 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     public GoodDetailsVo getGoodDetails(String id) {
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .select(GOOD_ENTITY.NAME, GOOD_ENTITY.WEIGHT, GOOD_ENTITY.VARIETY, GOOD_ENTITY.STORE,
-                        GOOD_ENTITY.SHELF_DATE, GOOD_ENTITY.ID,GOOD_TYPE_ENTITY.TYPE_NAME.as("type"))
+                        GOOD_ENTITY.SHELF_DATE, GOOD_ENTITY.ID, GOOD_TYPE_ENTITY.TYPE_NAME.as("type"))
                 .join(GOOD_TYPE_ENTITY).on(GOOD_TYPE_ENTITY.ID.eq(GOOD_ENTITY.TYPE_ID))
                 .from(GOOD_ENTITY)
                 .where(GOOD_ENTITY.ID.eq(id));
-        return mapper.selectListByQueryAs(queryWrapper,GoodDetailsVo.class,
-                fieldQueryBuilder ->fieldQueryBuilder
+        return mapper.selectListByQueryAs(queryWrapper, GoodDetailsVo.class,
+                fieldQueryBuilder -> fieldQueryBuilder
                         .field(GoodDetailsVo::getMainImage)
                         .queryWrapper(goodDetailsVo -> QueryWrapper.create()
                                 .select(GOOD_IMAGE_ENTITY.URL, GOOD_IMAGE_ENTITY.WIDTH, GOOD_IMAGE_ENTITY.HEIGHT)
@@ -112,7 +112,7 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                                 .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(goodDetailsVo.getId()))
                                 .and(GOOD_IMAGE_ENTITY.MAIN.eq(1))
                         ),
-                fieldQueryBuilder ->fieldQueryBuilder
+                fieldQueryBuilder -> fieldQueryBuilder
                         .field(GoodDetailsVo::getImage)
                         .queryWrapper(goodDetailsVo -> QueryWrapper.create()
                                 .select(GOOD_IMAGE_ENTITY.URL, GOOD_IMAGE_ENTITY.WIDTH, GOOD_IMAGE_ENTITY.HEIGHT)
@@ -125,15 +125,15 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
 
     @Override
     public boolean publish(PublishGoodDto publishGoodDto) {
-        int[] row=Db.executeBatch(publishGoodDto.getIds(),GoodMapper.class,
-                (mapper,id)-> UpdateChain.of(mapper)
-                            .from(GOOD_ENTITY) //使用 mapper 参数，才能起到批量执行的效果
-                            .set(GOOD_ENTITY.STATUS, 1)
-                            .where(GOOD_ENTITY.ID.eq(id))
-                            .and(GOOD_ENTITY.STATUS.eq(0))
-                            .update()
-                );
-        return Arrays.stream(row).anyMatch(r->r>0);
+        int[] row = Db.executeBatch(publishGoodDto.getIds(), GoodMapper.class,
+                (mapper, id) -> UpdateChain.of(mapper)
+                        .from(GOOD_ENTITY) //使用 mapper 参数，才能起到批量执行的效果
+                        .set(GOOD_ENTITY.STATUS, 1)
+                        .where(GOOD_ENTITY.ID.eq(id))
+                        .and(GOOD_ENTITY.STATUS.eq(0))
+                        .update()
+        );
+        return Arrays.stream(row).anyMatch(r -> r > 0);
     }
 
     /**
@@ -200,7 +200,7 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
             File newFile = new File(file.getAbsolutePath() + "/" + fileName);
             multipartFile.transferTo(newFile);
             //返回相对地址
-            String url ="/upload" + "/" + id + "/" + fileName;
+            String url = "/upload" + "/" + id + "/" + fileName;
             GoodImageEntity goodImage = GoodImageEntity
                     .builder()
                     .url(url)
@@ -242,11 +242,11 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     public Map<String, String> createGood(GoodCreateDto good) {
         GoodEntity goodEntity = good.dto2Entity();
-        QueryWrapper queryWrapper=QueryWrapper.create()
+        QueryWrapper queryWrapper = QueryWrapper.create()
                 .from(GOOD_TYPE_ENTITY)
                 .select(GOOD_TYPE_ENTITY.ID)
                 .where(GOOD_TYPE_ENTITY.TYPE_NAME.eq(good.getType()));
-        String typeId=goodTypeMapper.selectObjectByQueryAs(queryWrapper,String.class);
+        String typeId = goodTypeMapper.selectObjectByQueryAs(queryWrapper, String.class);
         goodEntity.setTypeId(typeId);
         if (mapper.insert(goodEntity) > 0) {
             // 把数据库中id为假id的更新为现在商品生成的id

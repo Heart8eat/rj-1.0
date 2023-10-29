@@ -15,7 +15,6 @@ import com.rj.backendjixian.util.JwtUtil;
 import com.rj.backendjixian.util.LoginToken;
 import com.rj.backendjixian.util.PassToken;
 import com.wf.captcha.GifCaptcha;
-import com.wf.captcha.SpecCaptcha;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -184,6 +183,7 @@ public class MerchantController {
 
     /**
      * 生成图片验证码
+     *
      * @param response
      * @throws Exception
      */
@@ -206,7 +206,7 @@ public class MerchantController {
         captcha.setLen(4);
         // 获取运算的结果
         String result = captcha.text().toLowerCase();
-        Context.put("Verify",result);
+        Context.put("Verify", result);
         System.out.println(result);
         captcha.out(outputStream);
     }
@@ -223,8 +223,10 @@ public class MerchantController {
             @Parameter(name = "pwd2", description = "确认密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
     public Response<Boolean> newMerchant(@RequestParam(value = "name") String name, @RequestParam("verify") String verify,
-                                         @RequestParam(value = "pwd1") String pwd1, @RequestParam(value = "pwd2") String pwd2){
-        if(!pwd1.equals(pwd2) && !verify.equals(Context.get("Verify"))){return Response.success(Boolean.FALSE);}
+                                         @RequestParam(value = "pwd1") String pwd1, @RequestParam(value = "pwd2") String pwd2) {
+        if (!pwd1.equals(pwd2) && !verify.equals(Context.get("Verify"))) {
+            return Response.success(Boolean.FALSE);
+        }
 
         MerchantEntity merchantEntity = new MerchantEntity();
         merchantEntity.setName(name);

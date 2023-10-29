@@ -1,9 +1,9 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import com.rj.backendjixian.model.entity.GoodTypeEntity;
+import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.vo.Response;
-import com.rj.backendjixian.service.IGoodTypeService;
+import com.rj.backendjixian.service.BuyerAddressService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -21,24 +21,23 @@ import java.util.List;
  * @since 1.0
  */
 @RestController
-@RequestMapping("/goodType")
-@Tag(name = "商品类型接口")
-@CrossOrigin
-public class GoodTypeController {
+@RequestMapping("/buyerAddress")
+@Tag(name = "控制层")
+public class BuyerAddressController {
 
     @Autowired
-    private IGoodTypeService goodTypeService;
+    private BuyerAddressService buyerAddressService;
 
     /**
      * 添加
      *
-     * @param goodType
+     * @param buyerAddress
      * @return {@code true} 添加成功，{@code false} 添加失败
      */
     @PostMapping("/save")
     @Operation(summary = "添加")
-    public Response<Boolean> save(@RequestBody GoodTypeEntity goodType) {
-        return Response.success(goodTypeService.save(goodType));
+    public Response<Boolean> save(@RequestBody BuyerAddressEntity buyerAddress) {
+        return Response.success(buyerAddressService.save(buyerAddress));
     }
 
 
@@ -49,25 +48,25 @@ public class GoodTypeController {
      * @return {@code true} 删除成功，{@code false} 删除失败
      */
     @DeleteMapping("/remove/{id}")
-    @Operation(summary = "根据主键删除", hidden = true)
+    @Operation(summary = "根据主键删除")
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true)
     })
     public Response<Boolean> remove(@PathVariable Serializable id) {
-        return Response.success(goodTypeService.removeById(id));
+        return Response.success(buyerAddressService.removeById(id));
     }
 
 
     /**
      * 根据主键更新
      *
-     * @param goodType
+     * @param buyerAddress
      * @return {@code true} 更新成功，{@code false} 更新失败
      */
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新", hidden = true)
-    public Response<Boolean> update(@RequestBody GoodTypeEntity goodType) {
-        return Response.success(goodTypeService.updateById(goodType));
+    @Operation(summary = "根据主键更新")
+    public Response<Boolean> update(@RequestBody BuyerAddressEntity buyerAddress) {
+        return Response.success(buyerAddressService.updateById(buyerAddress));
     }
 
 
@@ -78,24 +77,24 @@ public class GoodTypeController {
      */
     @GetMapping("/list")
     @Operation(summary = "查询所有")
-    public Response<List<GoodTypeEntity>> list() {
-        return Response.success(goodTypeService.list());
+    public Response<List<BuyerAddressEntity>> list() {
+        return Response.success(buyerAddressService.list());
     }
 
 
     /**
      * 根据主键获取详细信息。
      *
-     * @param id goodType主键
+     * @param id buyerAddress主键
      * @return 详情
      */
     @GetMapping("/getInfo/{id}")
-    @Operation(summary = "根据主键获取详细信息", hidden = true)
+    @Operation(summary = "根据主键获取详细信息")
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true)
     })
-    public Response<GoodTypeEntity> getInfo(@PathVariable Serializable id) {
-        return Response.success(goodTypeService.getById(id));
+    public Response<BuyerAddressEntity> getInfo(@PathVariable Serializable id) {
+        return Response.success(buyerAddressService.getById(id));
     }
 
 
@@ -106,12 +105,12 @@ public class GoodTypeController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    @Operation(summary = "分页查询", hidden = true)
+    @Operation(summary = "分页查询")
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true),
             @Parameter(name = "pageSize", description = "每页大小", required = true)
     })
-    public Response<Page<GoodTypeEntity>> page(Page<GoodTypeEntity> page) {
-        return Response.success(goodTypeService.page(page));
+    public Response<Page<BuyerAddressEntity>> page(Page<BuyerAddressEntity> page) {
+        return Response.success(buyerAddressService.page(page));
     }
 }
