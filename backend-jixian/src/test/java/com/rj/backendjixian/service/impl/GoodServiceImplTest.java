@@ -23,7 +23,6 @@ import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_EN
 class GoodServiceImplTest {
     private final GoodEntity goodEntity = GoodEntity.builder()
             .name("凤梨")
-            .image("1.png,2.png,3.png,4.png")
             .description("这是凤梨")
             .status(1)
             .price(100f)
@@ -32,7 +31,6 @@ class GoodServiceImplTest {
             .shopId("630e807bdf604941b89192af2eb7396e")
             .variety("菠萝")
             .weight("1kg")
-            .type("类别")
             .build();
     @Autowired
     private IGoodService service;
