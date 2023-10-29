@@ -14,6 +14,8 @@ import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
 import com.rj.backendjixian.util.LoginToken;
 import com.rj.backendjixian.util.PassToken;
+import com.wf.captcha.GifCaptcha;
+import com.wf.captcha.SpecCaptcha;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -21,6 +23,8 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -177,4 +181,55 @@ public class MerchantController {
         merchantUpdateDto.setId(merchant.getId());
         return Response.success((merchantsService.updatePassword(merchantUpdateDto)));
     }
+
+    /**
+     * 生成图片验证码
+     * @param response
+     * @throws Exception
+     */
+    @GetMapping("/getCode")
+    @Operation(summary = "图片验证码")
+    @SecurityRequirement(name = "token")
+    @PassToken
+    public void getCode(HttpServletResponse response) throws Exception {
+        ServletOutputStream outputStream = response.getOutputStream();
+        Context.remove("Verify");
+        //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
+//        ArithmeticCaptcha captcha = new ArithmeticCaptcha(120, 40);
+        // 中文验证码
+//        ChineseCaptcha captcha = new ChineseCaptcha(120, 40);
+//         英文与数字验证码
+//        SpecCaptcha captcha = new SpecCaptcha(120, 40);
+        //英文与数字动态验证码
+        GifCaptcha captcha = new GifCaptcha(120, 40);
+        // 几位数运算
+        captcha.setLen(4);
+        // 获取运算的结果
+        String result = captcha.text().toLowerCase();
+        Context.put("Verify",result);
+        System.out.println(result);
+        captcha.out(outputStream);
+    }
+
+
+    @PostMapping("/newMerchant")
+    @Operation(summary = "添加卖家(验证码测试)")
+    @SecurityRequirement(name = "token")
+    @PassToken
+    @Parameters(value = {
+            @Parameter(name = "name", description = "名字", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "verify", description = "验证码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "pwd1", description = "密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "pwd2", description = "确认密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<Boolean> newMerchant(@RequestParam(value = "name") String name, @RequestParam("verify") String verify,
+                                         @RequestParam(value = "pwd1") String pwd1, @RequestParam(value = "pwd2") String pwd2){
+        if(!pwd1.equals(pwd2) && !verify.equals(Context.get("Verify"))){return Response.success(Boolean.FALSE);}
+
+        MerchantEntity merchantEntity = new MerchantEntity();
+        merchantEntity.setName(name);
+        merchantEntity.setPassword(pwd1);
+        return Response.success(merchantsService.save(merchantEntity));
+    }
+
 }
