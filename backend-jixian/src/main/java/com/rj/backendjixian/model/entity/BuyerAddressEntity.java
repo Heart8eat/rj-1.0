@@ -40,5 +40,7 @@ public class BuyerAddressEntity {
     @Column(value = "receiver")
     private String receiver;
 
+    @Column(value = "email")
+    private String email;
 
 }

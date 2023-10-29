@@ -2,8 +2,10 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.model.dto.BuyerCreateDto;
+import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.vo.Response;
+import com.rj.backendjixian.service.IBuyerAddressService;
 import com.rj.backendjixian.service.IBuyerService;
 import com.rj.backendjixian.util.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
@@ -35,6 +37,9 @@ public class BuyersController {
 
     @Autowired
     private IBuyerService buyerService;
+
+    @Autowired
+    private IBuyerAddressService buyerAddressService;
 
     /**
      * 添加
@@ -132,5 +137,37 @@ public class BuyersController {
                                             @RequestParam int pageSize) {
         Page<BuyerEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(buyerService.page(page));
+    }
+
+
+    /**
+     * 查询所有地址
+     *
+     * @return 所有数据
+     */
+    @GetMapping("/listAddress")
+    @Operation(summary = "查询所有地址")
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    @Parameters(value = {
+            @Parameter(name = "buyerId", description = "买家id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<List<BuyerAddressEntity>> listAddressByBuyerId(@RequestParam String buyerId) {
+        return Response.success(buyerAddressService.selectByBuyerId(buyerId));
+    }
+
+
+    /**
+     * 添加地址
+     *
+     * @param buyerAddress
+     * @return {@code true} 添加成功，{@code false} 添加失败
+     */
+    @PostMapping("/saveAddress")
+    @Operation(summary = "添加地址")
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    public Response<Boolean> saveAddress(@RequestBody BuyerAddressEntity buyerAddress) {
+        return Response.success(buyerAddressService.save(buyerAddress));
     }
 }
