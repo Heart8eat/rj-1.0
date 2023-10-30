@@ -116,8 +116,32 @@ public class GoodController {
 
     @GetMapping("/getGoodBriefList")
     @Operation(summary = "查询所有上架商品的简略信息")
+    @Parameters(value = {
+            @Parameter(name = "type", description = "类别", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "name", description = "名称", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
     public Response<List<GoodBriefVo>> getGoodBriefList(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
         return Response.success(goodService.getGoodBriefList(type, name));
+    }
+    @GetMapping("/getGoodBriefPage")
+    @Operation(summary = "分页查询所有上架商品的简略信息")
+    @Parameters(value = {
+            @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+            @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+            @Parameter(name = "totalRow", description = "总条数", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+            @Parameter(name = "type", description = "类别", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "name", description = "名称", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<Page<GoodBriefVo>> getGoodBriefPage(@RequestParam Integer pageNumber,
+                                                        @RequestParam Integer pageSize,
+                                                        @RequestParam(required = false) Integer totalRow,
+                                                        @RequestParam(required = false) String type,
+                                                        @RequestParam(required = false) String name) {
+        Page<GoodBriefVo> page=Page.of(pageNumber,pageSize);
+        if(totalRow!=null){
+            page.setTotalRow(totalRow);
+        }
+        return Response.success(goodService.getGoodBriefPage(page,type, name));
     }
 
     /**
@@ -129,15 +153,80 @@ public class GoodController {
     @SecurityRequirement(name = "token")
     @GetMapping("/getHistoryGoodList")
     @Operation(summary = "查询所有历史商品")
-//    @Parameters(value = {
-//            @Parameter(name = "shop_id", description = "商铺id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
-//    })
+    @Parameters(value = {
+            @Parameter(name = "type", description = "类别", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "name", description = "名称", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
     public Response<List<HistoryGoodVo>> getHistoryGoodList(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
         ShopEntity shop = (ShopEntity) Context.get("shop");
         String shop_id = shop.getId();
         return Response.success(goodService.getHistoryGoodList(shop_id, type, name));
     }
-
+    /**
+     * 分页查询历史商品页面接口
+     *
+     * @return 历史商品
+     */
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    @GetMapping("/getHistoryGoodPage")
+    @Operation(summary = "分页查询所有历史商品")
+    @Parameters(value = {
+            @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+            @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+            @Parameter(name = "totalRow", description = "总条数", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
+            @Parameter(name = "type", description = "类别", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "name", description = "名称", required = false, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    public Response<Page<HistoryGoodVo>> getHistoryGoodPage(@RequestParam Integer pageNumber,
+                                                            @RequestParam Integer pageSize,
+                                                            @RequestParam(required = false) Integer totalRow,
+                                                            @RequestParam(required = false) String type,
+                                                            @RequestParam(required = false) String name) {
+        Page<HistoryGoodVo> page=Page.of(pageNumber,pageSize);
+        if(totalRow!=null){
+            page.setTotalRow(totalRow);
+        }
+        ShopEntity shop = (ShopEntity) Context.get("shop");
+        String shop_id = shop.getId();
+        return Response.success(goodService.getHistoryGoodPage(page,shop_id, type, name));
+    }
+    /**
+     * 查询待发布商品接口
+     *
+     * @return 所有待发布商品
+     */
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    @GetMapping("/getPublishGoodList")
+    @Operation(summary = "查询所有待发布商品接口")
+    public Response<List<PublishGoodVo>> getPublishGoodList(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
+        ShopEntity shop = (ShopEntity) Context.get("shop");
+        String shop_id = shop.getId();
+        return Response.success(goodService.getPublishGoodList(shop_id, type, name));
+    }
+    /**
+     * 分页待发布商品接口
+     *
+     * @return 分页待发布商品对象
+     */
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    @GetMapping("/getPublishGoodPage")
+    @Operation(summary = "分页查询所有待发布商品接口")
+    public Response<Page<PublishGoodVo>> getPublishGoodPage(@RequestParam Integer pageNumber,
+                                                            @RequestParam Integer pageSize,
+                                                            @RequestParam(required = false) Integer totalRow,
+                                                            @RequestParam(required = false) String type,
+                                                            @RequestParam(required = false) String name) {
+        Page<PublishGoodVo> page=Page.of(pageNumber,pageSize);
+        if(totalRow!=null){
+            page.setTotalRow(totalRow);
+        }
+        ShopEntity shop = (ShopEntity) Context.get("shop");
+        String shop_id = shop.getId();
+        return Response.success(goodService.getPublishGoodPage(page,shop_id, type, name));
+    }
     /**
      * 更改商品状态接口
      *
