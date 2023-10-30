@@ -13,6 +13,7 @@ import lombok.experimental.Accessors;
 public class ImageVo {
 
     //0-正常  1-失败
+    @Schema(description = "0-正常  1-失败")
     private Integer statusCode;
 
     @Schema(description = "图片地址")

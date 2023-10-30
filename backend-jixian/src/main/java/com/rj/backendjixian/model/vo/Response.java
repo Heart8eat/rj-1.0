@@ -99,7 +99,9 @@ public class Response<T> {
     public static <T> Response<T> unauthorized(T data) {
         return new Response<T>(StatueCode.UNAUTHORIZED.getCode(), StatueCode.UNAUTHORIZED.getMessage(), data);
     }
-
+    public static <T> Response<T> unauthorized(String message) {
+        return new Response<T>(StatueCode.UNAUTHORIZED.getCode(), message,null);
+    }
     /**
      * 未授权返回结果
      */
