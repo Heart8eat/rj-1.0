@@ -35,12 +35,12 @@
         <dependency>
             <groupId>com.mybatis-flex</groupId>
             <artifactId>mybatis-flex-spring-boot-starter</artifactId>
-            <version>1.6.8</version>
+            <version>1.7.3</version>
         </dependency>
         <dependency>
             <groupId>com.mybatis-flex</groupId>
             <artifactId>mybatis-flex-processor</artifactId>
-            <version>1.6.8</version>
+            <version>1.7.3</version>
             <scope>provided</scope>
         </dependency>
         <!-- 引入aop支持 -->

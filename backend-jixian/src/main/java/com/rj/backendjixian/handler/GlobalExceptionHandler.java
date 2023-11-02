@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
 
-;
+
 
 @RestControllerAdvice
 @Slf4j
@@ -61,14 +61,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = JwtException.class)
 
-    public Response<String> jwtExceptionHandler(JwtException e) {
+    public Response<Void> jwtExceptionHandler(JwtException e) {
         log.error("发生token验证错误异常:-------------->{}\n", e.getMessage());
         return Response.unauthorized(e.getMessage());
     }
 
     @ExceptionHandler(value = LoginException.class)
-    public Response<String> loginExceptionHandler(LoginException e) {
+    public Response<Void> loginExceptionHandler(LoginException e) {
         log.error("发生登录失败异常:-------------->{}尝试登录失败\n,错误信息:{}\n", e.getLoginName(), e.getMessage());
-        return Response.success(e.getMessage());
+        return Response.failed(e.getMessage());
+    }
+
+    @ExceptionHandler(value = RuntimeException.class)
+    public Response<Void> runtimeExceptionHandler(RuntimeException e) {
+        log.error("发生运行中异常:-------------->{}\n", e.getMessage());
+        return Response.failed(e.getMessage());
     }
 }
