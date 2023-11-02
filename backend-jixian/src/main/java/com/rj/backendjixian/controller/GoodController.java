@@ -302,7 +302,11 @@ public class GoodController {
         return Response.success(goodService.uploadImgs(files, id.toString(), main != null ? main : 0));
     }
 
-
+    /**
+     * 删除文件夹接口
+     * @param uuid
+     * @return
+     */
     @PostMapping(value = "/deleteImg")
     @Operation(summary = "删除文件")
     @Parameters(value = {
@@ -311,4 +315,6 @@ public class GoodController {
     public Response<Boolean> deleteImg(@RequestParam Serializable uuid) {
         return Response.success((goodService.deleteImgs(uuid.toString())));
     }
+
+
 }
