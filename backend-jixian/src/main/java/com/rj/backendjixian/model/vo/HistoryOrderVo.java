@@ -1,5 +1,6 @@
 package com.rj.backendjixian.model.vo;
 
+import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,10 @@ public class HistoryOrderVo {
     @Schema(description = "支付方式")
     private String pay = "手动支付";
 
-    @Schema(description = "买家ID")
-    private String buyer_id;
+    @Schema(description = "买家地址ID")
+    private String buyer_address_id;
 
-    @Schema(description = "买家")
-    private BuyerEntity buyer;
+    @Schema(description = "买家地址")
+    private BuyerAddressEntity buyerAddress;
 
 }

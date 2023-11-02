@@ -16,8 +16,8 @@ public class GoodOrderDto {
     private String shopId;
     @Schema(description = "商品ID")
     private String goodId;
-    @Schema(description = "买家ID")
-    private String buyerId;
+    @Schema(description = "买家地址ID")
+    private String buyerAddressId;
     @Schema(description = "数量")
     private int quantity;
     @Schema(description = "总价")

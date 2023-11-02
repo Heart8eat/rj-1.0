@@ -38,8 +38,8 @@ public class OrderEntity {
     @Column(value = "finish_time")
     private String finishTime;
 
-    @Column(value = "buyer_id")
-    private String buyerId;
+    @Column(value = "buyer_address_id")
+    private String buyerAddressId;
 
     @Column(value = "shop_id")
     private String shopId;

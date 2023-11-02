@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.rj.backendjixian.model.entity.table.BuyerAddressEntityTableDef.BUYER_ADDRESS_ENTITY;
 import static com.rj.backendjixian.model.entity.table.BuyerEntityTableDef.BUYER_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodImageEntityTableDef.GOOD_IMAGE_ENTITY;
@@ -29,7 +30,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
     @Override
     public List<HistoryOrderVo> getHistoryOrders(String id) {
         QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(GOOD_ORDER_ENTITY.ORDER_ID, GOOD_ENTITY.NAME, ORDER_ENTITY.BUYER_ID,
+                .select(GOOD_ORDER_ENTITY.ORDER_ID, GOOD_ENTITY.NAME, ORDER_ENTITY.BUYER_ADDRESS_ID,
                         ORDER_ENTITY.STATUS, GOOD_ORDER_ENTITY.SUM)
                 .from(GOOD_ORDER_ENTITY).as("go")
                 .where(ORDER_ENTITY.SHOP_ID.eq(id))
@@ -37,11 +38,12 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
                 .leftJoin(ORDER_ENTITY).as("o").on(GOOD_ORDER_ENTITY.ORDER_ID.eq(ORDER_ENTITY.ID));
         return mapper.selectListByQueryAs(queryWrapper, HistoryOrderVo.class,
                 ordersfieldQueryBuilder -> ordersfieldQueryBuilder
-                        .field(HistoryOrderVo::getBuyer)
+                        .field(HistoryOrderVo::getBuyerAddress)
                         .queryWrapper(historyOrderVo -> QueryWrapper.create()
-                                .from(BUYER_ENTITY)
-                                .select(BUYER_ENTITY.ID, BUYER_ENTITY.NAME, BUYER_ENTITY.ADDRESS, BUYER_ENTITY.PHONE)
-                                .where(BUYER_ENTITY.ID.eq(historyOrderVo.getBuyer_id()))),
+                                .from(BUYER_ADDRESS_ENTITY)
+                                .select(BUYER_ADDRESS_ENTITY.ID, BUYER_ADDRESS_ENTITY.ADDRESS, BUYER_ADDRESS_ENTITY.BUYER_ID,
+                                        BUYER_ADDRESS_ENTITY.EMAIL, BUYER_ADDRESS_ENTITY.PHONE, BUYER_ADDRESS_ENTITY.RECEIVER)
+                                .where(BUYER_ADDRESS_ENTITY.ID.eq(historyOrderVo.getBuyer_address_id()))),
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(HistoryOrderVo::getImage)
                         .queryWrapper(historyOrderVo ->
