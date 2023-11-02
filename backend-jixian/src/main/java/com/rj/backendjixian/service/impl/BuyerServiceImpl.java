@@ -2,6 +2,7 @@ package com.rj.backendjixian.service.impl;
 
 
 import com.mybatisflex.spring.service.impl.ServiceImpl;
+import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.mapper.BuyerMapper;
 import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerEntity;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.rj.backendjixian.model.entity.table.BuyerEntityTableDef.BUYER_ENTITY;
 
 
 @Service
@@ -52,4 +55,15 @@ public class BuyerServiceImpl extends ServiceImpl<BuyerMapper, BuyerEntity> impl
         }
         return null;
     }
+
+    @Override
+    public BuyerEntity login(String name, String pwd) throws LoginException{
+        BuyerEntity buyerEntity = mapper.selectOneByCondition(BUYER_ENTITY.NAME.eq(name));
+        if(buyerEntity != null && buyerEntity.getPassword().equals(pwd)){
+            return buyerEntity;
+        }
+        throw new LoginException("用户名或密码错误", name);
+    }
+
+
 }

@@ -1,8 +1,10 @@
 package com.rj.backendjixian.intercepter;
 
 import cn.hutool.core.util.StrUtil;
+import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
+import com.rj.backendjixian.service.IBuyerService;
 import com.rj.backendjixian.service.IMerchantService;
 import com.rj.backendjixian.service.IShopService;
 import com.rj.backendjixian.util.Context;
@@ -32,7 +34,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     IMerchantService merchantService;
     @Autowired
     IShopService shopService;
-
+    @Autowired
+    IBuyerService buyerService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -71,13 +74,26 @@ public class JwtInterceptor implements HandlerInterceptor {
                 token = token.replace("Bearer ", "");
 
                 Claims resToken = JwtUtil.parseToken(token);
-                // 将商家的详细信息放入上下文
-                MerchantEntity merchant = merchantService.getById(resToken.getId());
-                ShopEntity shop = shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
-                Context.put("merchant", merchant);
-                Context.put("shop", shop);
-                log.info(resToken.toString());
-                return true;
+
+                if(resToken.getSubject().equals("merchant")){
+                    // 将商家的详细信息放入上下文
+                    MerchantEntity merchant = merchantService.getById(resToken.getId());
+                    ShopEntity shop = shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
+                    Context.put("merchant", merchant);
+                    Context.put("shop", shop);
+                    log.info(resToken.toString());
+                    return true;
+                }
+
+                if (resToken.getSubject().equals("buyer")){
+                    // 将买家的详细信息放入上下文
+                    BuyerEntity buyerEntity = buyerService.getById(resToken.getId());
+                    Context.put("buyer", buyerEntity);
+                    log.info(resToken.toString());
+                    return true;
+                }
+
+                return false;
             }
             return true;
         }

@@ -1,5 +1,6 @@
 package com.rj.backendjixian.util;
 
+import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -50,7 +51,21 @@ public class JwtUtil {
                 .add("typ", "JWT") //类别
                 .and()
                 .id(merchant.getId()) //卖家id
-                .subject(merchant.getName())//卖家名
+                .subject("merchant")//卖家名
+                .issuedAt(new Date())//登录时间
+                .expiration(new Date(new Date().getTime() + Token_EXP))//设置过期时间
+                .signWith(getSecretKey());
+        return jwtBuilder.compact();
+    }
+
+    public static String createToken(BuyerEntity buyer) {
+        JwtBuilder jwtBuilder = Jwts.builder()
+                .header()//头部信息
+                .add("alg", "HS256") // 加密算法
+                .add("typ", "JWT") //类别
+                .and()
+                .id(buyer.getId()) //买家id
+                .subject("buyer")//买家名
                 .issuedAt(new Date())//登录时间
                 .expiration(new Date(new Date().getTime() + Token_EXP))//设置过期时间
                 .signWith(getSecretKey());
