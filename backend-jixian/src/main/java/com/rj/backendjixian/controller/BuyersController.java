@@ -146,7 +146,7 @@ public class BuyersController {
      * @return 所有数据
      */
     @GetMapping("/listAddress")
-    @Operation(summary = "查询所有地址")
+    @Operation(summary = "查询某个买家的所有地址")
     @LoginToken
     @SecurityRequirement(name = "token")
     @Parameters(value = {

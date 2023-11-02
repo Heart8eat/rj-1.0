@@ -12,6 +12,10 @@ import lombok.NoArgsConstructor;
 public class HistoryOrderVo {
     @Schema(description = "订单ID")
     private String order_id;
+
+    @Schema(description = "总价格")
+    private String sum;
+
     @Schema(description = "商品名字")
     private String name;
 

@@ -217,6 +217,11 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
         return root;
     }
 
+    /**
+     * 删除图片
+     * @param id
+     * @return
+     */
     @Override
     public boolean deleteImgs(String id) {
 
