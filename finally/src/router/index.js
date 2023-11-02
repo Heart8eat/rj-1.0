@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import zhuye from '../views1/zhuye.vue'
 import goods from '../views1/goods.vue'
 import books from '../views1/books.vue'
+import loginMain from '../views1/loginMain.vue'
+import regist from '../views1/regist.vue'
 import salerlogin from '../views/salerlogin.vue'
 import salerindex from '../views/salerindex.vue'
 import listgoods from '../views/listgoods.vue'
@@ -24,6 +26,8 @@ const routes = [
       name: 'books',
       component: books
     },
+    { path: '/loginMain',name: 'loginMain', component: loginMain },
+    { path: '/regist',name: 'regist', component: regist },
     { path: '/salerlogin', name: 'salerlogin', component: salerlogin },
     { path: '/salerindex', name: 'salerindex', component: salerindex },
     { path: '/listgoods', name: 'listgoods', component: listgoods },

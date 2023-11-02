@@ -11,30 +11,34 @@
       <el-tab-pane label="卖家" name="second"></el-tab-pane>
     </el-tabs>
     <h2 class="login_title">果购</h2>
-    <el-form-item label="用户名" prop="username">
+    <el-form-item  prop="username">
       <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
     </el-form-item>
-    <el-form-item label="密码" prop="password">
+    <el-form-item prop="password">
       <el-input
         type="password"
         v-model="form.password"
         placeholder="请输入密码"
       ></el-input>
     </el-form-item>
+    <el-form-item prop="password">
+      <el-input
+        type="password2"
+        v-model="form.password2"
+        placeholder="请确认密码"
+      ></el-input>
+    </el-form-item>
     <el-form-item>
       <el-button
-        @click="login"
-        style="margin-left: 52px; margin-top: 5px"
+        @click="regist"
+        style="margin-left: 82px; margin-top: 5px"
         type="primary"
-        >登录</el-button
-      >
-      <el-button plain @click="regist" style="margin-left: 32px"
         >注册</el-button
       >
     </el-form-item>
   </el-form>
 </template>
-<script>
+  <script>
 export default {
   data() {
     return {
@@ -42,12 +46,7 @@ export default {
       form: {
         username: "",
         password: "",
-      },
-      rules: {
-        username: [
-          { required: true, trigger: "blur", message: "请输入用户名" },
-        ],
-        password: [{ required: true, trigger: "blur", message: "请输入密码" }],
+        password2: "",
       },
     };
   },
@@ -59,23 +58,11 @@ export default {
         this.loadWho = "second"; // 选中卖家标签时，设置loadWho为2
       }
     },
-    regist() {
-      this.$router.push("/regist"); //
-    },
-    login() {
-      if(this.loadWho == "first"){
-        console.log(this.form.username);
-      }
-      else if(this.loadWho == "second"){
-        console.log(this.form.password);
-      }
-
-    },
   },
 };
 </script>
-
-<style lang="less" scoped>
+  
+  <style lang="less" scoped>
 .login-container {
   width: 350px;
   border: 1px solid #eaeaea;
@@ -91,7 +78,7 @@ export default {
     color: #72b5ff;
   }
   .el-input {
-    width: 198px;
+    width: 250px;
   }
 }
 </style>
