@@ -58,7 +58,7 @@ public class OrderServiceImplTest {
     void newOrderTest() {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setStatus(0);
-        orderEntity.setBuyerId(goodOrderDto.getBuyerId());
+        orderEntity.setBuyerAddressId(goodOrderDto.getBuyerAddressId());
         orderEntity.setShopId(goodOrderDto.getShopId());
         orderService.save(orderEntity);
 

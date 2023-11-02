@@ -181,7 +181,7 @@ public class OrderController {
     public Response<Boolean> newOrder(@RequestBody GoodOrderDto goodOrderDto) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setStatus(0);
-        orderEntity.setBuyerId(goodOrderDto.getBuyerId());
+        orderEntity.setBuyerAddressId(goodOrderDto.getBuyerAddressId());
         orderEntity.setShopId(goodOrderDto.getShopId());
         ordersService.save(orderEntity);
 

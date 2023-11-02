@@ -124,7 +124,7 @@ public class GoodController {
         return Response.success(goodService.getGoodBriefList(type, name));
     }
     @GetMapping("/getGoodBriefPage")
-    @Operation(summary = "分页查询所有上架商品的简略信息")
+    @Operation(summary = "分页查询上架商品的简略信息")
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
@@ -170,7 +170,7 @@ public class GoodController {
     @LoginToken
     @SecurityRequirement(name = "token")
     @GetMapping("/getHistoryGoodPage")
-    @Operation(summary = "分页查询所有历史商品")
+    @Operation(summary = "分页查询历史商品")
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
@@ -302,7 +302,11 @@ public class GoodController {
         return Response.success(goodService.uploadImgs(files, id.toString(), main != null ? main : 0));
     }
 
-
+    /**
+     * 删除文件夹接口
+     * @param uuid
+     * @return
+     */
     @PostMapping(value = "/deleteImg")
     @Operation(summary = "删除文件")
     @Parameters(value = {
@@ -311,4 +315,6 @@ public class GoodController {
     public Response<Boolean> deleteImg(@RequestParam Serializable uuid) {
         return Response.success((goodService.deleteImgs(uuid.toString())));
     }
+
+
 }
