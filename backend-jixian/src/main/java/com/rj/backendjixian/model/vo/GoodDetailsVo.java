@@ -53,7 +53,6 @@ public class GoodDetailsVo {
 
     public GoodDetailsVo(GoodEntity goodEntity) {
         this.store = goodEntity.getStore();
-        this.price = goodEntity.getPrice();
         this.variety = goodEntity.getVariety();
         this.name = goodEntity.getName();
         this.weight = goodEntity.getWeight();
