@@ -6,7 +6,6 @@ import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.entity.BuyerEntity;
-import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IBuyerAddressService;
@@ -181,7 +180,7 @@ public class BuyersController {
      * 买家登录
      *
      * @param name
-     * @param pwd
+     * @param password
      * @return
      */
     @GetMapping("/login")
@@ -195,7 +194,7 @@ public class BuyersController {
     public Response<TokenVo> login(@RequestParam(value = "name") String name,
                                    @RequestParam(value = "password") String password) throws LoginException {
 
-        BuyerEntity buyerEntity = buyerService.login(name,password);
+        BuyerEntity buyerEntity = buyerService.login(name, password);
 
         return Response.success(new TokenVo(JwtUtil.createToken(buyerEntity), "Bearer"));
     }

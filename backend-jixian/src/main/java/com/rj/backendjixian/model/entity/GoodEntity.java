@@ -28,8 +28,8 @@ public class GoodEntity {
     @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
     private String id;
 
-    @Column(value = "price")
-    private Float price;
+//    @Column(value = "price")
+//    private Float price;
 
     @Column(value = "name")
     private String name;

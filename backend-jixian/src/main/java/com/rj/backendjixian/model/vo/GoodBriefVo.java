@@ -1,6 +1,5 @@
 package com.rj.backendjixian.model.vo;
 
-import com.rj.backendjixian.model.entity.GoodEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,9 +26,5 @@ public class GoodBriefVo {
     @Schema(description = "商品主图片")
     private ImageVo image;
 
-    public GoodBriefVo(GoodEntity goodEntity) {
-        this.id = goodEntity.getId();
-        this.price = goodEntity.getPrice();
-        this.name = goodEntity.getName();
-    }
+
 }

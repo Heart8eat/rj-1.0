@@ -57,9 +57,9 @@ public class BuyerServiceImpl extends ServiceImpl<BuyerMapper, BuyerEntity> impl
     }
 
     @Override
-    public BuyerEntity login(String name, String pwd) throws LoginException{
+    public BuyerEntity login(String name, String pwd) throws LoginException {
         BuyerEntity buyerEntity = mapper.selectOneByCondition(BUYER_ENTITY.NAME.eq(name));
-        if(buyerEntity != null && buyerEntity.getPassword().equals(pwd)){
+        if (buyerEntity != null && buyerEntity.getPassword().equals(pwd)) {
             return buyerEntity;
         }
         throw new LoginException("用户名或密码错误", name);

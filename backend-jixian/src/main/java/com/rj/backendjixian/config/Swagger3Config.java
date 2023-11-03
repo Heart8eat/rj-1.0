@@ -57,7 +57,7 @@ public class Swagger3Config {
     public GroupedOpenApi goodApi() {
         return GroupedOpenApi.builder()
                 .group("商品接口")
-                .pathsToMatch("/goods/**", "/goodType/**")
+                .pathsToMatch("/goods/**", "/goodType/**", "/goodPriceLog/**")
                 .build();
     }
 

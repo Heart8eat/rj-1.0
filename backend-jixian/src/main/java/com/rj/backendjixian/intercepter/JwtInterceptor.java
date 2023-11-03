@@ -75,7 +75,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 
                 Claims resToken = JwtUtil.parseToken(token);
 
-                if(resToken.getSubject().equals("merchant")){
+                if (resToken.getSubject().equals("merchant")) {
                     // 将商家的详细信息放入上下文
                     MerchantEntity merchant = merchantService.getById(resToken.getId());
                     ShopEntity shop = shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
@@ -85,7 +85,7 @@ public class JwtInterceptor implements HandlerInterceptor {
                     return true;
                 }
 
-                if (resToken.getSubject().equals("buyer")){
+                if (resToken.getSubject().equals("buyer")) {
                     // 将买家的详细信息放入上下文
                     BuyerEntity buyerEntity = buyerService.getById(resToken.getId());
                     Context.put("buyer", buyerEntity);

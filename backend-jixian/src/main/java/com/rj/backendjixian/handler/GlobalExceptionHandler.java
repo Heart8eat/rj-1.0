@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.io.IOException;
 
 
-
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {

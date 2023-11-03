@@ -1,17 +1,15 @@
 package com.rj.backendjixian.model.entity;
 
-import com.mybatisflex.core.keygen.KeyGenerators;
-import lombok.Data;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.Builder;
-import io.swagger.v3.oas.annotations.media.Schema;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
 import com.mybatisflex.annotation.Table;
-
-import java.lang.String;
+import com.mybatisflex.core.keygen.KeyGenerators;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 实体类。
@@ -34,9 +32,9 @@ public class GoodPriceLogEntity {
     private String goodId;
 
     @Column(value = "price")
-    private String price;
+    private Float price;
 
-    @Column(value = "create_time")
+    @Column(value = "create_time", onInsertValue = "datetime('now')")
     private String createTime;
 
 

@@ -10,7 +10,8 @@
         <result column="create_time" jdbcType="CHAR" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        `id`, `good_id`, `price`, `create_time`
+        `id`
+        , `good_id`, `price`, `create_time`
     </sql>
 
 </mapper>
