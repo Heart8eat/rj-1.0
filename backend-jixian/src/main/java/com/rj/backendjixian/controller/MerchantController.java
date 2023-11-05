@@ -1,5 +1,6 @@
 package com.rj.backendjixian.controller;
 
+import cn.hutool.crypto.digest.BCrypt;
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.annotation.PassToken;
@@ -26,7 +27,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -44,6 +47,7 @@ import java.util.List;
 @CrossOrigin
 @RequiresRoles(roles = Role.MERCHANT)
 @LoginToken
+@Slf4j
 public class MerchantController {
 
     @Autowired
@@ -190,6 +194,7 @@ public class MerchantController {
     @SecurityRequirement(name = "token")
     @PassToken
     public void getCode(HttpServletResponse response) throws Exception {
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
         ServletOutputStream outputStream = response.getOutputStream();
         Context.remove("Verify");
         //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
@@ -205,7 +210,7 @@ public class MerchantController {
         // 获取运算的结果
         String result = captcha.text().toLowerCase();
         Context.put("Verify", result);
-        System.out.println(result);
+        log.info("验证码:{}",result);
         captcha.out(outputStream);
     }
 
@@ -228,7 +233,7 @@ public class MerchantController {
 
         MerchantEntity merchantEntity = new MerchantEntity();
         merchantEntity.setName(name);
-        merchantEntity.setPassword(pwd1);
+        merchantEntity.setPassword(BCrypt.hashpw(pwd1, BCrypt.gensalt()));
         return Response.success(merchantsService.save(merchantEntity));
     }
 

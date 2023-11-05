@@ -1,6 +1,7 @@
 package com.rj.backendjixian.service.impl;
 
 
+import cn.hutool.crypto.digest.BCrypt;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.mapper.BuyerMapper;
@@ -59,7 +60,7 @@ public class BuyerServiceImpl extends ServiceImpl<BuyerMapper, BuyerEntity> impl
     @Override
     public BuyerEntity login(String name, String pwd) throws LoginException {
         BuyerEntity buyerEntity = mapper.selectOneByCondition(BUYER_ENTITY.NAME.eq(name));
-        if (buyerEntity != null && buyerEntity.getPassword().equals(pwd)) {
+        if (buyerEntity != null && BCrypt.checkpw(pwd, buyerEntity.getPassword())) {
             return buyerEntity;
         }
         throw new LoginException("用户名或密码错误", name);

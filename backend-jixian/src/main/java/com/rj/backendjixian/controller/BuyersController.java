@@ -3,14 +3,20 @@ package com.rj.backendjixian.controller;
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.annotation.PassToken;
+import com.rj.backendjixian.annotation.RequiresRoles;
+import com.rj.backendjixian.annotation.Role;
 import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.entity.BuyerEntity;
+import com.rj.backendjixian.model.entity.MerchantEntity;
+import com.rj.backendjixian.model.entity.ShopEntity;
+import com.rj.backendjixian.model.vo.MerchantDetailsVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IBuyerAddressService;
 import com.rj.backendjixian.service.IBuyerService;
+import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -195,5 +201,15 @@ public class BuyersController {
         BuyerEntity buyerEntity = buyerService.login(name, password);
 
         return Response.success(new TokenVo(JwtUtil.createToken(buyerEntity), "Bearer"));
+    }
+
+    @SecurityRequirement(name = "token")
+    @GetMapping("/getInfo")
+    @Operation(summary = "获取登录买家的详细信息")
+    @LoginToken
+    @RequiresRoles(roles = Role.BUYER)
+    public Response<BuyerEntity> getInfo() {
+        BuyerEntity buyer = (BuyerEntity) Context.get("buyer");
+        return Response.success(buyer);
     }
 }

@@ -1,5 +1,6 @@
 package com.rj.backendjixian.Interceptor;
 
+import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.util.StrUtil;
 import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.annotation.Role;
@@ -35,6 +36,8 @@ public class JwtInterceptor implements HandlerInterceptor {
     IShopService shopService;
     @Autowired
     IBuyerService buyerService;
+    @Autowired
+    TimedCache<String,Object> timedCache;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -75,20 +78,51 @@ public class JwtInterceptor implements HandlerInterceptor {
         // 分配角色
         Context.put("roles",new String[]{resToken.getSubject()});
         if (resToken.getSubject().equals(Role.MERCHANT)) {
+            // 从缓存中取值，如果缓存中没有则查询数据库
+            MerchantEntity merchant = (MerchantEntity) timedCache.get(resToken.getId()+"-merchant");
+            ShopEntity shop = null;
+
+            if (merchant == null) {
+                log.info("缓存过期");
+                merchant = merchantService.getById(resToken.getId());
+                if (merchant != null) {
+                    timedCache.put(resToken.getId()+"-merchant", merchant);
+                    shop = shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
+                    if (shop != null) {
+                        timedCache.put(merchant.getId()+"-shop", shop);
+                    }
+                }
+            } else {
+                shop = (ShopEntity) timedCache.get(merchant.getId()+"-shop");
+                if (shop == null) {
+                    shop = shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
+                    if (shop != null) {
+                        timedCache.put(merchant.getId()+"-shop", shop);
+                    }
+                }
+            }
+
             // 将商家的详细信息放入上下文
-            MerchantEntity merchant = merchantService.getById(resToken.getId());
-            ShopEntity shop = shopService.getOne(SHOP_ENTITY.MERCHANTS_ID.eq(merchant.getId()));
             Context.put("merchant", merchant);
             Context.put("shop", shop);
-            log.info(resToken.toString());
+//            log.info(resToken.toString());
             return true;
         }
 
         if (resToken.getSubject().equals(Role.BUYER)) {
+            // 从缓存中取值，如果缓存中没有则查询数据库
+            BuyerEntity buyerEntity = (BuyerEntity) timedCache.get(resToken.getId());
+
+            if (buyerEntity == null) {
+                log.info("缓存过期");
+                buyerEntity = buyerService.getById(resToken.getId());
+                if (buyerEntity != null) {
+                    timedCache.put(resToken.getId(), buyerEntity);
+                }
+            }
             // 将买家的详细信息放入上下文
-            BuyerEntity buyerEntity = buyerService.getById(resToken.getId());
             Context.put("buyer", buyerEntity);
-            log.info(resToken.toString());
+//            log.info(resToken.toString());
             return true;
         }
         return false;
