@@ -1,6 +1,7 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.model.dto.GoodOrderDto;
 import com.rj.backendjixian.model.entity.GoodOrderEntity;
 import com.rj.backendjixian.model.entity.OrderEntity;
@@ -8,7 +9,6 @@ import com.rj.backendjixian.model.vo.HistoryOrderVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.service.IGoodOrderService;
 import com.rj.backendjixian.service.IOrderService;
-import com.rj.backendjixian.util.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;

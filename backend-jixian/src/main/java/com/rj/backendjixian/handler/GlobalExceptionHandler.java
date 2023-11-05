@@ -1,6 +1,7 @@
 package com.rj.backendjixian.handler;
 
 import com.rj.backendjixian.exception.LoginException;
+import com.rj.backendjixian.exception.RolesAuthorizationException;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.StatueCode;
 import io.jsonwebtoken.JwtException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 
 @RestControllerAdvice
@@ -64,7 +66,15 @@ public class GlobalExceptionHandler {
         log.error("发生token验证错误异常:-------------->{}\n", e.getMessage());
         return Response.unauthorized(e.getMessage());
     }
+    @ExceptionHandler(value = RolesAuthorizationException.class)
 
+    public Response<Void> rolesAuthorizationExceptionHandler(RolesAuthorizationException e) {
+        log.error("""
+                发生角色认证未通过异常:-------------->{}
+                缺失角色-------------->{}
+                """, e.getMessage(), Arrays.toString(e.getMissingRole()));
+        return Response.forbidden(e.getMessage());
+    }
     @ExceptionHandler(value = LoginException.class)
     public Response<Void> loginExceptionHandler(LoginException e) {
         log.error("发生登录失败异常:-------------->{}尝试登录失败\n,错误信息:{}\n", e.getLoginName(), e.getMessage());

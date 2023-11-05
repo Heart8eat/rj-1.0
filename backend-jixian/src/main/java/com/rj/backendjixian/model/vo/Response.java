@@ -110,5 +110,7 @@ public class Response<T> {
     public static <T> Response<T> forbidden(T data) {
         return new Response<T>(StatueCode.FORBIDDEN.getCode(), StatueCode.FORBIDDEN.getMessage(), data);
     }
-
+    public static <T> Response<T> forbidden(String message) {
+        return new Response<T>(StatueCode.FORBIDDEN.getCode(), StatueCode.FORBIDDEN.getMessage()+":"+message, null);
+    }
 }

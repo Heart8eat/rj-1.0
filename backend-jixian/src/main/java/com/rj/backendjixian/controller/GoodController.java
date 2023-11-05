@@ -1,6 +1,7 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
@@ -8,7 +9,6 @@ import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.model.vo.*;
 import com.rj.backendjixian.service.IGoodService;
 import com.rj.backendjixian.util.Context;
-import com.rj.backendjixian.util.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
