@@ -17,26 +17,23 @@ public class BuyerCreateDto {
     @NotBlank(message = "名字为必填项")
     @Schema(example = "Tom")
     private String name;
+    @Schema(description = "验证码")
+    private String verify;
+    @Schema(description = "标识验证码的uuid")
+    private String key;
+    @Schema(description = "密码")
+    private String pwd1;
+    @Schema(description = "确认密码")
+    private String pwd2;
 
 
-    @Schema(example = "杭州")
-    private String address;
-
-
-    @Schema(example = "14816714403")
-    @Length(min = 11, max = 11, message = "电话的长度为11")
-    private String phone;
-
-    @Schema(example = "123456789@qq.com")
-    @Email
-    private String email;
+    public boolean checkPassword(){
+        return this.pwd1.equals(this.pwd2);
+    }
 
     public BuyerEntity dto2Entity() {
         return BuyerEntity.builder()
-                .email(this.email)
-                .address(this.address)
                 .name(this.name)
-                .phone(this.phone)
                 .build();
     }
 }
