@@ -11,8 +11,14 @@
       <el-tab-pane label="卖家" name="second"></el-tab-pane>
     </el-tabs>
     <h2 class="login_title">果购</h2>
-    <el-form-item  prop="username">
+    <el-form-item prop="username">
       <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-input v-model="form.captcha" placeholder="请输入验证码"></el-input>
+      <div>
+        <img :src="captchaUrl" alt="验证码" />
+      </div>
     </el-form-item>
     <el-form-item prop="password">
       <el-input
@@ -23,7 +29,7 @@
     </el-form-item>
     <el-form-item prop="password">
       <el-input
-        type="password2"
+        type="password"
         v-model="form.password2"
         placeholder="请确认密码"
       ></el-input>
@@ -43,10 +49,20 @@ export default {
   data() {
     return {
       loadWho: "first",
+      captchaUrl: "http://localhost:8080/merchants/getCode",
       form: {
         username: "",
+        captcha: "",
         password: "",
         password2: "",
+      },
+      rules: {
+        username: [
+          { required: true, trigger: "blur", message: "请输入用户名" },
+        ],
+        password: [{ required: true, trigger: "blur", message: "请输入密码" }],
+        password2: [{ required: true, message: "请确认密码", trigger: "blur" }],
+        captcha: [{ required: true, message: "请输入验证码", trigger: "blur" }],
       },
     };
   },
@@ -54,8 +70,58 @@ export default {
     handleClick(tab) {
       if (tab.name === "first") {
         this.loadWho = "first"; // 选中买家标签时，设置loadWho为1
+        console.log(this.loadWho);
       } else if (tab.name === "second") {
         this.loadWho = "second"; // 选中卖家标签时，设置loadWho为2
+        console.log(this.loadWho);
+      }
+    },
+    regist() {
+      console.log(this.form);
+      if (this.loadWh === "first") {
+      } else if (this.loadWho == "second") {
+        console.log(this.form);
+        const formData = new FormData();
+        formData.append("name", this.form.username);
+        formData.append("verify", this.form.captcha);
+        formData.append("pwd1", this.form.password);
+        formData.append("pwd2", this.form.password2);
+        fetch("http://localhost:8080/merchants/newMerchant", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => {
+            if (response.ok) {
+              // 请求成功
+              return response.json();
+            } else {
+              // 请求失败
+              throw new Error("请求失败");
+            }
+          })
+          .then((responseJson) => {
+            if (responseJson.data === false) {
+              // 数据中的data为false，注册失败
+              console.error("注册失败");
+              this.$message({
+                message: "注册失败，请重新输入验证码",
+                type: "false",
+              });
+              // 在这里可以添加更多的处理逻辑，例如显示错误消息
+            } else {
+              // 数据中的data不为false，注册成功
+              console.log(responseJson.data);
+              this.$message({
+                message: "恭喜你，注册成功",
+                type: "success",
+              });
+              this.$router.push("/loginMain");
+            }
+          })
+          .catch((error) => {
+            // 处理错误
+            console.error(error);
+          });
       }
     },
   },

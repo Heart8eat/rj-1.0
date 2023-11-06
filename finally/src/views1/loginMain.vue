@@ -23,7 +23,7 @@
     </el-form-item>
     <el-form-item>
       <el-button
-        @click="login"
+        @click="login2"
         style="margin-left: 52px; margin-top: 5px"
         type="primary"
         >登录</el-button
@@ -35,6 +35,10 @@
   </el-form>
 </template>
 <script>
+import Mock from "mockjs";
+import Cookie from "js-cookie";
+import { login } from "@/api/merchants";
+import { history } from "@/api/merchants";
 export default {
   data() {
     return {
@@ -62,14 +66,26 @@ export default {
     regist() {
       this.$router.push("/regist"); //
     },
-    login() {
-      if(this.loadWho == "first"){
+    login2() {
+      if (this.loadWho == "first") {
         console.log(this.form.username);
-      }
-      else if(this.loadWho == "second"){
+      } else if (this.loadWho == "second") {
         console.log(this.form.password);
+        login(this.form.username, this.form.password).then((data) => {
+          console.log(data.data);
+          if (data.data.data.token != null) {
+            //获取后端token信息
+            const token = data.data.data.token;
+            //输出token值
+            //console.log(token)
+            //token信息传入cookie用于不同页面间通讯
+            Cookie.set("token", token);
+            this.$router.push("/salerindex");
+          } else {
+            this.$message.error(data.data.data);
+          }
+        });
       }
-
     },
   },
 };
