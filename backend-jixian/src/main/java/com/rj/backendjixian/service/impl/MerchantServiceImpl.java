@@ -33,8 +33,10 @@ public class MerchantServiceImpl extends ServiceImpl<MerchantMapper, MerchantEnt
 
     @Override
     public boolean updatePassword(MerchantUpdateDto merchantUpdateDto) {
+        // hash 新密码
+        String newHashedPassword=BCrypt.hashpw(merchantUpdateDto.getNewPassword(), BCrypt.gensalt());
         return this.updateChain()
-                .set(MERCHANT_ENTITY.PASSWORD, merchantUpdateDto.getNewPassword())
+                .set(MERCHANT_ENTITY.PASSWORD, newHashedPassword)
                 .where(MERCHANT_ENTITY.ID.eq(merchantUpdateDto.getId()))
                 .update();
     }

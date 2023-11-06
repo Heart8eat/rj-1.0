@@ -191,7 +191,6 @@ public class MerchantController {
      */
     @GetMapping("/getCode")
     @Operation(summary = "图片验证码")
-    @SecurityRequirement(name = "token")
     @PassToken
     public void getCode(HttpServletResponse response) throws Exception {
         response.setContentType(MediaType.IMAGE_PNG_VALUE);
@@ -233,7 +232,8 @@ public class MerchantController {
 
         MerchantEntity merchantEntity = new MerchantEntity();
         merchantEntity.setName(name);
-        merchantEntity.setPassword(BCrypt.hashpw(pwd1, BCrypt.gensalt()));
+        String hashedPassword=BCrypt.hashpw(pwd1, BCrypt.gensalt());
+        merchantEntity.setPassword(hashedPassword);
         return Response.success(merchantsService.save(merchantEntity));
     }
 
