@@ -1,82 +1,117 @@
 <template>
-    <div>
-        <el-container>
-            <el-header>
-                <zhuyeHeader />
-            </el-header>
-            <el-main>
-                <el-row >
-                    <el-col :span="3" v-for="product in products" :key="product.id">
-                        <el-card class="box-card">
-                           <div class="sp">
-                                <img :src="bindsrc(product.image)" alt="">
-                                <div class="spinfo">
-                                    <div class="info-top">
-                                        <p class="spName">{{product.name}}</p>
-                                        <p class="price">￥{{product.price}}</p>
-                                    </div>
-                                    <div class="info-bottom">
-                                        <div v-if="x === 0" class="replenish-msg">
-                                        </div>
-                                        <router-link v-else :to="'/goods/'+product.id">
-                                            <el-button type="primary" round>立即购买</el-button>
-                                        </router-link>
-                                    </div>
-                                </div>
-                           </div>
-                        </el-card>
-                    </el-col>
-                </el-row>       
-            </el-main>
+  <div>
+    <el-container>
+      <el-header>
+        <zhuyeHeader />
+      </el-header>
+      <el-main>
+        <el-row>
+          <div class="search-container">
+            <el-input
+              class="search-input"
+              placeholder="请输入关键词进行搜索"
+              v-model="searchQuery"
+              clearable
+            />
+            <el-button
+              type="primary"
+              class="search-button"
+              @click="searchProducts"
+            >
+              搜索
+            </el-button>
+          </div>
+        </el-row>
+        <el-row>
+          <el-col :span="3" v-for="product in products" :key="product.id">
+            <el-card class="box-card">
+              <div class="sp">
+                <img :src="bindsrc(product.image)" alt="" />
+                <div class="spinfo">
+                  <div class="info-top">
+                    <p class="spName">{{ product.name }}</p>
+                    <p class="price">￥{{ product.price }}</p>
+                  </div>
+                  <div class="info-bottom">
+                    <div v-if="x === 0" class="replenish-msg"></div>
+                    <router-link v-else :to="'/goods/' + product.id">
+                      <el-button type="primary" round>立即购买</el-button>
+                    </router-link>
+                  </div>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </el-main>
     </el-container>
-    </div>
+  </div>
 </template>
 <script>
-import zhuyeHeader from '../components/zhuyeHeader.vue' 
-import axios from 'axios';
+import zhuyeHeader from "../components/zhuyeHeader.vue";
+import axios from "axios";
 export default {
   data() {
     return {
       x: 2,
-       products: [], 
+      products: [],
+      searchQuery: "", // 用于存储搜索关键词
     };
   },
   components: {
     zhuyeHeader,
   },
-  methods:{
+  methods: {
     bindsrc(img) {
       return require("../picture/" + img);
+    },
+    searchProducts() {
+      // 在这里实现搜索产品的逻辑，根据searchQuery过滤产品列表
+      // 更新this.products以显示搜索结果
     },
   },
   mounted() {
     // 发起HTTP请求获取数据
-    axios.get('http://localhost:8080/goods/getGoodBriefList')
-      .then(response => {
-        console.log('成功获取数据：', response.data);
+    axios
+      .get("http://localhost:8080/goods/getGoodBriefList")
+      .then((response) => {
+        console.log("成功获取数据：", response.data);
 
         this.products = response.data.data;
         // 更新其他属性以匹配您的数据结构
       })
-      .catch(error => {
-        console.error('获取数据时出错：', error);
+      .catch((error) => {
+        console.error("获取数据时出错：", error);
       });
   },
 };
 </script>
 <style scoped>
-.el-header{
-    height: 120px;
-    margin: 0; /* 设置margin为0 */
-    padding: 0; /* 设置padding为0 */
+.el-header {
+  height: 120px;
+  margin: 0; /* 设置margin为0 */
+  padding: 0; /* 设置padding为0 */
+}
+.search-container {
+  display: flex;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.search-input {
+  flex: 1; /* 搜索框自动扩展填充可用空间 */
+  margin-right: 10px; /* 间距 */
+}
+.search-button {
+  width: 100px; /* 按钮宽度 */
 }
 </style>
 <style lang="less" scoped>
-.sp{
-    img{
-        width: 199px;
-        height: 189px;
-    }
+.sp {
+  img {
+    width: 199px;
+    height: 189px;
+  }
 }
 .spinfo {
   display: flex;
@@ -114,6 +149,6 @@ export default {
 }
 
 .replenish-msg::before {
-  content: '补货中'; /* 设置显示的文本内容 */
+  content: "补货中"; /* 设置显示的文本内容 */
 }
 </style>

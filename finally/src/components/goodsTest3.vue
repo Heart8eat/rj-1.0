@@ -1,22 +1,25 @@
 <template>
-    <div class="info-bottom">
-        <div class="middle-images">
-            <!-- 三张小图片并行排列 -->
-            <img src="../assets/images/西瓜详情3.jpg" alt="" class="image">
-            <img src="../assets/images/西瓜详情1.jpg" alt="" class="image">
-            <img src="../assets/images/西瓜详情4.jpg" alt="" class="image">
-        </div>
-    </div>
+  <el-carousel :interval="4000" type="card" height="200px">
+    <el-carousel-item v-for="item in 6" :key="item">
+      <h3 class="medium">{{ item }}</h3>
+    </el-carousel-item>
+  </el-carousel>
 </template>
-<style lang="less" scoped>
-.middle-images {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 5px;
+  
+  <style>
+.el-carousel__item h3 {
+  color: #475669;
+  font-size: 14px;
+  opacity: 0.75;
+  line-height: 400px;
+  margin: 0;
 }
 
-.image {
-    width: 445px; /* 设置图片的宽度 */
-    height: 643px; /* 设置图片的高度 */
+.el-carousel__item:nth-child(2n) {
+  background-color: #99a9bf;
+}
+
+.el-carousel__item:nth-child(2n + 1) {
+  background-color: #d3dce6;
 }
 </style>
