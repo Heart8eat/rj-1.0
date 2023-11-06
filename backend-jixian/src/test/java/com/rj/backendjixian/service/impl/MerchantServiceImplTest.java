@@ -1,13 +1,6 @@
 package com.rj.backendjixian.service.impl;
 
-import com.rj.backendjixian.exception.LoginException;
-import com.rj.backendjixian.model.dto.MerchantUpdateDto;
-import com.rj.backendjixian.model.entity.MerchantEntity;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 

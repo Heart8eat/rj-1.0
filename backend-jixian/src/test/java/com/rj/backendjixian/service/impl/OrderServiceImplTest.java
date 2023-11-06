@@ -1,21 +1,8 @@
 package com.rj.backendjixian.service.impl;
 
-import com.rj.backendjixian.model.dto.GoodOrderDto;
-import com.rj.backendjixian.model.entity.GoodOrderEntity;
-import com.rj.backendjixian.model.entity.OrderEntity;
-import com.rj.backendjixian.model.vo.HistoryOrderVo;
-import com.rj.backendjixian.service.IGoodOrderService;
-import com.rj.backendjixian.service.IGoodService;
-import com.rj.backendjixian.service.IOrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 订单服务层测试
