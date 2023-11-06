@@ -1,8 +1,12 @@
 package com.rj.backendjixian.service;
 
 
-import com.rj.backendjixian.model.entity.GoodPriceLogEntity;
 import com.mybatisflex.core.service.IService;
+import com.rj.backendjixian.model.dto.GoodPriceLogDto;
+import com.rj.backendjixian.model.entity.GoodPriceLogEntity;
+import com.rj.backendjixian.model.vo.GoodPriceLogVo;
+
+import java.util.List;
 
 /**
  * 服务层。
@@ -11,5 +15,9 @@ import com.mybatisflex.core.service.IService;
  * @since 1.0
  */
 public interface GoodPriceLogService extends IService<GoodPriceLogEntity> {
+    Boolean saveLog(GoodPriceLogDto goodPriceLogDto);
+
+    List<GoodPriceLogVo> getGoodPriceLogVoList(String good_id);
+
 
 }

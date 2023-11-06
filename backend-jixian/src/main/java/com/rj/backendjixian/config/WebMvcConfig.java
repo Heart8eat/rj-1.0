@@ -1,6 +1,7 @@
 package com.rj.backendjixian.config;
 
-import com.rj.backendjixian.intercepter.JwtInterceptor;
+import com.rj.backendjixian.Interceptor.JwtInterceptor;
+import com.rj.backendjixian.Interceptor.RolesAuthorizationInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -11,12 +12,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebMvcConfig implements WebMvcConfigurer {
     @Autowired
     JwtInterceptor jwtInterceptor;
+    @Autowired
+    RolesAuthorizationInterceptor rolesAuthorizationInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("");
+                .order(1);
+        registry.addInterceptor(rolesAuthorizationInterceptor)
+                .addPathPatterns("/**")
+                .order(2);
         WebMvcConfigurer.super.addInterceptors(registry);
     }
 

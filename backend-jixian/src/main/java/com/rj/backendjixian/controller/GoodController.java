@@ -1,6 +1,7 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
@@ -8,7 +9,6 @@ import com.rj.backendjixian.model.entity.ShopEntity;
 import com.rj.backendjixian.model.vo.*;
 import com.rj.backendjixian.service.IGoodService;
 import com.rj.backendjixian.util.Context;
-import com.rj.backendjixian.util.LoginToken;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -123,6 +123,7 @@ public class GoodController {
     public Response<List<GoodBriefVo>> getGoodBriefList(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
         return Response.success(goodService.getGoodBriefList(type, name));
     }
+
     @GetMapping("/getGoodBriefPage")
     @Operation(summary = "分页查询上架商品的简略信息")
     @Parameters(value = {
@@ -137,11 +138,11 @@ public class GoodController {
                                                         @RequestParam(required = false) Integer totalRow,
                                                         @RequestParam(required = false) String type,
                                                         @RequestParam(required = false) String name) {
-        Page<GoodBriefVo> page=Page.of(pageNumber,pageSize);
-        if(totalRow!=null){
+        Page<GoodBriefVo> page = Page.of(pageNumber, pageSize);
+        if (totalRow != null) {
             page.setTotalRow(totalRow);
         }
-        return Response.success(goodService.getGoodBriefPage(page,type, name));
+        return Response.success(goodService.getGoodBriefPage(page, type, name));
     }
 
     /**
@@ -162,6 +163,7 @@ public class GoodController {
         String shop_id = shop.getId();
         return Response.success(goodService.getHistoryGoodList(shop_id, type, name));
     }
+
     /**
      * 分页查询历史商品页面接口
      *
@@ -183,14 +185,15 @@ public class GoodController {
                                                             @RequestParam(required = false) Integer totalRow,
                                                             @RequestParam(required = false) String type,
                                                             @RequestParam(required = false) String name) {
-        Page<HistoryGoodVo> page=Page.of(pageNumber,pageSize);
-        if(totalRow!=null){
+        Page<HistoryGoodVo> page = Page.of(pageNumber, pageSize);
+        if (totalRow != null) {
             page.setTotalRow(totalRow);
         }
         ShopEntity shop = (ShopEntity) Context.get("shop");
         String shop_id = shop.getId();
-        return Response.success(goodService.getHistoryGoodPage(page,shop_id, type, name));
+        return Response.success(goodService.getHistoryGoodPage(page, shop_id, type, name));
     }
+
     /**
      * 查询待发布商品接口
      *
@@ -205,6 +208,7 @@ public class GoodController {
         String shop_id = shop.getId();
         return Response.success(goodService.getPublishGoodList(shop_id, type, name));
     }
+
     /**
      * 分页待发布商品接口
      *
@@ -219,14 +223,15 @@ public class GoodController {
                                                             @RequestParam(required = false) Integer totalRow,
                                                             @RequestParam(required = false) String type,
                                                             @RequestParam(required = false) String name) {
-        Page<PublishGoodVo> page=Page.of(pageNumber,pageSize);
-        if(totalRow!=null){
+        Page<PublishGoodVo> page = Page.of(pageNumber, pageSize);
+        if (totalRow != null) {
             page.setTotalRow(totalRow);
         }
         ShopEntity shop = (ShopEntity) Context.get("shop");
         String shop_id = shop.getId();
-        return Response.success(goodService.getPublishGoodPage(page,shop_id, type, name));
+        return Response.success(goodService.getPublishGoodPage(page, shop_id, type, name));
     }
+
     /**
      * 更改商品状态接口
      *
@@ -304,6 +309,7 @@ public class GoodController {
 
     /**
      * 删除文件夹接口
+     *
      * @param uuid
      * @return
      */

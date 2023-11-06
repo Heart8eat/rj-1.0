@@ -1,13 +1,20 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
+import com.rj.backendjixian.annotation.LoginToken;
+import com.rj.backendjixian.annotation.PassToken;
+import com.rj.backendjixian.annotation.RequiresRoles;
+import com.rj.backendjixian.annotation.Role;
+import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.vo.Response;
+import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IBuyerAddressService;
 import com.rj.backendjixian.service.IBuyerService;
-import com.rj.backendjixian.util.LoginToken;
+import com.rj.backendjixian.util.Context;
+import com.rj.backendjixian.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -169,5 +176,37 @@ public class BuyersController {
     @SecurityRequirement(name = "token")
     public Response<Boolean> saveAddress(@RequestBody BuyerAddressEntity buyerAddress) {
         return Response.success(buyerAddressService.save(buyerAddress));
+    }
+
+    /**
+     * 买家登录
+     *
+     * @param name
+     * @param password
+     * @return
+     */
+    @GetMapping("/login")
+    @Operation(summary = "登录")
+    @Parameters(value = {
+            @Parameter(name = "name", description = "名字", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+            @Parameter(name = "password", description = "密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
+    })
+    @PassToken
+    public Response<TokenVo> login(@RequestParam(value = "name") String name,
+                                   @RequestParam(value = "password") String password) throws LoginException {
+
+        BuyerEntity buyerEntity = buyerService.login(name, password);
+
+        return Response.success(new TokenVo(JwtUtil.createToken(buyerEntity), "Bearer"));
+    }
+
+    @SecurityRequirement(name = "token")
+    @GetMapping("/getInfo")
+    @Operation(summary = "获取登录买家的详细信息")
+    @LoginToken
+    @RequiresRoles(roles = Role.BUYER)
+    public Response<BuyerEntity> getInfo() {
+        BuyerEntity buyer = (BuyerEntity) Context.get("buyer");
+        return Response.success(buyer);
     }
 }

@@ -48,7 +48,6 @@ public class GoodCreateDto {
     public GoodEntity dto2Entity() {
         GoodEntity goodEntity = new GoodEntity();
         goodEntity.setName(this.name);
-        goodEntity.setPrice(this.price);
         goodEntity.setQuantity(this.quantity != null ? this.quantity : 1);
         goodEntity.setStore(this.store);
         goodEntity.setVariety(this.variety);

@@ -1,26 +1,20 @@
 package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.rj.backendjixian.service.GoodPriceLogService;
+import com.rj.backendjixian.model.dto.GoodPriceLogDto;
 import com.rj.backendjixian.model.entity.GoodPriceLogEntity;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.Serializable;
-import java.util.List;
-
+import com.rj.backendjixian.model.vo.GoodPriceLogVo;
 import com.rj.backendjixian.model.vo.Response;
+import com.rj.backendjixian.service.GoodPriceLogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * 控制层。
@@ -30,63 +24,34 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @RestController
 @RequestMapping("/goodPriceLog")
-@Tag(name = "控制层")
+@Tag(name = "商品价格管理接口")
 public class GoodPriceLogController {
 
     @Autowired
     private GoodPriceLogService goodPriceLogService;
 
     /**
-     * 添加
+     * 更改价格
      *
      * @param goodPriceLog
-     * @return {@code true} 添加成功，{@code false} 添加失败
+     * @return {@code true} 更改成功，{@code false} 添加失败
      */
     @PostMapping("/save")
-    @Operation(summary = "添加")
-    public Response<Boolean> save(@RequestBody GoodPriceLogEntity goodPriceLog) {
-        return Response.success(goodPriceLogService.save(goodPriceLog));
+    @Operation(summary = "更改价格")
+    public Response<Boolean> save(@RequestBody GoodPriceLogDto goodPriceLog) {
+        return Response.success(goodPriceLogService.saveLog(goodPriceLog));
     }
 
 
     /**
-     * 根据主键删除
+     * 查询商品所有历史价格
      *
-     * @param id 主键
-     * @return {@code true} 删除成功，{@code false} 删除失败
+     * @return 所有历史记录
      */
-    @DeleteMapping("/remove/{id}")
-    @Operation(summary = "根据主键删除")
-    @Parameters(value = {
-            @Parameter(name = "id", description = "", required = true)
-    })
-    public Response<Boolean> remove(@PathVariable Serializable id) {
-        return Response.success(goodPriceLogService.removeById(id));
-    }
-
-
-    /**
-     * 根据主键更新
-     *
-     * @param goodPriceLog
-     * @return {@code true} 更新成功，{@code false} 更新失败
-     */
-    @PutMapping("/update")
-    @Operation(summary = "根据主键更新")
-    public Response<Boolean> update(@RequestBody GoodPriceLogEntity goodPriceLog) {
-        return Response.success(goodPriceLogService.updateById(goodPriceLog));
-    }
-
-
-    /**
-     * 查询所有
-     *
-     * @return 所有数据
-     */
-    @GetMapping("/list")
-    @Operation(summary = "查询所有")
-    public Response<List<GoodPriceLogEntity>> list() {
-        return Response.success(goodPriceLogService.list());
+    @GetMapping("/getGoodPriceLogVoList/{good_id}")
+    @Operation(summary = "查询商品所有历史价格")
+    public Response<List<GoodPriceLogVo>> getGoodPriceLogVoList(@PathVariable Serializable good_id) {
+        return Response.success(goodPriceLogService.getGoodPriceLogVoList(good_id.toString()));
     }
 
 
@@ -97,7 +62,7 @@ public class GoodPriceLogController {
      * @return 详情
      */
     @GetMapping("/getInfo/{id}")
-    @Operation(summary = "根据主键获取详细信息")
+    @Operation(summary = "根据主键获取详细信息", hidden = true)
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true)
     })
@@ -113,7 +78,7 @@ public class GoodPriceLogController {
      * @return 分页对象
      */
     @GetMapping("/page")
-    @Operation(summary = "分页查询")
+    @Operation(summary = "分页查询", hidden = true)
     @Parameters(value = {
             @Parameter(name = "pageNumber", description = "页码", required = true),
             @Parameter(name = "pageSize", description = "每页大小", required = true)

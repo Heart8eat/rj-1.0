@@ -16,12 +16,16 @@ import java.util.Map;
 
 public interface IGoodService extends IService<GoodEntity> {
     List<HistoryGoodVo> getHistoryGoodList(String shop_id, String type, String name);
-    Page<HistoryGoodVo> getHistoryGoodPage(Page<HistoryGoodVo> page,String shop_id, String type, String name);
+
+    Page<HistoryGoodVo> getHistoryGoodPage(Page<HistoryGoodVo> page, String shop_id, String type, String name);
+
     List<PublishGoodVo> getPublishGoodList(String shop_id, String type, String name);
-    Page<PublishGoodVo> getPublishGoodPage(Page<PublishGoodVo> page,String shop_id, String type, String name);
+
+    Page<PublishGoodVo> getPublishGoodPage(Page<PublishGoodVo> page, String shop_id, String type, String name);
 
     List<GoodBriefVo> getGoodBriefList(String type, String name);
-    Page<GoodBriefVo> getGoodBriefPage(Page<GoodBriefVo> page,String type, String name);
+
+    Page<GoodBriefVo> getGoodBriefPage(Page<GoodBriefVo> page, String type, String name);
 
     boolean deleteImgs(String id);
 

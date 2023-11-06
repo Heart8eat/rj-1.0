@@ -57,7 +57,7 @@ public class Swagger3Config {
     public GroupedOpenApi goodApi() {
         return GroupedOpenApi.builder()
                 .group("商品接口")
-                .pathsToMatch("/goods/**", "/goodType/**")
+                .pathsToMatch("/goods/**", "/goodType/**", "/goodPriceLog/**")
                 .build();
     }
 
@@ -84,6 +84,12 @@ public class Swagger3Config {
                 .pathsToMatch("/shops/**")
                 .build();
     }
-
+    @Bean
+    public GroupedOpenApi utilsApi() {
+        return GroupedOpenApi.builder()
+                .group("调试接口")
+                .pathsToMatch("/utils/**")
+                .build();
+    }
 
 }

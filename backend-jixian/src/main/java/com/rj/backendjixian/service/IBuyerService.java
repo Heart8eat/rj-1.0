@@ -2,6 +2,7 @@ package com.rj.backendjixian.service;
 
 
 import com.mybatisflex.core.service.IService;
+import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.vo.OrderVo;
@@ -14,4 +15,6 @@ public interface IBuyerService extends IService<BuyerEntity> {
     List<OrderVo> getBuyerOrders(String id);
 
     Map<String, String> createBuyer(BuyerCreateDto buyer);
+
+    BuyerEntity login(String name, String pwd) throws LoginException;
 }

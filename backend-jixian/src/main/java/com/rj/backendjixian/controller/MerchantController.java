@@ -1,7 +1,11 @@
 package com.rj.backendjixian.controller;
 
+import cn.hutool.crypto.digest.BCrypt;
 import com.mybatisflex.core.paginate.Page;
-import com.rj.backendjixian.aspect.annotation.WebLog;
+import com.rj.backendjixian.annotation.LoginToken;
+import com.rj.backendjixian.annotation.PassToken;
+import com.rj.backendjixian.annotation.RequiresRoles;
+import com.rj.backendjixian.annotation.Role;
 import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.dto.MerchantUpdateDto;
 import com.rj.backendjixian.model.entity.MerchantEntity;
@@ -12,8 +16,6 @@ import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IMerchantService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
-import com.rj.backendjixian.util.LoginToken;
-import com.rj.backendjixian.util.PassToken;
 import com.wf.captcha.GifCaptcha;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,7 +27,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -41,6 +45,9 @@ import java.util.List;
 @RequestMapping("/merchants")
 @Tag(name = "商家接口")
 @CrossOrigin
+@RequiresRoles(roles = Role.MERCHANT)
+@LoginToken
+@Slf4j
 public class MerchantController {
 
     @Autowired
@@ -70,7 +77,7 @@ public class MerchantController {
     @Parameters(value = {
             @Parameter(name = "id", description = "", required = true, in = ParameterIn.PATH, schema = @Schema(type = "string"))
     })
-    @LoginToken
+
     @SecurityRequirement(name = "token")
     public Response<Boolean> remove(@PathVariable Serializable id) {
         return Response.success(merchantsService.removeById(id));
@@ -85,7 +92,6 @@ public class MerchantController {
      */
     @PutMapping("/update")
     @Operation(summary = "根据主键更新", hidden = true)
-    @LoginToken
     @SecurityRequirement(name = "token")
     public Response<Boolean> update(@RequestBody MerchantEntity merchant) {
         return Response.success(merchantsService.updateById(merchant));
@@ -97,7 +103,6 @@ public class MerchantController {
      *
      * @return 所有数据
      */
-    @LoginToken
     @SecurityRequirement(name = "token")
     @GetMapping("/list")
     @Operation(summary = "查询所有", hidden = true)
@@ -111,8 +116,8 @@ public class MerchantController {
      *
      * @return 详情
      */
-    @LoginToken
     @SecurityRequirement(name = "token")
+
     @GetMapping("/getInfo")
     @Operation(summary = "获取登录商家的详细信息")
     public Response<MerchantDetailsVo> getInfo() {
@@ -135,7 +140,6 @@ public class MerchantController {
             @Parameter(name = "pageNumber", description = "页码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer")),
             @Parameter(name = "pageSize", description = "每页大小", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
     })
-    @LoginToken
     @SecurityRequirement(name = "token")
     public Response<Page<MerchantEntity>> page(@RequestParam int pageNumber,
                                                @RequestParam int pageSize) {
@@ -157,7 +161,6 @@ public class MerchantController {
             @Parameter(name = "password", description = "密码", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
     @PassToken
-    @WebLog
     public Response<TokenVo> login(@RequestParam(value = "name") String name,
                                    @RequestParam(value = "password") String password) throws LoginException {
         MerchantEntity merchantEntity = merchantsService.login(name, password);
@@ -174,7 +177,6 @@ public class MerchantController {
     @PutMapping("/updatePassword")
     @Operation(summary = "更改密码")
     @SecurityRequirement(name = "token")
-    @LoginToken
     public Response<Boolean> updatePassword(@Valid @RequestBody MerchantUpdateDto merchantUpdateDto) {
         MerchantEntity merchant = (MerchantEntity) Context.get("merchant");
         merchantUpdateDto.setId(merchant.getId());
@@ -189,9 +191,9 @@ public class MerchantController {
      */
     @GetMapping("/getCode")
     @Operation(summary = "图片验证码")
-    @SecurityRequirement(name = "token")
     @PassToken
     public void getCode(HttpServletResponse response) throws Exception {
+        response.setContentType(MediaType.IMAGE_PNG_VALUE);
         ServletOutputStream outputStream = response.getOutputStream();
         Context.remove("Verify");
         //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
@@ -207,7 +209,7 @@ public class MerchantController {
         // 获取运算的结果
         String result = captcha.text().toLowerCase();
         Context.put("Verify", result);
-        System.out.println(result);
+        log.info("验证码:{}",result);
         captcha.out(outputStream);
     }
 
@@ -230,7 +232,8 @@ public class MerchantController {
 
         MerchantEntity merchantEntity = new MerchantEntity();
         merchantEntity.setName(name);
-        merchantEntity.setPassword(pwd1);
+        String hashedPassword=BCrypt.hashpw(pwd1, BCrypt.gensalt());
+        merchantEntity.setPassword(hashedPassword);
         return Response.success(merchantsService.save(merchantEntity));
     }
 

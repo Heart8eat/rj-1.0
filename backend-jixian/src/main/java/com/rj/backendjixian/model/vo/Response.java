@@ -99,14 +99,18 @@ public class Response<T> {
     public static <T> Response<T> unauthorized(T data) {
         return new Response<T>(StatueCode.UNAUTHORIZED.getCode(), StatueCode.UNAUTHORIZED.getMessage(), data);
     }
+
     public static <T> Response<T> unauthorized(String message) {
-        return new Response<T>(StatueCode.UNAUTHORIZED.getCode(), message,null);
+        return new Response<T>(StatueCode.UNAUTHORIZED.getCode(), message, null);
     }
+
     /**
      * 未授权返回结果
      */
     public static <T> Response<T> forbidden(T data) {
         return new Response<T>(StatueCode.FORBIDDEN.getCode(), StatueCode.FORBIDDEN.getMessage(), data);
     }
-
+    public static <T> Response<T> forbidden(String message) {
+        return new Response<T>(StatueCode.FORBIDDEN.getCode(), StatueCode.FORBIDDEN.getMessage()+":"+message, null);
+    }
 }

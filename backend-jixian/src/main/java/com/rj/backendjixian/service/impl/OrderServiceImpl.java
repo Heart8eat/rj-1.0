@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.rj.backendjixian.model.entity.table.BuyerAddressEntityTableDef.BUYER_ADDRESS_ENTITY;
-import static com.rj.backendjixian.model.entity.table.BuyerEntityTableDef.BUYER_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodImageEntityTableDef.GOOD_IMAGE_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodOrderEntityTableDef.GOOD_ORDER_ENTITY;

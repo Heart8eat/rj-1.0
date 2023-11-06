@@ -8,11 +8,13 @@ import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.GoodImageMapper;
 import com.rj.backendjixian.mapper.GoodMapper;
+import com.rj.backendjixian.mapper.GoodPriceLogMapper;
 import com.rj.backendjixian.mapper.GoodTypeMapper;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.GoodImageEntity;
+import com.rj.backendjixian.model.entity.GoodPriceLogEntity;
 import com.rj.backendjixian.model.vo.*;
 import com.rj.backendjixian.service.IGoodService;
 import com.rj.backendjixian.util.FileUtil;
@@ -28,6 +30,7 @@ import java.util.*;
 
 import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodImageEntityTableDef.GOOD_IMAGE_ENTITY;
+import static com.rj.backendjixian.model.entity.table.GoodPriceLogEntityTableDef.GOOD_PRICE_LOG_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodTypeEntityTableDef.GOOD_TYPE_ENTITY;
 
 
@@ -37,7 +40,10 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     GoodImageMapper goodImageMapper;
     @Autowired
     GoodTypeMapper goodTypeMapper;
-    private QueryWrapper historyGoodQueryWrapper(String shop_id, String type, String name){
+    @Autowired
+    GoodPriceLogMapper goodPriceLogMapper;
+
+    private QueryWrapper historyGoodQueryWrapper(String shop_id, String type, String name) {
         return QueryWrapper.create()
                 .select(GOOD_ENTITY.NAME, GOOD_ENTITY.WEIGHT, GOOD_ENTITY.VARIETY, GOOD_ENTITY.STORE,
                         GOOD_ENTITY.SHELF_DATE, GOOD_ENTITY.ID, GOOD_ENTITY.STATUS,
@@ -48,10 +54,11 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                 .and(GOOD_ENTITY.NAME.like(name).when(name != null))
                 .and(GOOD_TYPE_ENTITY.TYPE_NAME.eq(type).when(type != null));
     }
+
     @Override
     @Transactional
     public List<HistoryGoodVo> getHistoryGoodList(String shop_id, String type, String name) {
-        QueryWrapper queryWrapper =historyGoodQueryWrapper(shop_id,type,name);
+        QueryWrapper queryWrapper = historyGoodQueryWrapper(shop_id, type, name);
         return mapper.selectListByQueryAs(queryWrapper, HistoryGoodVo.class,
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(HistoryGoodVo::getImage)
@@ -69,8 +76,8 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     @Transactional
     public Page<HistoryGoodVo> getHistoryGoodPage(Page<HistoryGoodVo> page, String shop_id, String type, String name) {
-        QueryWrapper queryWrapper =historyGoodQueryWrapper(shop_id,type,name);
-        return mapper.paginateAs(page,queryWrapper,HistoryGoodVo.class,
+        QueryWrapper queryWrapper = historyGoodQueryWrapper(shop_id, type, name);
+        return mapper.paginateAs(page, queryWrapper, HistoryGoodVo.class,
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(HistoryGoodVo::getImage)
                         .queryWrapper(historyGoodVo ->
@@ -81,12 +88,13 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                                         // 只要主图片
                                         .and(GOOD_IMAGE_ENTITY.MAIN.eq(1))
                         )
-                );
+        );
     }
-    private QueryWrapper publishGoodQueryWrapper(String shop_id, String type, String name){
+
+    private QueryWrapper publishGoodQueryWrapper(String shop_id, String type, String name) {
         return QueryWrapper.create()
                 .select(GOOD_ENTITY.NAME, GOOD_ENTITY.WEIGHT, GOOD_ENTITY.VARIETY, GOOD_ENTITY.STORE,
-                        GOOD_ENTITY.SHELF_DATE, GOOD_ENTITY.ID, GOOD_ENTITY.PRICE,
+                        GOOD_ENTITY.SHELF_DATE, GOOD_ENTITY.ID,
                         GOOD_TYPE_ENTITY.TYPE_NAME.as("type"))
                 .from(GOOD_ENTITY)
                 .join(GOOD_TYPE_ENTITY).on(GOOD_TYPE_ENTITY.ID.eq(GOOD_ENTITY.TYPE_ID))
@@ -96,10 +104,11 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                 .and(GOOD_ENTITY.NAME.like(name).when(name != null))
                 .and(GOOD_TYPE_ENTITY.TYPE_NAME.eq(type).when(type != null));
     }
+
     @Override
     @Transactional
     public List<PublishGoodVo> getPublishGoodList(String shop_id, String type, String name) {
-        QueryWrapper queryWrapper = publishGoodQueryWrapper(shop_id,type,name);
+        QueryWrapper queryWrapper = publishGoodQueryWrapper(shop_id, type, name);
         return mapper.selectListByQueryAs(queryWrapper, PublishGoodVo.class,
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(PublishGoodVo::getImage)
@@ -117,8 +126,8 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     @Transactional
     public Page<PublishGoodVo> getPublishGoodPage(Page<PublishGoodVo> page, String shop_id, String type, String name) {
-        QueryWrapper queryWrapper = publishGoodQueryWrapper(shop_id,type,name);
-        return mapper.paginateAs(page,queryWrapper, PublishGoodVo.class,
+        QueryWrapper queryWrapper = publishGoodQueryWrapper(shop_id, type, name);
+        return mapper.paginateAs(page, queryWrapper, PublishGoodVo.class,
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(PublishGoodVo::getImage)
                         .queryWrapper(publishGoodVo ->
@@ -132,9 +141,9 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
         );
     }
 
-    private QueryWrapper goodBriefQueryWrapper(String type, String name){
-        return  QueryWrapper.create()
-                .select(GOOD_ENTITY.ID, GOOD_ENTITY.NAME, GOOD_ENTITY.PRICE)
+    private QueryWrapper goodBriefQueryWrapper(String type, String name) {
+        return QueryWrapper.create()
+                .select(GOOD_ENTITY.ID, GOOD_ENTITY.NAME)
                 .from(GOOD_ENTITY)
                 .join(GOOD_TYPE_ENTITY).on(GOOD_TYPE_ENTITY.ID.eq(GOOD_ENTITY.TYPE_ID))
                 // 这里查询的是买家浏览的商品，所以是上架的商品
@@ -146,7 +155,7 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     @Transactional
     public List<GoodBriefVo> getGoodBriefList(String type, String name) {
-        QueryWrapper queryWrapper = goodBriefQueryWrapper(type,name);
+        QueryWrapper queryWrapper = goodBriefQueryWrapper(type, name);
         return mapper.selectListByQueryAs(queryWrapper, GoodBriefVo.class,
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(GoodBriefVo::getImage)
@@ -156,9 +165,20 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                                         .select(GOOD_IMAGE_ENTITY.URL, GOOD_IMAGE_ENTITY.WIDTH, GOOD_IMAGE_ENTITY.HEIGHT)
                                         .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(goodBriefVo.getId()))
                                         .and(GOOD_IMAGE_ENTITY.MAIN.eq(1))
+                        ),
+                fieldQueryBuilder -> fieldQueryBuilder
+                        .field(GoodBriefVo::getPrice)
+                        .queryWrapper(goodBriefVo ->
+                                QueryWrapper.create()
+                                        .from(GOOD_PRICE_LOG_ENTITY)
+                                        .select(GOOD_PRICE_LOG_ENTITY.PRICE)
+                                        .where(GOOD_PRICE_LOG_ENTITY.GOOD_ID.eq(goodBriefVo.getId()))
+                                        .orderBy(GOOD_PRICE_LOG_ENTITY.CREATE_TIME, false)
+                                        .limit(1)
                         )
         );
     }
+
     /**
      * 分页查询商品的简略信息
      *
@@ -170,8 +190,8 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     @Transactional
     public Page<GoodBriefVo> getGoodBriefPage(Page<GoodBriefVo> page, String type, String name) {
-        QueryWrapper queryWrapper = goodBriefQueryWrapper(type,name);
-        return mapper.paginateAs(page,queryWrapper,GoodBriefVo.class,
+        QueryWrapper queryWrapper = goodBriefQueryWrapper(type, name);
+        return mapper.paginateAs(page, queryWrapper, GoodBriefVo.class,
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(GoodBriefVo::getImage)
                         .queryWrapper(goodBriefVo ->
@@ -180,8 +200,18 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                                         .select(GOOD_IMAGE_ENTITY.URL, GOOD_IMAGE_ENTITY.WIDTH, GOOD_IMAGE_ENTITY.HEIGHT)
                                         .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(goodBriefVo.getId()))
                                         .and(GOOD_IMAGE_ENTITY.MAIN.eq(1))
+                        ),
+                fieldQueryBuilder -> fieldQueryBuilder
+                        .field(GoodBriefVo::getPrice)
+                        .queryWrapper(goodBriefVo ->
+                                QueryWrapper.create()
+                                        .from(GOOD_PRICE_LOG_ENTITY)
+                                        .select(GOOD_PRICE_LOG_ENTITY.PRICE)
+                                        .where(GOOD_PRICE_LOG_ENTITY.GOOD_ID.eq(goodBriefVo.getId()))
+                                        .orderBy(GOOD_PRICE_LOG_ENTITY.CREATE_TIME, false)
+                                        .limit(1)
                         )
-                );
+        );
     }
 
     /**
@@ -231,9 +261,20 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                                 .from(GOOD_IMAGE_ENTITY)
                                 .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(goodDetailsVo.getId()))
                                 .and(GOOD_IMAGE_ENTITY.MAIN.eq(0))
+                        ),
+                fieldQueryBuilder -> fieldQueryBuilder
+                        .field(GoodDetailsVo::getPrice)
+                        .queryWrapper(goodBriefVo ->
+                                QueryWrapper.create()
+                                        .from(GOOD_PRICE_LOG_ENTITY)
+                                        .select(GOOD_PRICE_LOG_ENTITY.PRICE)
+                                        .where(GOOD_PRICE_LOG_ENTITY.GOOD_ID.eq(goodBriefVo.getId()))
+                                        .orderBy(GOOD_PRICE_LOG_ENTITY.CREATE_TIME, false)
+                                        .limit(1)
                         )
         ).get(0);
     }
+
     /**
      * 批量发布商品
      *
@@ -251,7 +292,7 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                         .and(GOOD_ENTITY.STATUS.eq(0))
                         .update()
         );
-        if(Arrays.stream(row).anyMatch(r -> r ==0)){
+        if (Arrays.stream(row).anyMatch(r -> r == 0)) {
             throw new RuntimeException("存在未发布成功商品，数据库回滚");
         }
         return true;
@@ -340,6 +381,7 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
 
     /**
      * 删除图片
+     *
      * @param id
      * @return
      */
@@ -376,17 +418,30 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
         String typeId = goodTypeMapper.selectObjectByQueryAs(queryWrapper, String.class);
         goodEntity.setTypeId(typeId);
         if (mapper.insert(goodEntity) > 0) {
+
+            // 价格表中插入价格
+            GoodPriceLogEntity goodPriceLog = GoodPriceLogEntity
+                    .builder()
+                    .price(good.getPrice())
+                    .goodId(goodEntity.getId())
+                    .build();
+            if (goodPriceLogMapper.insert(goodPriceLog) == 0) {
+                throw new RuntimeException("价格插入失败，商品创建失败，开始回滚");
+            }
+
             // 把数据库中id为假id的更新为现在商品生成的id
             UpdateChain.create(goodImageMapper)
                     .from(GOOD_IMAGE_ENTITY)
                     .set(GOOD_IMAGE_ENTITY.GOOD_ID, goodEntity.getId())
                     .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(good.getFakeId()))
                     .update();
+
+
             Map<String, String> map = new HashMap<>();
             map.put("goodId", goodEntity.getId());
             return map;
         }
-        return null;
+        throw new RuntimeException("商品插入失败，开始回滚");
     }
 
 
