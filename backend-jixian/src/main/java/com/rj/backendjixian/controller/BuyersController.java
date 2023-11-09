@@ -1,5 +1,8 @@
 package com.rj.backendjixian.controller;
 
+import cn.hutool.cache.impl.TimedCache;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.digest.BCrypt;
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.annotation.PassToken;
@@ -7,14 +10,19 @@ import com.rj.backendjixian.annotation.RequiresRoles;
 import com.rj.backendjixian.annotation.Role;
 import com.rj.backendjixian.exception.LoginException;
 import com.rj.backendjixian.model.dto.BuyerCreateDto;
+import com.rj.backendjixian.model.dto.MerchantCreateDto;
 import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.entity.BuyerEntity;
+import com.rj.backendjixian.model.entity.MerchantEntity;
+import com.rj.backendjixian.model.vo.CaptchaVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IBuyerAddressService;
 import com.rj.backendjixian.service.IBuyerService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
+import com.wf.captcha.GifCaptcha;
+import com.wf.captcha.SpecCaptcha;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -22,6 +30,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +49,13 @@ import java.util.Map;
 @RequestMapping("/buyers")
 @Tag(name = "买家接口")
 @CrossOrigin
+@Slf4j
 public class BuyersController {
 
     @Autowired
     private IBuyerService buyerService;
-
+    @Autowired
+    private TimedCache<String,Object> timedCache;
     @Autowired
     private IBuyerAddressService buyerAddressService;
 
@@ -209,4 +220,60 @@ public class BuyersController {
         BuyerEntity buyer = (BuyerEntity) Context.get("buyer");
         return Response.success(buyer);
     }
+
+    /**
+     * 生成图片验证码
+     *
+     */
+    @GetMapping("/getCode")
+    @Operation(summary = "图片验证码（验证码会在30分钟后过期）")
+    @PassToken
+    public Response<CaptchaVo> getCode(){
+//         英文与数字验证码
+        SpecCaptcha captcha = new SpecCaptcha(120, 40);
+        // 几位数运算
+        captcha.setLen(4);
+        // 获取运算的结果
+        String result = captcha.text().toLowerCase();
+
+        // 生成id标识验证码
+        String key= IdUtil.simpleUUID();
+        // 放入全局timeout缓存中 30分钟后过期
+        timedCache.put(key,result,30*60*1000);
+        log.info("验证码:{}",result);
+        return Response.success(CaptchaVo.builder()
+                .key(key)
+                .image(captcha.toBase64())
+                .build());
+    }
+
+    /**
+     * 添加买家
+     * @param buyerCreateDto
+     * @return
+     */
+    @PostMapping("/newBuyer")
+    @Operation(summary = "添加买家(验证码)")
+    @PassToken
+    public Response<Boolean> newMerchant(@RequestBody BuyerCreateDto buyerCreateDto) {
+
+        if(!buyerCreateDto.getVerify().trim().toLowerCase()
+                .equals(timedCache.get(buyerCreateDto.getKey()))){
+            log.info("验证码错误");
+            return Response.success(Boolean.FALSE);
+        }
+
+        if (!buyerCreateDto.checkPassword()) {
+            log.info("两次密码不同");
+            return Response.success(Boolean.FALSE);
+        }
+
+
+        BuyerEntity buyerEntity = new BuyerEntity();
+        buyerEntity.setName(buyerCreateDto.getName());
+        String hashedPassword= BCrypt.hashpw(buyerCreateDto.getPwd1(), BCrypt.gensalt());
+        buyerEntity.setPassword(hashedPassword);
+        return Response.success(buyerService.save(buyerEntity));
+    }
+
 }

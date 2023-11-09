@@ -1,9 +1,6 @@
 package com.rj.backendjixian.util;
 
-import cn.hutool.core.io.FileUtil;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
 
 class FileUtilTest {
 
