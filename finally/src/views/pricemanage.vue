@@ -20,7 +20,7 @@
           align-items: center;
         "
       >
-        <h1 class="word" style="margin: 0">发布商品</h1>
+        <h1 class="word" style="margin: 0">价格管理</h1>
       </div>
     </el-header>
     <el-container>
@@ -39,12 +39,8 @@
             >搜索</el-button
           >
         </div>
-        <ul class="infinite-list myul" style="overflow: auto; padding: 0 5px">
-          <li
-            style="width: 1400px"
-            v-for="(good, index) in goodslist"
-            :key="good.id"
-          >
+        <ul class="infinite-list" style="overflow: auto; padding: 0 5px">
+          <li style="width: 1400px" v-for="good in goodslist" :key="good.id">
             <el-container style="display: flex">
               <el-aside
                 style="
@@ -53,27 +49,9 @@
                   display: flex;
                   flex: 1;
                 "
-              >
-                <input
-                  type="checkbox"
-                  name="item"
-                  :value="good.id"
-                  style="width: 20px; height: 20px"
-                  v-model="isChecked[index]"
-                  @change="handleCheckboxChange($event, index)"
-                />
-              </el-aside>
-              <el-aside
-                style="
-                  align-items: center;
-                  justify-content: center;
-                  display: flex;
-                  flex: 4;
-                "
-              >
-                <img class="img1" :src="bindsrc(good.image)"
+                ><img class="img1" :src="bindsrc(good.image)"
               /></el-aside>
-              <el-container style="flex: 12">
+              <el-container style="flex: 3">
                 <el-header
                   ><h2 style="margin-top: 5px">
                     {{ good.name }}
@@ -111,47 +89,44 @@
                   align-items: center;
                   justify-content: center;
                   display: flex;
-                  flex: 4;
+                  flex: 1;
                 "
               >
-                <el-button class="el-button1" type="danger" plain
-                  >发布商品</el-button
+                <el-button
+                  class="el-button1"
+                  @click="dongjie(good.id)"
+                  type="success"
+                  plain
+                  >查看历史价格</el-button
                 >
               </el-aside>
             </el-container>
           </li>
         </ul>
-        <div>
-          <el-select
-            v-model="value"
-            clearable
-            placeholder="请选择"
+        <el-select
+          v-model="value"
+          clearable
+          placeholder="请选择"
+          style="width: 300px"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
             style="width: 300px"
           >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              style="width: 300px"
-            >
-            </el-option>
-          </el-select>
-          <el-button type="primary" style="margin-left: 1000px" @click="checkall" plain
-            >全选</el-button
-          >
-          <el-button type="primary">发布</el-button>
-        </div>
+          </el-option>
+        </el-select>
       </el-main>
     </el-container>
   </el-container>
 </template>
-      
-      <script>
+    
+    <script>
 import Cookie from "js-cookie";
 import { gethistorygoodlist } from "@/api/goods";
 import { goodstatue } from "@/api/goods";
-
 export default {
   data() {
     return {
@@ -181,19 +156,8 @@ export default {
         },
       ],
       value: "",
-      isChecked: [],
-      checkedid: [],
-      allid: [],
     };
   },
-  // created() {
-  //   // 动态为 isChecked 添加元素
-  //   for (let i = 0; i < this.goodslist.length; i++) {
-  //     this.isChecked.push(false); // 默认值为 false
-  //     this.idlist.push(this.goodslist[i].id);
-  //     //console.log(this.goodslist[i].id)
-  //   }
-  // },
   methods: {
     //刷新页面
     refresh() {
@@ -203,44 +167,17 @@ export default {
     bindsrc(img) {
       return require("../picture/" + img);
     },
-    //全选商品
-    //选取商品监听器
-    handleCheckboxChange(event, index) {
-      // 处理复选框的选择事件
-      // 如果 isChecked 数组的长度不足，先动态为其添加元素
-      // if (index >= this.isChecked.length) {
-      //   for (let i = this.isChecked.length; i <= index; i++) {
-      //     this.isChecked.push(false); // 默认值为 false
-      //   }
-      // }
-      this.isChecked[index] = event.target.checked;
-      if (this.isChecked[index] === true) {
-        //console.log(event.target.value, this.isChecked[index]);
-        this.checkedid.push(event.target.value);
-        console.log(this.checkedid);
-        console.log(this.isChecked);
-      } else {
-        console.log(event.target.value, this.isChecked[index]);
-        this.checkedid = this.checkedid.filter(
-          (item) => item !== event.target.value
-        );
-        console.log(this.checkedid);
-        console.log(this.isChecked);
-      }
-    },
-    //全选按钮
-    checkall(){
-      // for(let g of this.goodslist){
-      //   this.allid.push(g.id)
-      // }
-      // console.log(this.allid)
-      for(let i = 0; i < this.isChecked.length; i++){
-        this.isChecked[i]=true
-      }
-      this.checkedid=this.allid
-      //console.log(this.checkedid)
-      //console.log(this.isChecked)
-      this.$forceUpdate();
+    //冻结商品
+    dongjie(id) {
+      const token = Cookie.get("token");
+      goodstatue(token, id, "2").then((data) => {
+        //console.log(data.data)
+      });
+      this.$message({
+        message: "冻结商品成功",
+        type: "success",
+      });
+      setTimeout(() => this.refresh(), 1000);
     },
   },
   //获取历史商品
@@ -249,19 +186,13 @@ export default {
     gethistorygoodlist(token).then((data) => {
       this.goodslist = data.data.data;
       //console.log(this.goodslist);
-      for(let g of this.goodslist){
-        this.allid.push(g.id)
-        this.isChecked.push(false);
-      }
-      //console.log(this.allid)
-      //console.log(this.isChecked)
     });
   },
 };
 </script>
-      
-      <style scoped>
-.myul li {
+    
+    <style scoped>
+ul li {
   border-radius: 20px;
   /* height: 200px; */
   background-color: rgba(114, 181, 255, 0.66);
@@ -279,9 +210,9 @@ export default {
   width: 200px;
   height: 86px;
   font-size: 18px;
-  border: 3px solid red;
-  background-color: white;
-  color: red;
+  /* border: 3px solid red;
+    background-color: white;
+    color: red; */
   border-radius: 5px;
 }
 .tag1 {

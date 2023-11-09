@@ -24,8 +24,22 @@
       </div>
     </el-header>
     <el-container>
-      <el-main style="justify-content: center; display: flex; padding: 0 10px">
-        <ul class="infinite-list" style="overflow: auto; padding: 0 5px">
+      <el-main
+        style="justify-content: center; display: inline-block; padding: 0 10px"
+      >
+        <div>
+          <el-input
+            placeholder="请输入内容"
+            prefix-icon="el-icon-search"
+            v-model="search"
+            style="margin-top: 10px; width: 300px"
+          >
+          </el-input>
+          <el-button type="primary" style="margin-left: 10px" plain
+            >搜索</el-button
+          >
+        </div>
+        <ul class="infinite-list myul" style="overflow: auto; padding: 0 5px">
           <li style="width: 1400px" v-for="good in goodslist" :key="good.id">
             <el-container style="display: flex">
               <el-aside
@@ -38,11 +52,11 @@
                 ><img class="img1" :src="bindsrc(good.image)"
               /></el-aside>
               <el-container style="flex: 3">
-                <el-header
+                <!-- <el-header
                   ><h2 style="margin-top: 5px">
                     {{ good.name }}
                   </h2></el-header
-                >
+                > -->
                 <el-container style="display: flex">
                   <el-main
                     style="
@@ -52,6 +66,9 @@
                       flex: 1;
                     "
                   >
+                    <h2 style="margin-top: 5px">
+                      {{ good.name }}
+                    </h2>
                     <h5>商品名称:{{ good.name }}</h5>
                     <h5>上架日期:{{ good.shelfDate }}</h5>
                     <h5>重量:{{ good.weight }}</h5>
@@ -96,6 +113,21 @@
             </el-container>
           </li>
         </ul>
+        <el-select
+          v-model="value"
+          clearable
+          placeholder="请选择"
+          style="width: 300px"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            style="width: 300px"
+          >
+          </el-option>
+        </el-select>
       </el-main>
     </el-container>
   </el-container>
@@ -110,6 +142,30 @@ export default {
     return {
       count: 0,
       goodslist: [],
+      search: "",
+      options: [
+        {
+          value: "选项1",
+          label: "黄金糕",
+        },
+        {
+          value: "选项2",
+          label: "双皮奶",
+        },
+        {
+          value: "选项3",
+          label: "蚵仔煎",
+        },
+        {
+          value: "选项4",
+          label: "龙须面",
+        },
+        {
+          value: "选项5",
+          label: "北京烤鸭",
+        },
+      ],
+      value: "",
     };
   },
   methods: {
@@ -145,8 +201,8 @@ export default {
 };
 </script>
   
-  <style>
-ul li {
+  <style scoped>
+.myul li {
   border-radius: 20px;
   /* height: 200px; */
   background-color: rgba(114, 181, 255, 0.66);

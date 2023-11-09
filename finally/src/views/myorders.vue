@@ -26,84 +26,11 @@
     <el-container>
       <el-main style="justify-content: center; display: flex; padding: 0 10px">
         <ul class="infinite-list" style="overflow: auto; padding: 0 5px">
-          <!-- <li style="width: 1400px">
-            <el-container style="display: flex">
-              <el-aside
-                style="
-                  align-items: center;
-                  justify-content: center;
-                  display: flex;
-                  flex: 1;
-                "
-                ><img class="img1" src="../picture/xigua1.jpg"
-              /></el-aside>
-              <el-container style="flex: 3">
-                <el-header
-                  ><h2 style="margin-top: 5px">
-                    麒麟西瓜 1粒装 单果2.5kg起 生鲜水果
-                  </h2></el-header
-                >
-                <el-main style="display: flex">
-                  <div style="display: flex; align-items: flex-start">
-                    <h4 style="margin-left: 0; margin-top: 0">配送信息:</h4>
-                    <el-tag class="tag1" style="margin-left: 20px"
-                      >张三 13327518405<br />浙江省杭州市钱塘新区浙江工商大学
-                    </el-tag>
-                  </div>
-                </el-main>
-              </el-container>
-              <el-aside
-                style="
-                  align-items: center;
-                  justify-content: center;
-                  display: flex;
-                  flex: 1;
-                  flex-direction: column;
-                "
-              >
-                <p>
-                  支付方式:<span v-bind:style="{ fontWeight: 'bold' }"
-                    >货到付款</span
-                  >
-                </p>
-                <el-button class="button1" type="primary">完成交易</el-button>
-              </el-aside>
-            </el-container>
-          </li>
-          <li style="width: 1400px">
-            <el-container style="display: flex">
-              <el-aside
-                style="
-                  align-items: center;
-                  justify-content: center;
-                  display: flex;
-                  flex: 1;
-                "
-                ><img class="img1" src="../picture/xigua.png"
-              /></el-aside>
-              <el-container style="flex: 2">
-                <el-main style="display: flex; align-items: center"
-                  ><h2 style="margin-top: 5px">
-                    麒麟西瓜 1粒装 单果2.5kg起 生鲜水果
-                  </h2></el-main
-                >
-              </el-container>
-              <el-aside
-                style="
-                  align-items: center;
-                  justify-content: center;
-                  display: flex;
-                  flex: 2;
-                  flex-direction: column;
-                "
-              >
-                <el-tag class="tag1" style="margin-left: 20px"
-                  >订单已完成，信息已隐藏
-                </el-tag>
-              </el-aside>
-            </el-container>
-          </li> -->
-          <li style="width: 1400px" v-for="order in orderslist" :key="order.order_id">
+          <li
+            style="width: 1400px"
+            v-for="order in orderslist"
+            :key="order.order_id"
+          >
             <el-container style="display: flex" v-if="order.status == '0'">
               <el-aside
                 style="
@@ -114,20 +41,17 @@
                 "
                 ><img class="img1" :src="bindsrc(order.image)"
               /></el-aside>
-              <el-container style="flex: 3">
-                <el-header
-                  ><h2 style="margin-top: 5px">
+              <el-container style="flex: 3; display: inline-block">
+                  <h3 style="color: red">No.{{ order.order_id }}</h3>
+                  <h3>
                     {{ order.name }}
-                  </h2></el-header
-                >
-                <el-main style="display: flex">
-                  <div style="display: flex; align-items: flex-start">
-                    <h4 style="margin-left: 0; margin-top: 0">配送信息:</h4>
-                    <el-tag class="tag1" style="margin-left: 20px"
-                      >{{ order.buyer.name }} {{ order.buyer.phone }}<br />{{ order.buyer.address }}
+                  </h3>
+                  <div style="display: flex; align-items: flex-start;">
+                    <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
+                    <el-tag class="tag1" style="margin-left: 20px;margin-top: 12px"
+                      >{{ order.buyer.name }} {{ order.buyer.phone }} {{ order.buyer.address }}
                     </el-tag>
                   </div>
-                </el-main>
               </el-container>
               <el-aside
                 style="
@@ -139,11 +63,17 @@
                 "
               >
                 <p>
-                  支付方式:<span v-bind:style="{ fontWeight: 'bold' }"
-                    >{{ order.pay }}</span
-                  >
+                  支付方式：<span v-bind:style="{ fontWeight: 'bold' }">{{
+                    order.pay
+                  }}</span>
                 </p>
-                <el-button class="button1" type="primary" @click="submitorder(order.order_id)">完成交易</el-button>
+                <p style="margin-top: 0;">总计：<span v-bind:style="{ fontWeight: 'bold' }" style="color: red;">多少钱</span></p>
+                <el-button
+                  class="button1"
+                  type="primary"
+                  @click="submitorder(order.order_id)"
+                  >完成交易</el-button
+                >
               </el-aside>
             </el-container>
             <el-container style="display: flex" v-if="order.status == '1'">
@@ -156,56 +86,68 @@
                 "
                 ><img class="img1" :src="bindsrc(order.image)"
               /></el-aside>
-              <el-container style="flex: 2">
-                <el-main style="display: flex; align-items: center"
-                  ><h2 style="margin-top: 5px">
+              <el-container style="flex: 3; display: inline-block">
+                  <h3 style="color: red">No.{{ order.order_id }}</h3>
+                  <h3>
                     {{ order.name }}
-                  </h2></el-main
-                >
+                  </h3>
+                  <div style="display: flex; align-items: flex-start;">
+                    <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
+                    <el-tag class="tag1" style="margin-left: 20px;margin-top: 12px"
+                      >{{ order.buyer.name }} {{ order.buyer.phone }} {{ order.buyer.address }}
+                    </el-tag>
+                  </div>
               </el-container>
               <el-aside
                 style="
                   align-items: center;
                   justify-content: center;
                   display: flex;
-                  flex: 2;
+                  flex: 1;
                   flex-direction: column;
                 "
               >
-                <el-tag class="tag1" style="margin-left: 20px"
-                  >订单已完成，信息已隐藏
-                </el-tag>
+                <p>
+                  支付方式：<span v-bind:style="{ fontWeight: 'bold' }">{{
+                    order.pay
+                  }}</span>
+                </p>
+                <p style="margin-top: 0;">总计：<span v-bind:style="{ fontWeight: 'bold' }" style="color: red;">多少钱</span></p>
+                <el-tag class="tag2">已完成</el-tag>
               </el-aside>
             </el-container>
           </li>
         </ul>
       </el-main>
+      <el-footer>
+        <h2 style="float: right;margin-right: 20px;">总收入：<span style="color: red;">{{  }}</span></h2>
+      </el-footer>
     </el-container>
   </el-container>
 </template>
   
   <script>
-  import Cookie from "js-cookie";
-  import { getmyorders } from "@/api/orders";
-  import { orderstatus } from "@/api/orders";
+import Cookie from "js-cookie";
+import { getmyorders } from "@/api/orders";
+import { orderstatus } from "@/api/orders";
 export default {
   data() {
     return {
       count: 0,
-      orderslist:[],
+      orderslist: [],
     };
   },
-  methods:{
+  methods: {
     //刷新页面
     refresh() {
       location.reload();
     },
     //修改订单状态
-    submitorder(id){
+    submitorder(id) {
       const token = Cookie.get("token");
-      orderstatus(token,1,id).then((res)=>{
+      orderstatus(token, 1, id).then((res) => {
         //console.log(res)
-      })
+      });
       this.$message({
         message: "交易已完成",
         type: "success",
@@ -226,7 +168,7 @@ export default {
 };
 </script>
   
-  <style>
+  <style scoped>
 ul li {
   border-radius: 20px;
   /* height: 200px; */
@@ -247,10 +189,25 @@ ul li {
   margin-bottom: 10px;
 }
 .tag1 {
-  height: auto;
-  text-align: center;
+  display: flex;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
   font-size: 20px;
-  padding: 10px 40px;
+  padding-left: 40px;
+  padding-right: 40px;
+  border: 3px solid #268cfd;
+  color: #268cfd;
+  background-color: white;
+  border-radius: 5px;
+}
+.tag2{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 50px;
+  font-size: 18px;
   border: 3px solid #268cfd;
   color: #268cfd;
   background-color: white;
@@ -258,7 +215,7 @@ ul li {
 }
 .button1 {
   width: 150px;
-  height: 70px;
+  height: 50px;
   font-size: 18px;
 }
 </style>

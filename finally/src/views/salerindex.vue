@@ -31,7 +31,7 @@
     </el-dialog>
     <el-container>
       <el-header style="background-color: #72b5ff">
-        <h1 class="word" style="color: #ffffff; float: left">在线购物</h1>
+        <h1 class="word" style="color: #ffffff; float: left">果购——在线水果商城</h1>
         <el-button
           class="button3"
           icon="el-icon-s-tools"
@@ -43,9 +43,16 @@
       </el-header>
       <el-main style="display: flex; justify-content: center">
         <el-button
+          @click="creategoods"
+          class="large-button"
+          style="color: #268cfd;"
+          ><div class="size-icon"><i class="el-icon-plus"></i></div>
+          创建商品</el-button
+        >
+        <el-button
           @click="listgoods"
           class="large-button"
-          style="color: #268cfd; margin-right: 50px"
+          style="color: #268cfd; margin-left: 50px"
           ><div class="size-icon"><i class="el-icon-s-goods"></i></div>
           发布商品</el-button
         >
@@ -56,6 +63,13 @@
           ><div class="size-icon"><i class="el-icon-s-order"></i></div>
           我的订单</el-button
         >
+        <el-button
+          @click="pricemanage"
+          class="large-button"
+          style="color: #268cfd; margin-left: 50px"
+          ><div class="size-icon"><i class="el-icon-discount"></i></div>
+          价格管理</el-button
+        >
       </el-main>
       <el-footer style="display: flex; justify-content: center"
         ><el-button
@@ -63,8 +77,8 @@
           class="button2"
           type="info"
           icon="el-icon-time"
-          style="color: black"
-          >历史记录</el-button
+          style="color: black;margin-top: 250px;"
+          >历史商品</el-button
         ></el-footer
       >
     </el-container>
@@ -87,6 +101,10 @@ export default {
     };
   },
   methods: {
+    //创建商品
+    creategoods(){
+      this.$router.push("/creategoods");
+    },
     //发布商品
     listgoods() {
       this.$router.push("/listgoods");
@@ -94,6 +112,10 @@ export default {
     //我的订单
     myorders() {
       this.$router.push("/myorders");
+    },
+    //价格管理
+    pricemanage(){
+      this.$router.push("/pricemanage");
     },
     //历史商品
     historicalgoods() {
@@ -144,19 +166,20 @@ export default {
 .large-button {
   //   left: 102px;
   //   top: 167px;
-  width: 550px;
-  height: 520px;
+  width: 300px;
+  height: 290px;
   border-radius: 30px;
-  font-size: 80px;
+  font-size: 40px;
   text-align: center;
   font-family: Roboto;
+  border: 1px solid rgba(38, 140, 253, 1);
   .size-icon {
     margin-top: 0;
-    font-size: 300px;
+    font-size: 200px;
   }
 }
 .button2 {
-  width: 1200px;
+  width: 1350px;
   height: 80px;
   border-radius: 30px;
   font-size: 60px;
