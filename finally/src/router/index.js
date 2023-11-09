@@ -10,6 +10,8 @@ import salerindex from '../views/salerindex.vue'
 import listgoods from '../views/listgoods.vue'
 import myorders from '../views/myorders.vue'
 import historicalgoods from '../views/historicalgoods.vue'
+import creategoods from '../views/creategoods.vue'
+import pricemanage from '../views/pricemanage.vue'
 import Cookie from 'js-cookie';
 
 Vue.use(VueRouter)
@@ -33,6 +35,8 @@ const routes = [
     { path: '/listgoods', name: 'listgoods', component: listgoods },
     { path: '/myorders', name: 'myorders', component: myorders },
     { path: '/historicalgoods', name: 'historicalgoods', component: historicalgoods },
+    { path: '/creategoods', name: 'creategoods', component: creategoods },
+    { path: '/pricemanage', name: 'pricemanage', component: pricemanage },
 ]
 
 const router = new VueRouter({
