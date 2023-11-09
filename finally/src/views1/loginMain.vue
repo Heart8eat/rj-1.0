@@ -6,9 +6,9 @@
     :model="form"
     :rules="rules"
   >
-    <el-tabs v-model="loadWho" type="card" @tab-click="handleClick">
-      <el-tab-pane label="买家" name="first"></el-tab-pane>
-      <el-tab-pane label="卖家" name="second"></el-tab-pane>
+    <el-tabs v-model="loadWho" type="card" @tab-click="handleClick" stretch>
+      <el-tab-pane label="买家" name="first" class="custom-tab"></el-tab-pane>
+      <el-tab-pane label="卖家" name="second" class="custom-tab"></el-tab-pane>
     </el-tabs>
     <h2 class="login_title">果购</h2>
     <el-form-item label="用户名" prop="username">
@@ -38,6 +38,7 @@
 import Mock from "mockjs";
 import Cookie from "js-cookie";
 import { login } from "@/api/merchants";
+import { loginB } from "@/api/merchants";
 import { history } from "@/api/merchants";
 export default {
   data() {
@@ -69,6 +70,20 @@ export default {
     login2() {
       if (this.loadWho == "first") {
         console.log(this.form.username);
+        loginB(this.form.username, this.form.password).then((data) => {
+          console.log(data.data);
+          if (data.data.data.token != null) {
+            //获取后端token信息
+            const token = data.data.data.token;
+            //输出token值
+            //console.log(token)
+            //token信息传入cookie用于不同页面间通讯
+            Cookie.set("token", token);
+            this.$router.push("/zhuye");
+          } else {
+            this.$message.error(data.data.data);
+          }
+        });
       } else if (this.loadWho == "second") {
         console.log(this.form.password);
         login(this.form.username, this.form.password).then((data) => {
@@ -109,5 +124,12 @@ export default {
   .el-input {
     width: 198px;
   }
+  
+}
+.full-width-tabs {
+  width: 100%; /* Make the tabs fill the entire width of the container */
+}
+.custom-tab {
+  color: #409EFF; /* 设置选中时的背景颜色 */
 }
 </style>
