@@ -40,6 +40,7 @@
             action="https://jsonplaceholder.typicode.com/posts/"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
+            :on-error="handleAvatarSuccess"
             :on-change="handleChange"
             :before-upload="beforeAvatarUpload"
             style="margin-top: 30px"
