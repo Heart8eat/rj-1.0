@@ -155,6 +155,7 @@
 <script>
 import Cookie from "js-cookie";
 import { create } from "@/api/goods";
+import { nanoid } from "nanoid";
 export default {
   data() {
     return {
