@@ -59,6 +59,7 @@
               list-type="picture-card"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
+              :auto-upload="false"
               :limit="9"
             >
               <i class="el-icon-plus" style=""></i>
@@ -158,7 +159,7 @@ export default {
   data() {
     return {
       mimageUrl: "",
-      mbaseUrl:"",
+      mbaseUrl: "",
       dialogImageUrl: "",
       dialogVisible: false,
       price: "",
@@ -172,14 +173,14 @@ export default {
   },
   methods: {
     handleChange(file, fileLists) {
-			//console.log(file);
-			//console.log(fileLists);
-			// 本地服务器路径
-			//console.log(URL.createObjectURL(file.raw));
-			// 本地电脑路径 
-      this.mbaseUrl = file.name
+      //console.log(file);
+      //console.log(fileLists);
+      // 本地服务器路径
+      //console.log(URL.createObjectURL(file.raw));
+      // 本地电脑路径
+      this.mbaseUrl = file.name;
       //console.log(this.mbaseUrl);
-		},
+    },
     handleAvatarSuccess(res, file) {
       this.mimageUrl = URL.createObjectURL(file.raw);
     },
@@ -239,7 +240,7 @@ export default {
     },
     Cancel() {
       (this.mimageUrl = ""),
-      (this.mbaseUrl = ""),
+        (this.mbaseUrl = ""),
         (this.dialogImageUrl = ""),
         (this.dialogVisible = false),
         (this.price = ""),
@@ -267,8 +268,7 @@ export default {
   font-family: Roboto;
 }
 </style>
-
-<style scoped>
+<style>
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;
@@ -292,6 +292,8 @@ export default {
   height: 178px;
   display: block;
 }
+</style>
+<style scoped>
 .row {
   display: flex;
   align-items: center;
@@ -311,8 +313,6 @@ h4 {
   font-family: Roboto;
 }
 .el-upload--picture-card {
-  height: 75px !important;
-  width: 75px !important;
   display: flex;
   justify-content: center;
   align-items: center;
