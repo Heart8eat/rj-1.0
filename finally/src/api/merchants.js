@@ -1,7 +1,16 @@
 import http from "@/utils/request";
-//登录
+//卖家登录
 export const login = (name, password) => {
     return http.get('/merchants/login', {
+        params: {
+            name: name,
+            password: password
+        }
+    })
+}
+//买家登录
+export const loginB = (name, password) => {
+    return http.get('/buyers/login', {
         params: {
             name: name,
             password: password

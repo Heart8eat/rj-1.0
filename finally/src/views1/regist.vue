@@ -6,25 +6,41 @@
     :model="form"
     :rules="rules"
   >
-    <el-tabs v-model="loadWho" type="card" @tab-click="handleClick">
+    <el-tabs v-model="loadWho" type="card" @tab-click="handleClick" stretch>
       <el-tab-pane label="买家" name="first"></el-tab-pane>
       <el-tab-pane label="卖家" name="second"></el-tab-pane>
     </el-tabs>
     <h2 class="login_title">果购</h2>
     <el-form-item prop="username">
-      <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
+      <el-input
+        v-model="form.username"
+        placeholder="请输入用户名"
+        class="input"
+      ></el-input>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="form.captcha" placeholder="请输入验证码"></el-input>
-      <div>
-        <img :src="captchaUrl" alt="验证码" />
-      </div>
+      <el-row>
+        <el-col :span="12">
+          <el-input v-model="form.verify" placeholder="请输入验证码"></el-input>
+        </el-col>
+        <el-col :span="12">
+          <div>
+            <img
+              :src="this.captchaUrl.img"
+              alt="验证码"
+              style="max-width: 100px; height: auto; cursor: pointer"
+              @click="refreshCaptcha"
+            />
+          </div>
+        </el-col>
+      </el-row>
     </el-form-item>
     <el-form-item prop="password">
       <el-input
         type="password"
         v-model="form.password"
         placeholder="请输入密码"
+        class="input"
       ></el-input>
     </el-form-item>
     <el-form-item prop="password">
@@ -32,27 +48,34 @@
         type="password"
         v-model="form.password2"
         placeholder="请确认密码"
+        class="input"
       ></el-input>
     </el-form-item>
     <el-form-item>
       <el-button
         @click="regist"
-        style="margin-left: 82px; margin-top: 5px"
+        style="margin-left: 52px; margin-top: 5px"
         type="primary"
         >注册</el-button
       >
+      <el-button plain @click="close" style="margin-left: 32px">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
   <script>
+import axios from "axios";
+import router from "@/router";
 export default {
   data() {
     return {
       loadWho: "first",
-      captchaUrl: "http://localhost:8080/merchants/getCode",
+      captchaUrl: {
+        key: "",
+        img: "",
+      },
       form: {
         username: "",
-        captcha: "",
+        verify: "",
         password: "",
         password2: "",
       },
@@ -66,6 +89,21 @@ export default {
       },
     };
   },
+  mounted() {
+    // 发起HTTP请求获取数据
+    axios
+      .get("http://localhost:8080/merchants/getCode")
+      .then((response) => {
+        console.log("成功获取数据：", response.data);
+
+        this.captchaUrl.key = response.data.data.key;
+        this.captchaUrl.img = response.data.data.image;
+        // 更新其他属性以匹配您的数据结构
+      })
+      .catch((error) => {
+        console.error("获取数据时出错：", error);
+      });
+  },
   methods: {
     handleClick(tab) {
       if (tab.name === "first") {
@@ -76,53 +114,90 @@ export default {
         console.log(this.loadWho);
       }
     },
-    regist() {
-      console.log(this.form);
-      if (this.loadWh === "first") {
-      } else if (this.loadWho == "second") {
-        console.log(this.form);
-        const formData = new FormData();
-        formData.append("name", this.form.username);
-        formData.append("verify", this.form.captcha);
-        formData.append("pwd1", this.form.password);
-        formData.append("pwd2", this.form.password2);
-        fetch("http://localhost:8080/merchants/newMerchant", {
-          method: "POST",
-          body: formData,
+    refreshCaptcha() {
+      // 发起HTTP请求以获取新的验证码
+      axios
+        .get("http://localhost:8080/merchants/getCode")
+        .then((response) => {
+          console.log("成功获取数据：", response.data);
+
+          this.captchaUrl.key = response.data.data.key;
+          this.captchaUrl.img = response.data.data.image;
+          // 更新其他属性以匹配您的数据结构
         })
-          .then((response) => {
-            if (response.ok) {
-              // 请求成功
-              return response.json();
-            } else {
-              // 请求失败
-              throw new Error("请求失败");
+        .catch((error) => {
+          console.error("获取数据时出错：", error);
+        });
+    },
+    async regist() {
+      console.log(this.form);
+      if (this.loadWho == "first") {
+        try {
+          // 构建HTTP POST请求
+          console.log(this.form);
+          const response1 = await axios.post(
+            "http://localhost:8080/buyers/newBuyer",
+            {
+              name: this.form.username,
+              verify: this.form.verify,
+              key: this.captchaUrl.key,
+              pwd1: this.form.password,
+              pwd2: this.form.password2,
             }
-          })
-          .then((responseJson) => {
-            if (responseJson.data === false) {
-              // 数据中的data为false，注册失败
-              console.error("注册失败");
-              this.$message({
-                message: "注册失败，请重新输入验证码",
-                type: "false",
-              });
-              // 在这里可以添加更多的处理逻辑，例如显示错误消息
-            } else {
-              // 数据中的data不为false，注册成功
-              console.log(responseJson.data);
-              this.$message({
-                message: "恭喜你，注册成功",
-                type: "success",
-              });
-              this.$router.push("/loginMain");
+          );
+          console.log("成功保存到数据库:", response1.data);
+          if (response1.data.data == true) {
+            this.$message({
+              message: "恭喜你，注册成功",
+              type: "success",
+            });
+            this.$router.push("/loginMain");
+          } else {
+            this.$notify.error({
+              title: "注册失败",
+              message: "请检查信息输入是否正确",
+            });
+          }
+        } catch (error) {
+          // 请求失败，处理错误
+          console.error("保存失败:", error);
+          // 可以显示错误消息或采取其他适当的措施
+        }
+      } else if (this.loadWho == "second") {
+        try {
+          // 构建HTTP POST请求
+          const response2 = await axios.post(
+            "http://localhost:8080/merchants/newMerchant",
+            {
+              name: this.form.username,
+              verify: this.form.verify,
+              key: this.captchaUrl.key,
+              pwd1: this.form.password,
+              pwd2: this.form.password2,
             }
-          })
-          .catch((error) => {
-            // 处理错误
-            console.error(error);
-          });
+          );
+          console.log("成功保存到数据库:", response2.data);
+          if (response2.data.data == true) {
+            this.$message({
+              message: "恭喜你，注册成功",
+              type: "success",
+            });
+            this.$router.push("/loginMain");
+          } else {
+            this.$notify.error({
+              title: "注册失败",
+              message: "请检查信息输入是否正确",
+            });
+          }
+        } catch (error) {
+          // 请求失败，处理错误
+          console.error("保存失败:", error);
+          // 可以显示错误消息或采取其他适当的措施
+        }
       }
+    },
+    close() {
+      this.$router.push("/loginMain");
     },
   },
 };
@@ -143,7 +218,7 @@ export default {
     margin-bottom: 40px;
     color: #72b5ff;
   }
-  .el-input {
+  .input {
     width: 250px;
   }
 }
