@@ -31,7 +31,7 @@
             v-for="order in orderslist"
             :key="order.order_id"
           >
-            <el-container style="display: flex" v-if="order.status == '0'">
+          <el-container style="display: flex" v-if="order.status == '0'">
               <el-aside
                 style="
                   align-items: center;
@@ -42,16 +42,75 @@
                 ><img class="img1" :src="bindsrc(order.image)"
               /></el-aside>
               <el-container style="flex: 3; display: inline-block">
-                  <h3 style="color: red">No.{{ order.order_id }}</h3>
-                  <h3>
-                    {{ order.name }}
-                  </h3>
-                  <div style="display: flex; align-items: flex-start;">
-                    <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
-                    <el-tag class="tag1" style="margin-left: 20px;margin-top: 12px"
-                      >{{ order.buyer.name }} {{ order.buyer.phone }} {{ order.buyer.address }}
-                    </el-tag>
-                  </div>
+                <h3 style="color: red">No.{{ order.order_id }}</h3>
+                <h3>
+                  {{ order.name }}
+                </h3>
+                <div style="display: flex; align-items: flex-start">
+                  <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
+                  <el-tag
+                    class="tag1"
+                    style="margin-left: 20px; margin-top: 12px"
+                    >{{ order.buyer.name }} {{ order.buyer.phone }}
+                    {{ order.buyer.address }}
+                  </el-tag>
+                </div>
+              </el-container>
+              <el-aside
+                style="
+                  align-items: center;
+                  justify-content: center;
+                  display: flex;
+                  flex: 2;
+                  flex-direction: column;
+                "
+              >
+                <p>
+                  支付方式：<span v-bind:style="{ fontWeight: 'bold' }">{{
+                    order.pay
+                  }}</span>
+                </p>
+                <p style="margin-top: 0;">总计：<span v-bind:style="{ fontWeight: 'bold' }" style="color: red;">多少钱</span></p>
+                <div style="display: inline">
+                  <el-button
+                    class="button2"
+                    type="info"
+                    @click="submitorder(order.order_id, 3)"
+                    >取消</el-button
+                  >
+                  <el-button
+                    class="button1"
+                    type="primary"
+                    @click="submitorder(order.order_id, 1)"
+                    >接受订单</el-button
+                  >
+                </div>
+              </el-aside>
+            </el-container>
+            <el-container style="display: flex" v-if="order.status == '1'">
+              <el-aside
+                style="
+                  align-items: center;
+                  justify-content: center;
+                  display: flex;
+                  flex: 1;
+                "
+                ><img class="img1" :src="bindsrc(order.image)"
+              /></el-aside>
+              <el-container style="flex: 3; display: inline-block">
+                <h3 style="color: red">No.{{ order.order_id }}</h3>
+                <h3>
+                  {{ order.name }}
+                </h3>
+                <div style="display: flex; align-items: flex-start">
+                  <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
+                  <el-tag
+                    class="tag1"
+                    style="margin-left: 20px; margin-top: 12px"
+                    >{{ order.buyer.name }} {{ order.buyer.phone }}
+                    {{ order.buyer.address }}
+                  </el-tag>
+                </div>
               </el-container>
               <el-aside
                 style="
@@ -71,12 +130,12 @@
                 <el-button
                   class="button1"
                   type="primary"
-                  @click="submitorder(order.order_id)"
+                  @click="submitorder(order.order_id, 2)"
                   >完成交易</el-button
                 >
               </el-aside>
             </el-container>
-            <el-container style="display: flex" v-if="order.status == '1'">
+            <el-container style="display: flex" v-if="order.status == '2'">
               <el-aside
                 style="
                   align-items: center;
@@ -87,16 +146,19 @@
                 ><img class="img1" :src="bindsrc(order.image)"
               /></el-aside>
               <el-container style="flex: 3; display: inline-block">
-                  <h3 style="color: red">No.{{ order.order_id }}</h3>
-                  <h3>
-                    {{ order.name }}
-                  </h3>
-                  <div style="display: flex; align-items: flex-start;">
-                    <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
-                    <el-tag class="tag1" style="margin-left: 20px;margin-top: 12px"
-                      >{{ order.buyer.name }} {{ order.buyer.phone }} {{ order.buyer.address }}
-                    </el-tag>
-                  </div>
+                <h3 style="color: red">No.{{ order.order_id }}</h3>
+                <h3>
+                  {{ order.name }}
+                </h3>
+                <div style="display: flex; align-items: flex-start">
+                  <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
+                  <el-tag
+                    class="tag1"
+                    style="margin-left: 20px; margin-top: 12px"
+                    >{{ order.buyer.name }} {{ order.buyer.phone }}
+                    {{ order.buyer.address }}
+                  </el-tag>
+                </div>
               </el-container>
               <el-aside
                 style="
@@ -114,6 +176,49 @@
                 </p>
                 <p style="margin-top: 0;">总计：<span v-bind:style="{ fontWeight: 'bold' }" style="color: red;">多少钱</span></p>
                 <el-tag class="tag2">已完成</el-tag>
+              </el-aside>
+            </el-container>
+            <el-container style="display: flex" v-if="order.status == '3'">
+              <el-aside
+                style="
+                  align-items: center;
+                  justify-content: center;
+                  display: flex;
+                  flex: 1;
+                "
+                ><img class="img1" :src="bindsrc(order.image)"
+              /></el-aside>
+              <el-container style="flex: 3; display: inline-block">
+                <h3 style="color: red">No.{{ order.order_id }}</h3>
+                <h3>
+                  {{ order.name }}
+                </h3>
+                <div style="display: flex; align-items: flex-start">
+                  <h3 style="margin-left: 0; margin-top: 24px">配送信息:</h3>
+                  <el-tag
+                    class="tag1"
+                    style="margin-left: 20px; margin-top: 12px"
+                    >{{ order.buyer.name }} {{ order.buyer.phone }}
+                    {{ order.buyer.address }}
+                  </el-tag>
+                </div>
+              </el-container>
+              <el-aside
+                style="
+                  align-items: center;
+                  justify-content: center;
+                  display: flex;
+                  flex: 1;
+                  flex-direction: column;
+                "
+              >
+                <p>
+                  支付方式：<span v-bind:style="{ fontWeight: 'bold' }">{{
+                    order.pay
+                  }}</span>
+                </p>
+                <p style="margin-top: 0;">总计：<span v-bind:style="{ fontWeight: 'bold' }" style="color: red;">多少钱</span></p>
+                <el-tag class="tag2">订单已取消</el-tag>
               </el-aside>
             </el-container>
           </li>
@@ -143,16 +248,34 @@ export default {
       location.reload();
     },
     //修改订单状态
-    submitorder(id) {
+    submitorder(id, status) {
       const token = Cookie.get("token");
-      orderstatus(token, 1, id).then((res) => {
+      orderstatus(token, status, id).then((res) => {
         //console.log(res)
       });
-      this.$message({
-        message: "交易已完成",
-        type: "success",
-      });
-      setTimeout(() => this.refresh(), 1000);
+      switch (status) {
+        case 1:
+          this.$message({
+            message: "订单已接受",
+            type: "success",
+          });
+          setTimeout(() => this.refresh(), 1000);
+          break;
+        case 2:
+          this.$message({
+            message: "交易已完成",
+            type: "success",
+          });
+          setTimeout(() => this.refresh(), 1000);
+          break;
+        case 3:
+          this.$message({
+            message: "交易已取消",
+            type: "success",
+          });
+          setTimeout(() => this.refresh(), 1000);
+          break;
+      }
     },
     bindsrc(img) {
       return require("../picture/" + img);
@@ -215,6 +338,11 @@ ul li {
 }
 .button1 {
   width: 150px;
+  height: 50px;
+  font-size: 18px;
+}
+.button2 {
+  width: 100px;
   height: 50px;
   font-size: 18px;
 }
