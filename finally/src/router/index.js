@@ -46,13 +46,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   const token = Cookie.get('token')
-  const routesRequiringToken = ['salerindex', 'listgoods', 'myorders', 'historicalgoods'];
-
-  if (routesRequiringToken.includes(to.name) && token === null) {
-    // 如果访问需要验证 token 的路由且没有令牌，重定向到登录页面
-    next({ name: 'salerlogin' });
-  } else {
-    next();
+ if (!token && to.name !== 'loginMain') {
+    next({ name: 'salerlogin' })
+  } else if (token && to.name === 'loginMain') {
+    next({ name: 'salerindex'})
+  }else{
+    next()
   }
 })
 

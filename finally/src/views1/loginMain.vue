@@ -129,7 +129,7 @@ export default {
 .full-width-tabs {
   width: 100%; /* Make the tabs fill the entire width of the container */
 }
-.custom-tab {
-  color: #409EFF; /* 设置选中时的背景颜色 */
+.custom-tab.is-active {
+  background-color: #409EFF; /* 设置选中时的背景颜色 */
 }
 </style>
