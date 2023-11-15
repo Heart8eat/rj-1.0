@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -102,7 +103,7 @@ public class GoodController {
     @LoginToken
     @SecurityRequirement(name = "token")
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新", hidden = true)
+    @Operation(summary = "根据主键更新")
     public Response<Boolean> update(@RequestBody GoodEntity good) {
         return Response.success(goodService.updateById(good));
     }
@@ -284,42 +285,6 @@ public class GoodController {
                                            @RequestParam int pageSize) {
         Page<GoodEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(goodService.page(page));
-    }
-
-
-    /**
-     * 多图片上传测试接口
-     *
-     * @param id
-     * @param files
-     * @return
-     * @throws IOException
-     */
-    @PostMapping(value = "/uploadImg", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "保存图片")
-    @Parameters(value = {
-//            @Parameter(name = "imgFile", description = "图片", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "file")),
-            @Parameter(name = "id", description = "前端生成的id", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string")),
-            @Parameter(name = "main", description = "1为主图片，0为其他图片", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
-    })
-    public Response<List<ImageVo>> uploadImg(@RequestParam Serializable id, @RequestParam Integer main,
-                                             @RequestPart("uploadFiles") MultipartFile[] files) throws IOException {
-        return Response.success(goodService.uploadImgs(files, id.toString(), main != null ? main : 0));
-    }
-
-    /**
-     * 删除文件夹接口
-     *
-     * @param uuid
-     * @return
-     */
-    @PostMapping(value = "/deleteImg")
-    @Operation(summary = "删除文件")
-    @Parameters(value = {
-            @Parameter(name = "uuid", description = "图片文件夹uuid", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
-    })
-    public Response<Boolean> deleteImg(@RequestParam Serializable uuid) {
-        return Response.success((goodService.deleteImgs(uuid.toString())));
     }
 
 

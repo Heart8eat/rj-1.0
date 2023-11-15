@@ -21,6 +21,7 @@ import com.rj.backendjixian.service.IMerchantService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
 import com.wf.captcha.GifCaptcha;
+import com.wf.captcha.SpecCaptcha;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -193,14 +194,8 @@ public class MerchantController {
     @Operation(summary = "图片验证码（验证码会在30分钟后过期）")
     @PassToken
     public Response<CaptchaVo> getCode(){
-        //算术验证码 数字加减乘除. 建议2位运算就行:captcha.setLen(2);
-//        ArithmeticCaptcha captcha = new ArithmeticCaptcha(120, 40);
-        // 中文验证码
-//        ChineseCaptcha captcha = new ChineseCaptcha(120, 40);
 //         英文与数字验证码
-//        SpecCaptcha captcha = new SpecCaptcha(120, 40);
-        //英文与数字动态验证码
-        GifCaptcha captcha = new GifCaptcha(120, 40);
+        SpecCaptcha captcha = new SpecCaptcha(120, 40);
         // 几位数运算
         captcha.setLen(4);
         // 获取运算的结果

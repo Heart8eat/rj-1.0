@@ -27,10 +27,6 @@ public interface IGoodService extends IService<GoodEntity> {
 
     Page<GoodBriefVo> getGoodBriefPage(Page<GoodBriefVo> page, String type, String name);
 
-    boolean deleteImgs(String id);
-
-    List<ImageVo> uploadImgs(MultipartFile[] multipartFiles, String id, Integer main) throws IOException;
-
     Map<String, String> createGood(GoodCreateDto good);
 
     Boolean changeGoodStatue(String id, int statue);

@@ -91,5 +91,12 @@ public class Swagger3Config {
                 .pathsToMatch("/utils/**")
                 .build();
     }
+    @Bean
+    public GroupedOpenApi fileApi() {
+        return GroupedOpenApi.builder()
+                .group("图片接口")
+                .pathsToMatch("/files/**")
+                .build();
+    }
 
 }
