@@ -178,6 +178,9 @@ public class OrderController {
     @PostMapping("/newOrder")
     @Operation(summary = "生成订单")
 
+    /**
+     * 生成订单
+     */
     public Response<Boolean> newOrder(@RequestBody GoodOrderDto goodOrderDto) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setStatus(0);

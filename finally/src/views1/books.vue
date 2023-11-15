@@ -23,7 +23,7 @@
                     </el-col>
                     <el-col :span="8" class="right-side"> 
                         <div class="right-side-zhu">
-                            <div v-if="savedData.name || savedData.address || savedData.phone" >
+                            <div v-if="savedData.name || savedData.address || savedData.phone" class="Xx-container">
                                 <span class="Xinxi">收货人: {{ savedData.name }}，地址: {{ savedData.address }}，手机号: {{ savedData.phone }}</span>
                             </div>
                             <button @click="openBooksRightDialog" class="dzbutton">新增收货地址</button>
@@ -213,6 +213,12 @@ export default {
     flex-direction: column;
     justify-content: space-between;   
 }
+.Xx-container {
+    width: 574px;
+    height: 155px;
+    border: 2px solid #000; /* 边框样式，可以根据需要更改颜色和宽度 */
+    box-sizing: border-box; /* 让边框大小包括在元素的宽度和高度内 */
+}
 .Xinxi {
     position: absolute;
     top: 10px; /* 调整按钮与底部的距离 */
@@ -220,6 +226,8 @@ export default {
     border: 2px solid brown; /* 设置棕色边框 */
     border-radius: 10px; /* 添加圆角效果 */
     padding: 10px; /* 可选，添加内边距以分离文本内容和边框 */
+    width: 520px;
+    height: auto;
 }
 .right-side button {
   position: absolute;
