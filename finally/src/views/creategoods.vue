@@ -37,10 +37,11 @@
         <div style="display: flex; flex-direction: column; align-items: center">
           <el-upload
             class="avatar-uploader"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action="/goods/uoloadImg"
+            :data="{id:uid,main:1}"
+            name="uploadFiles"
             :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :on-error="handleAvatarSuccess"
+            :auto-upload="false"
             :on-change="handleChange"
             :before-upload="beforeAvatarUpload"
             style="margin-top: 30px"
@@ -55,10 +56,12 @@
               <p>(选填1~9张)</p>
             </div>
             <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
+              action="/goods/uoloadImg"
               list-type="picture-card"
+              :data="{id:uid,main:0}"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
+              :on-change="handleChange2"
               :auto-upload="false"
               :limit="9"
             >
@@ -144,7 +147,7 @@
               style="margin-right: 250px"
               >确定</el-button
             >
-            <el-button class="button1" @click="Cancel">取消</el-button>
+            <el-button class="button1" @click="Cancel">清空</el-button>
           </div>
         </div>
       </el-main>
@@ -162,6 +165,7 @@ export default {
       mimageUrl: "",
       mbaseUrl: "",
       dialogImageUrl: "",
+      Urllist:[],
       dialogVisible: false,
       price: "",
       name: "",
@@ -170,21 +174,20 @@ export default {
       weight: "",
       store: "",
       description: "",
+      uid:"",
     };
   },
   methods: {
     handleChange(file, fileLists) {
-      //console.log(file);
-      //console.log(fileLists);
-      // 本地服务器路径
-      //console.log(URL.createObjectURL(file.raw));
       // 本地电脑路径
       this.mbaseUrl = file.name;
+      //使图片显示
+      this.mimageUrl = URL.createObjectURL(file.raw);
       //console.log(this.mbaseUrl);
     },
-    handleAvatarSuccess(res, file) {
-      this.mimageUrl = URL.createObjectURL(file.raw);
-    },
+    // handleAvatarSuccess(res, file) {
+    //   this.mimageUrl = URL.createObjectURL(file.raw);
+    // },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -198,11 +201,17 @@ export default {
       return isJPG && isLt2M;
     },
     handleRemove(file, fileList) {
+      this.Urllist=fileList;
+      console.log(this.Urllist);
       //console.log(file, fileList);
     },
-    handlePictureCardPreview(file) {
+    handlePictureCardPreview(file,fileList) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
+    },
+    handleChange2(file,fileList){
+      this.Urllist=fileList;
+      console.log(this.Urllist);
     },
     submit() {
       //console.log("测试")
@@ -243,6 +252,7 @@ export default {
       (this.mimageUrl = ""),
         (this.mbaseUrl = ""),
         (this.dialogImageUrl = ""),
+        (this.Urllist=[]),
         (this.dialogVisible = false),
         (this.price = ""),
         (this.name = ""),
@@ -251,15 +261,12 @@ export default {
         (this.weight = ""),
         (this.store = ""),
         (this.description = "");
-      // const token = Cookie.get("token");
-      // //console.log(token);
-      // create2(
-      //     token,
-      //   ).then((data) => {
-      //   });
-      //   //console.log(data.data.data.message)
     },
   },
+  mounted(){
+    this.uid=nanoid();
+    console.log(this.uid);
+  }
 };
 </script>
   
