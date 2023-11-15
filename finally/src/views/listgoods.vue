@@ -137,7 +137,11 @@
             >
             </el-option>
           </el-select>
-          <el-button type="primary" style="margin-left: 1000px" @click="checkall" plain
+          <el-button
+            type="primary"
+            style="margin-left: 1000px"
+            @click="checkall"
+            plain
             >全选</el-button
           >
           <el-button type="primary">发布</el-button>
@@ -229,17 +233,26 @@ export default {
       }
     },
     //全选按钮
-    checkall(){
-      // for(let g of this.goodslist){
-      //   this.allid.push(g.id)
-      // }
-      // console.log(this.allid)
-      for(let i = 0; i < this.isChecked.length; i++){
-        this.isChecked[i]=true
+    checkall() {
+      var flag = false;
+      for (let i = 0; i < this.isChecked.length; i++) {
+        if (this.isChecked[i] === false) {
+          this.isChecked[i] = true;
+          flag = true;
+        }
       }
-      this.checkedid=this.allid
-      //console.log(this.checkedid)
-      //console.log(this.isChecked)
+      if (flag === false) {
+        //已经全选需取消全选
+        for (let i = 0; i < this.isChecked.length; i++) {    
+            this.isChecked[i] = false;
+        }
+        this.checkedid=[];
+      }
+      else{
+        this.checkedid = this.allid;
+      }
+      // console.log(this.checkedid)
+      // console.log(this.isChecked)
       this.$forceUpdate();
     },
   },
@@ -249,8 +262,8 @@ export default {
     gethistorygoodlist(token).then((data) => {
       this.goodslist = data.data.data;
       //console.log(this.goodslist);
-      for(let g of this.goodslist){
-        this.allid.push(g.id)
+      for (let g of this.goodslist) {
+        this.allid.push(g.id);
         this.isChecked.push(false);
       }
       //console.log(this.allid)

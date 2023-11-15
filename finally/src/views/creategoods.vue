@@ -166,6 +166,7 @@ export default {
       mbaseUrl: "",
       dialogImageUrl: "",
       Urllist:[],
+      Urlmain:"",
       dialogVisible: false,
       price: "",
       name: "",
@@ -183,7 +184,9 @@ export default {
       this.mbaseUrl = file.name;
       //使图片显示
       this.mimageUrl = URL.createObjectURL(file.raw);
-      //console.log(this.mbaseUrl);
+      // console.log(this.mbaseUrl);
+      this.Urlmain = file;
+      console.log(this.Urlmain);
     },
     // handleAvatarSuccess(res, file) {
     //   this.mimageUrl = URL.createObjectURL(file.raw);
