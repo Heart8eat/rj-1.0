@@ -71,7 +71,7 @@
                   flex: 4;
                 "
               >
-                <img class="img1" :src="bindsrc(good.image)"
+                <img class="img1" :src="bindsrc(good.image.url)"
               /></el-aside>
               <el-container style="flex: 12">
                 <el-header
@@ -153,8 +153,7 @@
       
       <script>
 import Cookie from "js-cookie";
-import { gethistorygoodlist } from "@/api/goods";
-import { goodstatue } from "@/api/goods";
+import { getpublishgoodlist } from "@/api/goods";
 
 export default {
   data() {
@@ -190,14 +189,6 @@ export default {
       allid: [],
     };
   },
-  // created() {
-  //   // 动态为 isChecked 添加元素
-  //   for (let i = 0; i < this.goodslist.length; i++) {
-  //     this.isChecked.push(false); // 默认值为 false
-  //     this.idlist.push(this.goodslist[i].id);
-  //     //console.log(this.goodslist[i].id)
-  //   }
-  // },
   methods: {
     //刷新页面
     refresh() {
@@ -205,18 +196,11 @@ export default {
     },
     //图片路径
     bindsrc(img) {
-      return require("../picture/" + img);
+      return "http://localhost:8080" + img;
     },
     //全选商品
     //选取商品监听器
     handleCheckboxChange(event, index) {
-      // 处理复选框的选择事件
-      // 如果 isChecked 数组的长度不足，先动态为其添加元素
-      // if (index >= this.isChecked.length) {
-      //   for (let i = this.isChecked.length; i <= index; i++) {
-      //     this.isChecked.push(false); // 默认值为 false
-      //   }
-      // }
       this.isChecked[index] = event.target.checked;
       if (this.isChecked[index] === true) {
         //console.log(event.target.value, this.isChecked[index]);
@@ -259,9 +243,9 @@ export default {
   //获取历史商品
   mounted() {
     const token = Cookie.get("token");
-    gethistorygoodlist(token).then((data) => {
+    getpublishgoodlist(token).then((data) => {
       this.goodslist = data.data.data;
-      //console.log(this.goodslist);
+      console.log(this.goodslist);
       for (let g of this.goodslist) {
         this.allid.push(g.id);
         this.isChecked.push(false);

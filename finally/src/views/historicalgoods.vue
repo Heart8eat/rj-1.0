@@ -49,7 +49,7 @@
                   display: flex;
                   flex: 1;
                 "
-                ><img class="img1" :src="bindsrc(good.image)"
+                ><img class="img1" :src="good.image.url"
               /></el-aside>
               <el-container style="flex: 3">
                 <!-- <el-header
