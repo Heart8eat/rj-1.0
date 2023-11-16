@@ -8,6 +8,7 @@ import com.rj.backendjixian.model.entity.GoodImageEntity;
 import com.rj.backendjixian.model.vo.ImageVo;
 import com.rj.backendjixian.service.IImageService;
 import com.rj.backendjixian.util.FileUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEntity> implements IImageService {
 
     /**
@@ -37,8 +39,8 @@ public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEnti
 
         //File对象封装文件路径
         ApplicationHome applicationHome = new ApplicationHome(this.getClass());
-        String pre = applicationHome.getDir().getParentFile().
-                getParentFile().getAbsolutePath() + "/upload";
+        log.info(applicationHome.getDir().getAbsolutePath());
+        String pre = applicationHome.getDir().getAbsolutePath() + "/upload";
 //        System.out.println(pre);
 
         for (MultipartFile multipartFile : multipartFiles) {
@@ -60,15 +62,16 @@ public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEnti
             //如果目录不存在创建多级目录
             if (!file.exists()) {
                 boolean mkdirs = file.mkdirs();
-                System.out.println("日期文件夹" + (mkdirs ? "创建成功" : "创建失败"));
+               log.info("日期文件夹" + (mkdirs ? "创建成功" : "创建失败"));
             }
-            //判断目录下是否有相同的文件
-
-            File[] files = file.listFiles();
-            if (files != null) {
-                for (File f : files) {
-                    if (FileUtil.isEqual(multipartFile, f)) {
-                        throw new IOException("相同的文件");
+            //判断目录下是否有相同的文件, 主图片的文件可以和其他图片相同
+            if(main==0){
+                File[] files = file.listFiles();
+                if (files != null) {
+                    for (File f : files) {
+                        if (FileUtil.isEqual(multipartFile, f)) {
+                            throw new IOException("相同的文件");
+                        }
                     }
                 }
             }
