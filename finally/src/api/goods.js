@@ -1,11 +1,11 @@
 import http from "@/utils/request";
-//上架商品
-export const create = (token, price, name, image, type, variety, weight, store, description) => {
+//创建商品
+export const create = (token, price, name, uid, type, variety, weight, store, description) => {
     return http.post('/goods/create', {
         shopId: "630e807bdf604941b89192af2eb7396e",
         price: price,
         name: name,
-        image: image,
+        fakeId: uid,
         type: type,
         variety: variety,
         weight: weight,
@@ -16,6 +16,14 @@ export const create = (token, price, name, image, type, variety, weight, store, 
             Authorization: ' Bearer ' + token
         },
 
+    })
+}
+//获取待发布商品
+export const getpublishgoodlist =(token)=>{
+    return http.get('/goods/getPublishGoodList', {
+        headers: {
+            Authorization:' Bearer '+token
+        }
     })
 }
 //获取历史商品

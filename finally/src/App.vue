@@ -18,8 +18,8 @@
 import devicePixelRatio from './devicePixelRatio';
 export default {
   name: 'App',
-  created() {
-    new devicePixelRatio().init();
-	}
+  // created() {
+  //   new devicePixelRatio().init();
+	// }
 }
 </script>
