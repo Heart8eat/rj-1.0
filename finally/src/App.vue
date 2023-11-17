@@ -17,5 +17,8 @@
 <script>
 export default {
   name: 'App',
+  // created() {
+  //   new devicePixelRatio().init();
+	// }
 }
 </script>

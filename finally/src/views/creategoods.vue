@@ -38,7 +38,7 @@
           <el-upload
             class="avatar-uploader"
             action="/goods/uoloadImg"
-            :data="{id:uid,main:1}"
+            :data="{ id: uid, main: 1 }"
             name="uploadFiles"
             :show-file-list="false"
             :auto-upload="false"
@@ -58,7 +58,7 @@
             <el-upload
               action="/goods/uoloadImg"
               list-type="picture-card"
-              :data="{id:uid,main:0}"
+              :data="{ id: uid, main: 0 }"
               :on-preview="handlePictureCardPreview"
               :on-remove="handleRemove"
               :on-change="handleChange2"
@@ -159,14 +159,15 @@
 import Cookie from "js-cookie";
 import { create } from "@/api/goods";
 import { nanoid } from "nanoid";
+import { uploadImg } from "@/api/picture";
 export default {
   data() {
     return {
       mimageUrl: "",
       mbaseUrl: "",
       dialogImageUrl: "",
-      Urllist:[],
-      Urlmain:"",
+      Urllist: [],
+      Urlmain: "",
       dialogVisible: false,
       price: "",
       name: "",
@@ -175,10 +176,11 @@ export default {
       weight: "",
       store: "",
       description: "",
-      uid:"",
+      uid: "",
     };
   },
   methods: {
+    //主图片
     handleChange(file, fileLists) {
       // 本地电脑路径
       this.mbaseUrl = file.name;
@@ -188,9 +190,7 @@ export default {
       this.Urlmain = file;
       console.log(this.Urlmain);
     },
-    // handleAvatarSuccess(res, file) {
-    //   this.mimageUrl = URL.createObjectURL(file.raw);
-    // },
+    //主图片
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";
       const isLt2M = file.size / 1024 / 1024 < 2;
@@ -204,25 +204,26 @@ export default {
       return isJPG && isLt2M;
     },
     handleRemove(file, fileList) {
-      this.Urllist=fileList;
+      this.Urllist = fileList;
       console.log(this.Urllist);
       //console.log(file, fileList);
     },
-    handlePictureCardPreview(file,fileList) {
+    handlePictureCardPreview(file, fileList) {
       this.dialogImageUrl = file.url;
       this.dialogVisible = true;
     },
-    handleChange2(file,fileList){
-      this.Urllist=fileList;
+    handleChange2(file, fileList) {
+      this.Urllist = fileList;
       console.log(this.Urllist);
     },
-    submit() {
+    async submit() {
       //console.log("测试")
       const token = Cookie.get("token");
       if (
         this.price == "" ||
         this.name == "" ||
-        this.mbaseUrl == "" ||
+        this.Urlmain == null ||
+        this.Urllist == null ||
         this.type == "" ||
         this.variety == "" ||
         this.weight == "" ||
@@ -231,11 +232,20 @@ export default {
       ) {
         this.$message.error("商品信息不能为空");
       } else {
-        create(
+        await uploadImg(
+          token,
+          this.uid,
+          this.Urlmain.raw,
+          this.Urllist.map((f) => f.raw)
+        ).then((res) => {
+          //console.log(res.data)
+        });
+
+        await create(
           token,
           this.price,
           this.name,
-          [this.mbaseUrl],
+          this.uid,
           this.type,
           this.variety,
           this.weight,
@@ -244,6 +254,7 @@ export default {
         ).then((data) => {
           //console.log(data.data);
         });
+
         this.$message({
           message: "发布商品成功",
           type: "success",
@@ -255,7 +266,7 @@ export default {
       (this.mimageUrl = ""),
         (this.mbaseUrl = ""),
         (this.dialogImageUrl = ""),
-        (this.Urllist=[]),
+        (this.Urllist = []),
         (this.dialogVisible = false),
         (this.price = ""),
         (this.name = ""),
@@ -266,10 +277,10 @@ export default {
         (this.description = "");
     },
   },
-  mounted(){
-    this.uid=nanoid();
+  mounted() {
+    this.uid = nanoid();
     console.log(this.uid);
-  }
+  },
 };
 </script>
   

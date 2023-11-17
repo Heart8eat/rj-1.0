@@ -42,7 +42,7 @@ public class FileController {
           @Parameter(name = "id", description = "前端传图片的uuid", required = true, in = ParameterIn.QUERY, schema = @Schema(type = "string"))
     })
     public Response<List<ImageVo>> uploadImg(@RequestParam Serializable id, @RequestPart("mainFile") MultipartFile mainFile,
-                                             @RequestPart("uploadFiles") MultipartFile[] files) throws IOException {
+                                             @RequestPart("uploadFiles[]") MultipartFile[] files) throws IOException {
         //用于返回的list<ImageVo>
         List<ImageVo> root = new ArrayList<ImageVo>();
 
