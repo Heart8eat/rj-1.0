@@ -30,22 +30,37 @@
       </span>
     </el-dialog>
     <el-container>
-      <el-header style="background-color: #72b5ff">
-        <h1 class="word" style="color: #ffffff; float: left">果购——在线水果商城</h1>
-        <el-button
+      <el-header style="background-color: #72b5ff;">
+        <h1 class="word" style="color: #ffffff;float: left;">
+          果购——在线水果商城
+        </h1>
+        <!-- <el-button
           class="button3"
           icon="el-icon-s-tools"
           round
           style="float: right"
           @click="dialogVisible = true"
           >修改密码</el-button
+        > -->
+        <el-dropdown
+          @command="handleCommand"
+          style="float: right;margin: 15px 0;"
+          trigger="click"
         >
+          <span class="el-dropdown-link">
+            <i class="el-icon-s-tools el-icon-arrow-down"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="a">修改密码</el-dropdown-item>
+            <el-dropdown-item command="b">退出登录</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-header>
       <el-main style="display: flex; justify-content: center">
         <el-button
           @click="creategoods"
           class="large-button"
-          style="color: #268cfd;"
+          style="color: #268cfd"
           ><div class="size-icon"><i class="el-icon-plus"></i></div>
           创建商品</el-button
         >
@@ -77,7 +92,7 @@
           class="button2"
           type="info"
           icon="el-icon-time"
-          style="color: black;margin-top: 250px;"
+          style="color: black; margin-top: 250px"
           >历史商品</el-button
         ></el-footer
       >
@@ -102,7 +117,7 @@ export default {
   },
   methods: {
     //创建商品
-    creategoods(){
+    creategoods() {
       this.$router.push("/creategoods");
     },
     //发布商品
@@ -114,7 +129,7 @@ export default {
       this.$router.push("/myorders");
     },
     //价格管理
-    pricemanage(){
+    pricemanage() {
       this.$router.push("/pricemanage");
     },
     //历史商品
@@ -158,6 +173,17 @@ export default {
         });
       }
     },
+    handleCommand(command){
+      //修改密码
+      if(command==="a"){
+        this.dialogVisible = true;
+        console.log("1111")
+      }//退出登录
+      else if(command==="b"){
+        Cookie.set('token',"");
+        this.$router.push("/loginMain");
+      }
+    },
   },
 };
 </script>
@@ -198,5 +224,13 @@ export default {
 }
 .input1 {
   width: 250px;
+}
+
+.el-dropdown-link {
+  cursor: pointer;
+  color: #000000;
+}
+.el-icon-arrow-down {
+  font-size: 30px;
 }
 </style>

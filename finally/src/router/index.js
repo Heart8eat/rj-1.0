@@ -47,7 +47,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const token = Cookie.get('token')
  if (!token && to.name !== 'loginMain') {
-    next({ name: 'salerlogin' })
+    next({ name: 'loginMain' })
   } else if (token && to.name === 'loginMain') {
     next({ name: 'salerindex'})
   }else{

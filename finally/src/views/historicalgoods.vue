@@ -35,6 +35,36 @@
             style="margin-top: 10px; width: 300px"
           >
           </el-input>
+          <el-select
+            v-model="value"
+            clearable
+            placeholder="水果类别"
+            style="width: 180px;margin-left: 15px;"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              style="width: 180px"
+            >
+            </el-option>
+          </el-select>
+          <el-select
+            v-model="value"
+            clearable
+            placeholder="水果品种"
+            style="width: 180px;margin-left: 15px;"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              style="width: 180px"
+            >
+            </el-option>
+          </el-select>
           <el-button type="primary" style="margin-left: 10px" plain
             >搜索</el-button
           >
@@ -49,7 +79,7 @@
                   display: flex;
                   flex: 1;
                 "
-                ><img class="img1" :src="good.image.url"
+                ><img class="img1" :src="bindsrc(good.image.url)"
               /></el-aside>
               <el-container style="flex: 3">
                 <!-- <el-header
@@ -113,21 +143,6 @@
             </el-container>
           </li>
         </ul>
-        <el-select
-          v-model="value"
-          clearable
-          placeholder="请选择"
-          style="width: 300px"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            style="width: 300px"
-          >
-          </el-option>
-        </el-select>
       </el-main>
     </el-container>
   </el-container>
@@ -175,7 +190,7 @@ export default {
     },
     //图片路径
     bindsrc(img) {
-      return require("../picture/" + img);
+      return "http://localhost:8080" + img;
     },
     //冻结商品
     dongjie(id) {
