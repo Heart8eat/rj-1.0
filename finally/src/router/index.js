@@ -17,40 +17,42 @@ import Cookie from 'js-cookie';
 Vue.use(VueRouter)
 
 const routes = [
-    { path: '/zhuye',name: 'zhuye', component: zhuye },
-    {
-      path: '/goods/:productId',
-      name: 'goods',
-      component: goods
-    },
-    {
-      path: '/books/:productId',
-      name: 'books',
-      component: books
-    },
-    { path: '/loginMain',name: 'loginMain', component: loginMain },
-    { path: '/regist',name: 'regist', component: regist },
-    { path: '/salerlogin', name: 'salerlogin', component: salerlogin },
-    { path: '/salerindex', name: 'salerindex', component: salerindex },
-    { path: '/listgoods', name: 'listgoods', component: listgoods },
-    { path: '/myorders', name: 'myorders', component: myorders },
-    { path: '/historicalgoods', name: 'historicalgoods', component: historicalgoods },
-    { path: '/creategoods', name: 'creategoods', component: creategoods },
-    { path: '/pricemanage', name: 'pricemanage', component: pricemanage },
+  { path: '/zhuye', name: 'zhuye', component: zhuye },
+  {
+    path: '/goods/:productId',
+    name: 'goods',
+    component: goods
+  },
+  {
+    path: '/books/:productId',
+    name: 'books',
+    component: books
+  },
+  { path: '/loginMain', name: 'loginMain', component: loginMain },
+  { path: '/regist', name: 'regist', component: regist },
+  { path: '/salerlogin', name: 'salerlogin', component: salerlogin },
+  { path: '/salerindex', name: 'salerindex', component: salerindex },
+  { path: '/listgoods', name: 'listgoods', component: listgoods },
+  { path: '/myorders', name: 'myorders', component: myorders },
+  { path: '/historicalgoods', name: 'historicalgoods', component: historicalgoods },
+  { path: '/creategoods', name: 'creategoods', component: creategoods },
+  { path: '/pricemanage', name: 'pricemanage', component: pricemanage },
 ]
 
 const router = new VueRouter({
-    mode: 'history',
-    routes
+  mode: 'history',
+  routes
 })
 
 router.beforeEach((to, from, next) => {
   const token = Cookie.get('token')
- if (!token && to.name !== 'loginMain') {
-    next({ name: 'loginMain' })
+  if (!token && to.name === 'regist') {
+    next()
   } else if (token && to.name === 'loginMain') {
-    next({ name: 'salerindex'})
-  }else{
+    next({ name: 'zhuye' })
+  } else if (!token && to.name !== 'loginMain') {
+    next({ name: 'loginMain' })
+  } else {
     next()
   }
 })

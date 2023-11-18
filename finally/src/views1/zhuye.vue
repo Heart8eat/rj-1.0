@@ -23,10 +23,10 @@
           </div>
         </el-row>
         <el-row>
-          <el-col :span="3" v-for="product in products" :key="product.id">
+          <el-col :span="4" v-for="product in products" :key="product.id">
             <el-card class="box-card">
               <div class="sp">
-                <img :src="bindsrc(product.image)" alt="" />
+                <img :src="bindsrc(product.image.url)" alt="" />
                 <div class="spinfo">
                   <div class="info-top">
                     <p class="spName">{{ product.name }}</p>
@@ -62,8 +62,8 @@ export default {
     zhuyeHeader,
   },
   methods: {
-    bindsrc(img) {
-      return require("../picture/" + img);
+    bindsrc(img) { 
+      return "http://localhost:8080" + img;
     },
     searchProducts() {
       // 在这里实现搜索产品的逻辑，根据searchQuery过滤产品列表
@@ -107,8 +107,13 @@ export default {
 }
 </style>
 <style lang="less" scoped>
+.box-card{
+  margin-right: 10px;
+  margin-top: 10px;
+}
 .sp {
   img {
+    margin: auto;
     width: 199px;
     height: 189px;
   }
