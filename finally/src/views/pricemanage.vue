@@ -35,11 +35,41 @@
             style="margin-top: 10px; width: 300px"
           >
           </el-input>
+          <el-select
+            v-model="value"
+            clearable
+            placeholder="水果类别"
+            style="width: 180px;margin-left: 15px;"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              style="width: 180px"
+            >
+            </el-option>
+          </el-select>
+          <el-select
+            v-model="value"
+            clearable
+            placeholder="水果品种"
+            style="width: 180px;margin-left: 15px;"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              style="width: 180px"
+            >
+            </el-option>
+          </el-select>
           <el-button type="primary" style="margin-left: 10px" plain
             >搜索</el-button
           >
         </div>
-        <ul class="infinite-list" style="overflow: auto; padding: 0 5px">
+        <ul class="infinite-list myul" style="overflow: auto; padding: 0 5px">
           <li style="width: 1400px" v-for="good in goodslist" :key="good.id">
             <el-container style="display: flex">
               <el-aside
@@ -103,21 +133,6 @@
             </el-container>
           </li>
         </ul>
-        <el-select
-          v-model="value"
-          clearable
-          placeholder="请选择"
-          style="width: 300px"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            style="width: 300px"
-          >
-          </el-option>
-        </el-select>
       </el-main>
     </el-container>
   </el-container>
@@ -192,7 +207,7 @@ export default {
 </script>
     
     <style scoped>
-ul li {
+.myul li {
   border-radius: 20px;
   /* height: 200px; */
   background-color: rgba(114, 181, 255, 0.66);
