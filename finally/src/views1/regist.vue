@@ -10,7 +10,10 @@
       <el-tab-pane label="买家" name="first"></el-tab-pane>
       <el-tab-pane label="卖家" name="second"></el-tab-pane>
     </el-tabs>
-    <h2 class="login_title">果购</h2>
+    <div style="display: flex; align-items: center">
+      <el-button @click="goBack" class="back-button">返回</el-button>
+      <h2 class="login_title">果购</h2>
+    </div>
     <el-form-item prop="username">
       <el-input
         v-model="form.username"
@@ -129,6 +132,9 @@ export default {
           console.error("获取数据时出错：", error);
         });
     },
+    goBack() {
+      this.$router.push("/loginMain");
+    },
     async regist() {
       console.log(this.form);
       if (this.loadWho == "first") {
@@ -216,7 +222,20 @@ export default {
   .login_title {
     text-align: center;
     margin-bottom: 40px;
+    margin-left: 50px;
     color: #72b5ff;
+  }
+  .back-button {
+    border-radius: 20px;
+    font-size: 10px; /* 可以调整字体大小 */
+    margin-top:1px ;
+    margin-bottom:60px ;
+  }
+  .custom-button {
+    width: 30px; /* 设置按钮宽度 */
+    height: 20px; /* 设置按钮高度 */
+    margin-right: 10px; /* 设置按钮之间的右边距 */
+    font-size: 10px; /* 可以调整字体大小 */
   }
   .input {
     width: 250px;

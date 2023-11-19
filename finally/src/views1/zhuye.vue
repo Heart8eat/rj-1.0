@@ -86,7 +86,7 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 .el-header {
   height: 120px;
   margin: 0; /* 设置margin为0 */
