@@ -5,12 +5,12 @@
                 <goodsHeader />
             </el-header>
             <el-row>
-                <el-col :span="6">
+                <el-col :span="7">
                     <div class="GAisde">
                         <goods-aside :productId="$route.params.productId"/>
                     </div>
                 </el-col>
-                <el-col :span="18">
+                <el-col :span="17">
                     <div class="GMain">
                        <goods-test :productId="$route.params.productId"/>
                         <goods-test-3 />

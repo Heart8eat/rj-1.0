@@ -103,7 +103,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .g-container {
-    border: 2px solid #333;
+    border: 1px solid #333;
     border-radius: 10px;
     background-color: #D5D5D5;
     padding: 30px;
@@ -121,7 +121,7 @@ export default {
 .description-row {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
 .description-item {

@@ -12,12 +12,16 @@ import myorders from '../views/myorders.vue'
 import historicalgoods from '../views/historicalgoods.vue'
 import creategoods from '../views/creategoods.vue'
 import pricemanage from '../views/pricemanage.vue'
+import listbooks from '../views1/listbooks.vue'
+import usercenter from '../views1/usercenter.vue'
 import Cookie from 'js-cookie';
 
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/zhuye', name: 'zhuye', component: zhuye },
+  { path: '/listbooks', name: 'listbooks', component: listbooks },
+  { path: '/usercenter', name: 'usercenter', component: usercenter },
   {
     path: '/goods/:productId',
     name: 'goods',

@@ -101,6 +101,7 @@ export default {
 .search-input {
   flex: 1; /* 搜索框自动扩展填充可用空间 */
   margin-right: 10px; /* 间距 */
+  border-radius: 20px; /* 圆角边框 */
 }
 .search-button {
   width: 100px; /* 按钮宽度 */

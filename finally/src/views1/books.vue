@@ -186,7 +186,7 @@ export default {
 .custom-header { /* 添加一个类名以便样式设置 */
     margin: 0;
     padding: 0;
-    border-bottom: 2px solid #000000; /* 添加底部边框样式 */
+    border-bottom: 1px solid #000000; /* 添加底部边框样式 */
 }
 .books-text{
     font-weight: bold;
@@ -195,7 +195,7 @@ export default {
 }
 
 .form-container {
-    border: 2px solid #333; /* 圆角框的样式 */
+    border: 1px solid #333; /* 圆角框的样式 */
     border-radius: 10px; /* 圆角边框 */
     width: 1850px; /* 设置容器的宽度 */
     height: 500px;

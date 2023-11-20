@@ -67,7 +67,7 @@ export default {
       product: {
         name: "",
         price: "",
-        img:""
+        img: "",
         // Add more properties as needed
       },
       num: 1,
@@ -82,7 +82,8 @@ export default {
       this.sum = this.num * this.product.price; // 使用 num 乘以 39.9 更新 sum 的值
     },
     bindsrc(img) {
-      return require("../picture/" + img);
+      console.log("url:", img);
+      return "http://localhost:8080" + img;
     },
   },
   created() {
@@ -99,7 +100,7 @@ export default {
 
         this.product.name = response.data.data.name;
         this.product.price = response.data.data.price;
-        this.product.img = response.data.data.image[0];
+        this.product.img = response.data.data.mainImage.url;
         // 更新其他属性以匹配您的数据结构
       })
       .catch((error) => {

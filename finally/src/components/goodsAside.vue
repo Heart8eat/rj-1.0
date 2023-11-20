@@ -6,14 +6,7 @@
                 <p class="spName">{{product.name}} 1粒装</p>
                 <p>单果2.5KG起 生鲜水果</p>
             </div>
-            <div class="info-bottom">
-                <div class="small-images">
-                    <!-- 三张小图片并行排列 -->
-                    <!-- <img src="../assets/images/xigua1.jpg" alt="">
-                    <img src="../assets/images/xigua2.jpg" alt="">
-                    <img src="../assets/images/xigua3.jpg" alt=""> -->
-                </div>
-            </div>
+           
             <div class="additional-info">
                 <p class="add1">优惠价:  <span style="color: red;">￥{{product.price}}</span></p>
             </div>
@@ -43,8 +36,9 @@
       };
     },
     methods:{
-    bindsrc(img) {
-      return require("../picture/" + img);
+      bindsrc(img) { 
+        console.log('url:', img);
+      return "http://localhost:8080" + img;
     },
   },
     created() {
@@ -61,7 +55,7 @@
           this.product.name = response.data.data.name;
           this.product.price = response.data.data.price;
           this.product.id = productId;
-          this.product.img = response.data.data.image[0];
+          this.product.img = response.data.data.mainImage.url;
           // 更新其他属性以匹配您的数据结构
         })
         .catch(error => {
@@ -81,12 +75,12 @@
     background-color:rgb(114, 181 ,255);
   }
   .sp-image{
-    margin-top: 10px; 
+    margin-top: 40px; 
     height: 309px;
     width: 391px;
   }
   .spName{
-    margin-left: 30px; 
+    margin-left: 40px; 
   }
 
   .sp-text {
@@ -95,34 +89,24 @@
 
   }
 
-  .small-images {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px; /* 添加一些上边距 */
-  }
-
-  .small-images img {
-    padding: 10px;
-    width: 100px; /* 调整小图片的大小 */
-    height: 100px;
-  }
 
   .additional-info {
     text-align: center;
     font-weight: bold;
     font-size: 32px;
+    margin-top: 30px; 
   }
 
   .priceButton {
     margin-top: 20px; 
-    margin-bottom: 140px;
+    margin-bottom: 110px;
     width: 300px;
     height: 80px;
-    font-size: 18px;
-    border: 5px solid red; /* 添加红色边框 */
+    font-size: 25px;
+    border: 2px solid red; /* 添加红色边框 */
     background-color: white; /* 设置白色背景 */
     color: red; /* 设置红色字体颜色 */
-    border-radius: 5px; /* 圆角边框 */
+    border-radius: 10px; /* 圆角边框 */
   }
 }
 </style>

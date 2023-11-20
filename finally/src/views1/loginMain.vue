@@ -10,10 +10,7 @@
       <el-tab-pane label="买家" name="first" class="custom-tab"></el-tab-pane>
       <el-tab-pane label="卖家" name="second" class="custom-tab"></el-tab-pane>
     </el-tabs>
-    <h2 class="login_title">
-      <el-button @click="goBack" v-show="showBackButton">返回</el-button>
-      果购
-    </h2>
+    <h2 class="login_title">果购</h2>
     <el-form-item label="用户名" prop="username">
       <el-input v-model="form.username" placeholder="请输入用户名"></el-input>
     </el-form-item>

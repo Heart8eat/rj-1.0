@@ -4,13 +4,13 @@
       <span class="text">在线购物</span>
     </div>
     <div class="r-content">
-      <el-dropdown>
+      <el-dropdown  @command="handleCommand">
         <span class="el-dropdown-link">
-          <img class="userimage" src="../assets/user.jpg" alt="">
+          <img class="userimage" src="../assets/user.jpg" alt="" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>历史记录</el-dropdown-item>
+          <el-dropdown-item command="a">个人中心</el-dropdown-item>
+          <el-dropdown-item command="b">历史订单</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -20,6 +20,16 @@
 export default {
   data() {
     return {};
+  },
+  methods: {
+    handleCommand(command) {
+        if(command == "a"){
+          this.$router.push('/usercenter');
+        }
+        else if(command == "b"){
+          this.$router.push('/listbooks');
+        }
+      }
   },
 };
 </script>
@@ -37,10 +47,10 @@ export default {
     font-size: 24px; /* 设置字体大小 */
     margin-left: 20px;
   }
-  .r-content{
+  .r-content {
     margin-right: 10px;
   }
-  .userimage{
+  .userimage {
     width: 40px;
     height: 40px;
     border-radius: 50%;
