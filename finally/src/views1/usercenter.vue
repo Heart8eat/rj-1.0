@@ -25,7 +25,9 @@
     </el-header>
     <div class="user-center">
       <!-- 左侧账号信息表单 -->
+
       <el-card class="form-container" header="账号信息">
+        <div>
         <el-form ref="accountForm" :model="accountForm" label-width="80px">
           <el-form-item label="用户名：" class="addinfo">
             <el-input v-model="accountForm.username" class="custom-input"></el-input>
@@ -48,6 +50,7 @@
             >
           </el-form-item>
         </el-form>
+      </div>
       </el-card>
 
       <!-- 右侧收货地址表单 -->
