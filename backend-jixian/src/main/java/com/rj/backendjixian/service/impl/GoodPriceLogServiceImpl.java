@@ -23,6 +23,15 @@ import static com.rj.backendjixian.model.entity.table.GoodPriceLogEntityTableDef
  */
 @Service
 public class GoodPriceLogServiceImpl extends ServiceImpl<GoodPriceLogMapper, GoodPriceLogEntity> implements GoodPriceLogService {
+    @Override
+    public boolean save(String id,Float price) {
+        GoodPriceLogEntity goodPriceLog = GoodPriceLogEntity
+                .builder()
+                .price(price)
+                .goodId(id)
+                .build();
+        return this.save(goodPriceLog);
+    }
 
     @Override
     @Transactional
@@ -35,14 +44,14 @@ public class GoodPriceLogServiceImpl extends ServiceImpl<GoodPriceLogMapper, Goo
                 .orderBy(GOOD_PRICE_LOG_ENTITY.CREATE_TIME, false)
                 .limit(1);
         GoodPriceLogEntity goodPriceLog = mapper.selectOneByQuery(queryWrapper);
-        if (goodPriceLog.getPrice().equals(goodPriceLogDto.getPrice())) {
+        if (goodPriceLog.getPrice().equals(goodPriceLogDto.getNewPrice())) {
             throw new RuntimeException("和最新价格相同，无需修改");
         }
 
         GoodPriceLogEntity goodPriceLog2 = GoodPriceLogEntity
                 .builder()
                 .goodId(goodPriceLogDto.getGoodId())
-                .price(goodPriceLogDto.getPrice())
+                .price(goodPriceLogDto.getNewPrice())
                 .build();
         return this.save(goodPriceLog2);
     }
@@ -53,6 +62,7 @@ public class GoodPriceLogServiceImpl extends ServiceImpl<GoodPriceLogMapper, Goo
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .from(GOOD_PRICE_LOG_ENTITY)
                 .select(GOOD_PRICE_LOG_ENTITY.PRICE, GOOD_PRICE_LOG_ENTITY.CREATE_TIME)
+                .orderBy(GOOD_PRICE_LOG_ENTITY.CREATE_TIME, true)
                 .where(GOOD_PRICE_LOG_ENTITY.GOOD_ID.eq(good_id));
 
         return mapper.selectListByQueryAs(queryWrapper, GoodPriceLogVo.class);

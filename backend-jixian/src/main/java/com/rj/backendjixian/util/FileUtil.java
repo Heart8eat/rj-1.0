@@ -2,16 +2,12 @@ package com.rj.backendjixian.util;
 
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
-import com.rj.backendjixian.model.entity.GoodImageEntity;
-import com.rj.backendjixian.model.vo.ImageVo;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 /**

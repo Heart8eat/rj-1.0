@@ -1,9 +1,6 @@
 package com.rj.backendjixian.service.impl;
 
-import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.GoodImageMapper;
-import com.rj.backendjixian.mapper.GoodMapper;
-import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.GoodImageEntity;
 import com.rj.backendjixian.model.vo.ImageVo;
 import com.rj.backendjixian.service.IImageService;
@@ -16,13 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Service
 @Slf4j
-public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEntity> implements IImageService {
+public class ImageServiceImpl implements IImageService {
+    @Autowired
+    GoodImageMapper mapper;
 
     /**
      * 上传图片组
@@ -42,7 +42,7 @@ public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEnti
         log.info(applicationHome.getDir().getAbsolutePath());
         String pre = applicationHome.getDir().getAbsolutePath() + "/upload";
 //        System.out.println(pre);
-
+        List<GoodImageEntity> goodImageEntities=new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
 
             //获取原始图片名称
@@ -95,10 +95,10 @@ public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEnti
                     .main(main)
                     .goodId(id)
                     .build();
-            mapper.insert(goodImage);
+            goodImageEntities.add(goodImage);
             root.add(ImageVo.success(url, imageWidth, imageHeight));
         }
-
+        mapper.insertBatch(goodImageEntities);
 
         return root;
     }

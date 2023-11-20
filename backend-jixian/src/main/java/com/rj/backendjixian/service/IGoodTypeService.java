@@ -11,5 +11,5 @@ import com.rj.backendjixian.model.entity.GoodTypeEntity;
  * @since 1.0
  */
 public interface IGoodTypeService extends IService<GoodTypeEntity> {
-
+    String getTypeIdOrCreate(String typeName);
 }

@@ -20,7 +20,6 @@ import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IMerchantService;
 import com.rj.backendjixian.util.Context;
 import com.rj.backendjixian.util.JwtUtil;
-import com.wf.captcha.GifCaptcha;
 import com.wf.captcha.SpecCaptcha;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
