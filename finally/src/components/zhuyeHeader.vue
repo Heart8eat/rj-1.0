@@ -4,7 +4,7 @@
       <span class="text">在线购物</span>
     </div>
     <div class="r-content">
-      <el-dropdown  @command="handleCommand">
+      <el-dropdown @command="handleCommand">
         <span class="el-dropdown-link">
           <img class="userimage" src="../assets/user.jpg" alt="" />
         </span>
@@ -23,13 +23,12 @@ export default {
   },
   methods: {
     handleCommand(command) {
-        if(command == "a"){
-          this.$router.push('/usercenter');
-        }
-        else if(command == "b"){
-          this.$router.push('/listbooks');
-        }
+      if (command == "a") {
+        this.$router.push("/usercenter");
+      } else if (command == "b") {
+        this.$router.push("/listbooks");
       }
+    },
   },
 };
 </script>
