@@ -2,7 +2,6 @@ package com.rj.backendjixian.controller;
 
 import com.rj.backendjixian.model.vo.ImageVo;
 import com.rj.backendjixian.model.vo.Response;
-import com.rj.backendjixian.service.IGoodService;
 import com.rj.backendjixian.service.IImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -48,6 +47,7 @@ public class FileController {
 
         return Response.success(imageService.uploadImgs(files, mainFile, id.toString(), root));
     }
+
 
 
     /**

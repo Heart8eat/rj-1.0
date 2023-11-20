@@ -13,5 +13,5 @@ public class GoodPriceLogDto {
     private String goodId;
 
     @Schema(description = "变动价格")
-    private Float price;
+    private Float newPrice;
 }

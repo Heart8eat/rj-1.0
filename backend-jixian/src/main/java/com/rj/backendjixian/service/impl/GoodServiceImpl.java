@@ -6,27 +6,24 @@ import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.row.Db;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
-import com.rj.backendjixian.mapper.GoodImageMapper;
 import com.rj.backendjixian.mapper.GoodMapper;
-import com.rj.backendjixian.mapper.GoodPriceLogMapper;
-import com.rj.backendjixian.mapper.GoodTypeMapper;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
+import com.rj.backendjixian.model.dto.GoodUpdateDto;
 import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
-import com.rj.backendjixian.model.entity.GoodImageEntity;
-import com.rj.backendjixian.model.entity.GoodPriceLogEntity;
-import com.rj.backendjixian.model.vo.*;
+import com.rj.backendjixian.model.vo.GoodBriefVo;
+import com.rj.backendjixian.model.vo.GoodDetailsVo;
+import com.rj.backendjixian.model.vo.HistoryGoodVo;
+import com.rj.backendjixian.model.vo.PublishGoodVo;
 import com.rj.backendjixian.service.IGoodService;
-import com.rj.backendjixian.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.rj.backendjixian.model.entity.table.GoodEntityTableDef.GOOD_ENTITY;
 import static com.rj.backendjixian.model.entity.table.GoodImageEntityTableDef.GOOD_IMAGE_ENTITY;
@@ -37,11 +34,11 @@ import static com.rj.backendjixian.model.entity.table.GoodTypeEntityTableDef.GOO
 @Service
 public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> implements IGoodService {
     @Autowired
-    GoodImageMapper goodImageMapper;
+    GoodImageServiceImpl goodImageService;
     @Autowired
-    GoodTypeMapper goodTypeMapper;
+    GoodTypeServiceImpl goodTypeService;
     @Autowired
-    GoodPriceLogMapper goodPriceLogMapper;
+    GoodPriceLogServiceImpl goodPriceLogService;
 
     private QueryWrapper historyGoodQueryWrapper(String shop_id, String type, String name) {
         return QueryWrapper.create()
@@ -264,11 +261,11 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
                         ),
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(GoodDetailsVo::getPrice)
-                        .queryWrapper(goodBriefVo ->
+                        .queryWrapper(goodDetailsVo ->
                                 QueryWrapper.create()
                                         .from(GOOD_PRICE_LOG_ENTITY)
                                         .select(GOOD_PRICE_LOG_ENTITY.PRICE)
-                                        .where(GOOD_PRICE_LOG_ENTITY.GOOD_ID.eq(goodBriefVo.getId()))
+                                        .where(GOOD_PRICE_LOG_ENTITY.GOOD_ID.eq(goodDetailsVo.getId()))
                                         .orderBy(GOOD_PRICE_LOG_ENTITY.CREATE_TIME, false)
                                         .limit(1)
                         )
@@ -298,6 +295,41 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
         return true;
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateGood(GoodUpdateDto goodUpdateDto) {
+        GoodEntity goodEntity=goodUpdateDto.dto2Entity();
+        if(goodUpdateDto.getType()!=null){
+            // 要更新类别
+            String typeId= goodTypeService.getTypeIdOrCreate(goodUpdateDto.getType());
+            goodEntity.setTypeId(typeId);
+        }
+        if(mapper.update(goodEntity)<1){
+            throw new RuntimeException("商品基本信息更新失败，数据库回滚");
+        }
+        //TODO 要更新品种
+        if(goodUpdateDto.getFakeId()!=null){
+            //需要更改图片信息
+            //删除之前商品所有的图片记录
+            if(!goodImageService.deleteAllGoodImageByGoodId(goodEntity.getId())){
+                throw new RuntimeException("删除旧商品图片失败，开始回滚");
+            }
+            // 把数据库中id为假id的更新为现在商品生成的id
+            if(!goodImageService.bindGoodId(goodUpdateDto.getFakeId(),goodEntity.getId())){
+                throw new RuntimeException("商品图片绑定失败，开始回滚");
+            }
+        }
+        if(goodUpdateDto.getPrice()!=null){
+            // 插入新价格记录
+            boolean b=goodPriceLogService.save(goodUpdateDto.getId(),goodUpdateDto.getPrice());
+            if(!b){
+                throw new RuntimeException("商品价格信息更新失败，数据库回滚");
+            }
+        }
+
+        return false;
+    }
+
     /**
      * 创建新Good
      *
@@ -307,32 +339,25 @@ public class GoodServiceImpl extends ServiceImpl<GoodMapper, GoodEntity> impleme
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Map<String, String> createGood(GoodCreateDto good) {
+
+        // 类别
+        String typeId = goodTypeService.getTypeIdOrCreate(good.getType());
+        // TODO 品种
+
         GoodEntity goodEntity = good.dto2Entity();
-        QueryWrapper queryWrapper = QueryWrapper.create()
-                .from(GOOD_TYPE_ENTITY)
-                .select(GOOD_TYPE_ENTITY.ID)
-                .where(GOOD_TYPE_ENTITY.TYPE_NAME.eq(good.getType()));
-        String typeId = goodTypeMapper.selectObjectByQueryAs(queryWrapper, String.class);
         goodEntity.setTypeId(typeId);
         if (mapper.insert(goodEntity) > 0) {
 
             // 价格表中插入价格
-            GoodPriceLogEntity goodPriceLog = GoodPriceLogEntity
-                    .builder()
-                    .price(good.getPrice())
-                    .goodId(goodEntity.getId())
-                    .build();
-            if (goodPriceLogMapper.insert(goodPriceLog) == 0) {
+
+            if (!goodPriceLogService.save(goodEntity.getId(),good.getPrice())) {
                 throw new RuntimeException("价格插入失败，商品创建失败，开始回滚");
             }
 
             // 把数据库中id为假id的更新为现在商品生成的id
-            UpdateChain.create(goodImageMapper)
-                    .from(GOOD_IMAGE_ENTITY)
-                    .set(GOOD_IMAGE_ENTITY.GOOD_ID, goodEntity.getId())
-                    .where(GOOD_IMAGE_ENTITY.GOOD_ID.eq(good.getFakeId()))
-                    .update();
-
+            if(!goodImageService.bindGoodId(good.getFakeId(),goodEntity.getId())){
+                throw new RuntimeException("商品图片绑定失败，开始回滚");
+            }
 
             Map<String, String> map = new HashMap<>();
             map.put("goodId", goodEntity.getId());
