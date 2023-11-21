@@ -9,6 +9,7 @@ import java.util.List;
 public interface IImageService  {
 
     boolean deleteImgs(String id);
+    boolean deleteImgByUrl(String url);
 
     List<ImageVo> uploadImg(MultipartFile[] multipartFiles, String id, Integer main, List<ImageVo> root) throws IOException;
 

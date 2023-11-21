@@ -13,6 +13,7 @@ import com.rj.backendjixian.model.dto.BuyerCreateDto;
 import com.rj.backendjixian.model.entity.BuyerAddressEntity;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.vo.CaptchaVo;
+import com.rj.backendjixian.model.vo.OrderVo;
 import com.rj.backendjixian.model.vo.Response;
 import com.rj.backendjixian.model.vo.TokenVo;
 import com.rj.backendjixian.service.IBuyerAddressService;
@@ -29,6 +30,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -153,7 +155,14 @@ public class BuyersController {
         Page<BuyerEntity> page = Page.of(pageNumber, pageSize);
         return Response.success(buyerService.page(page));
     }
-
+    @GetMapping("/getBuyerOrders")
+    @Operation(summary = "查询买家的所有订单")
+    @LoginToken
+    @SecurityRequirement(name = "token")
+    public Response<List<OrderVo>> getBuyerOrders() {
+        BuyerEntity buyer = (BuyerEntity) Context.get("buyer");
+        return Response.success(buyerService.getBuyerOrders(buyer.getId()));
+    }
 
     /**
      * 查询所有地址

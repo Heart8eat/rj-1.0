@@ -2,6 +2,8 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.annotation.LoginToken;
+import com.rj.backendjixian.annotation.RequiresRoles;
+import com.rj.backendjixian.annotation.Role;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
 import com.rj.backendjixian.model.dto.GoodUpdateDto;
 import com.rj.backendjixian.model.dto.PublishGoodDto;
@@ -198,6 +200,7 @@ public class GoodController {
      * @return 所有待发布商品
      */
     @LoginToken
+    @RequiresRoles(roles = Role.MERCHANT)
     @SecurityRequirement(name = "token")
     @GetMapping("/getPublishGoodList")
     @Operation(summary = "查询所有待发布商品接口")
@@ -213,6 +216,7 @@ public class GoodController {
      * @return 分页待发布商品对象
      */
     @LoginToken
+    @RequiresRoles(roles = Role.MERCHANT)
     @SecurityRequirement(name = "token")
     @GetMapping("/getPublishGoodPage")
     @Operation(summary = "分页查询所有待发布商品接口")

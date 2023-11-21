@@ -64,4 +64,5 @@ public class GoodEntity {
     @Column(value = "description")
     @Schema(description = "商品描述(可选)")
     private String description;
+
 }

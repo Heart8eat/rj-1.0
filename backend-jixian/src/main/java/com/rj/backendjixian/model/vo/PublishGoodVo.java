@@ -35,6 +35,4 @@ public class PublishGoodVo {
     @Schema(description = "上架日期")
     private String shelfDate;
 
-    @Schema(description = "商品价格")
-    private Float price;
 }

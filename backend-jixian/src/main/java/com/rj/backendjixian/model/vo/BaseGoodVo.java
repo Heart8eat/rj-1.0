@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BasicGoodVo {
+public class BaseGoodVo {
     private String id;
 
     private String name;
 
-    private ImageVo image;
+    private ImageVo mainImage;
 
 
     @Schema(description = "类别")

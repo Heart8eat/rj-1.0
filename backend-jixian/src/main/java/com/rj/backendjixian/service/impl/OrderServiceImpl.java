@@ -42,7 +42,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
                                 .from(BUYER_ADDRESS_ENTITY)
                                 .select(BUYER_ADDRESS_ENTITY.ID, BUYER_ADDRESS_ENTITY.ADDRESS, BUYER_ADDRESS_ENTITY.BUYER_ID,
                                         BUYER_ADDRESS_ENTITY.EMAIL, BUYER_ADDRESS_ENTITY.PHONE, BUYER_ADDRESS_ENTITY.RECEIVER)
-                                .where(BUYER_ADDRESS_ENTITY.ID.eq(historyOrderVo.getBuyer_address_id()))),
+                                .where(BUYER_ADDRESS_ENTITY.ID.eq(historyOrderVo.getBuyerAddressId()))),
                 fieldQueryBuilder -> fieldQueryBuilder
                         .field(HistoryOrderVo::getImage)
                         .queryWrapper(historyOrderVo ->
@@ -53,7 +53,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
                                                 QueryWrapper.create()
                                                         .select(GOOD_ORDER_ENTITY.GOOD_ID)
                                                         .from(GOOD_ORDER_ENTITY)
-                                                        .where(GOOD_ORDER_ENTITY.ORDER_ID.eq(historyOrderVo.getOrder_id()))
+                                                        .where(GOOD_ORDER_ENTITY.ORDER_ID.eq(historyOrderVo.getOrderId()))
                                         ))
                                         .and(GOOD_IMAGE_ENTITY.MAIN.eq(1))
                         )
