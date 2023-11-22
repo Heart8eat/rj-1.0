@@ -27,30 +27,50 @@
       <!-- 左侧账号信息表单 -->
 
       <el-card class="form-container" header="账号信息">
-        <div>
         <el-form ref="accountForm" :model="accountForm" label-width="80px">
-          <el-form-item label="用户名：" class="addinfo">
-            <el-input v-model="accountForm.username" class="custom-input"></el-input>
-          </el-form-item>
-          <el-form-item label="密码：" class="addinfo">
-            <el-input v-model="accountForm.password" type="password" class="custom-input"></el-input>
-          </el-form-item>
+          <div class="actForm">
+            <el-form-item class="addinfo">
+              <label style="font-size: 28px;">用户名：</label>
+              <el-input
+                v-model="accountForm.username"
+                class="custom-input"
+              ></el-input>
+            </el-form-item>
+            <el-form-item class="addinfo">
+              <label style="font-size: 28px;">密码：</label>
+              <el-input
+                v-model="accountForm.password"
+                type="password"
+                class="custom-input"
+              ></el-input>
+            </el-form-item>
+          </div>
           <el-form-item>
             <el-button
               plain
               @click="取消"
-              style="margin-left: 62px; margin-top: 100px"
+              style="margin-left: 152px; margin-top: 40px"
+              class="button1"
               >取消</el-button
             >
             <el-button
               @click="save"
-              style="margin-left: 82px"
+              style="margin-left: 102px"
               type="primary"
+              class="button1"
               >确定</el-button
             >
           </el-form-item>
+          <el-form-item>
+            <el-button
+              @click="quit"
+              type="danger"
+              style="margin-left: 152px; margin-top: 100px"
+              class="button2"
+              >退出登录</el-button
+            >
+          </el-form-item>
         </el-form>
-      </div>
       </el-card>
 
       <!-- 右侧收货地址表单 -->
@@ -83,8 +103,8 @@ export default {
     return {
       // 账号信息表单数据
       accountForm: {
-        username: "用户123", // 你可以从后端获取用户信息填充这些字段
-        password: "",
+        username: "啊对对对", // 你可以从后端获取用户信息填充这些字段
+        password: "123456",
         // 其他账号信息字段可以根据需要添加
       },
 
@@ -117,11 +137,28 @@ export default {
 }
 .addinfo {
   margin-top: 50px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 .custom-input {
-  width: 60%; /* 控制input宽度为父容器的80% */
+  width: 274px; 
+  height: 80px;
   margin-right: 10px; /* 可以根据需要添加右侧边距 */
+}
+.actForm {
+  display: flex; /* 使用Flex布局 */
+  flex-direction: column; /* 垂直方向布局 */
+  align-items: center; /* 水平居中 */
+}
+.button1{
+  width: 150px;
+  height: 74px;
+  font-size: 24px;
+}
+.button2{
+  width: 403px;
+  height: 74px;
+  font-size: 24px;
+  background-color: red
 }
 .form-container {
   width: 50%; /* 左右两侧各占据一半的宽度 */
