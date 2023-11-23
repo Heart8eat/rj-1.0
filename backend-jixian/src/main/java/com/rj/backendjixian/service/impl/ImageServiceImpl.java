@@ -1,9 +1,6 @@
 package com.rj.backendjixian.service.impl;
 
-import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.rj.backendjixian.mapper.GoodImageMapper;
-import com.rj.backendjixian.mapper.GoodMapper;
-import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.GoodImageEntity;
 import com.rj.backendjixian.model.vo.ImageVo;
 import com.rj.backendjixian.service.IImageService;
@@ -12,17 +9,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.system.ApplicationHome;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static com.rj.backendjixian.model.entity.table.GoodImageEntityTableDef.GOOD_IMAGE_ENTITY;
+
 @Service
 @Slf4j
-public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEntity> implements IImageService {
+public class ImageServiceImpl implements IImageService {
+    @Autowired
+    private GoodImageServiceImpl goodImageService;
+    //File对象封装文件路径
+    private final String pre=new ApplicationHome(this.getClass()).getDir().getAbsolutePath() + "/upload";
+
 
     /**
      * 上传图片组
@@ -37,12 +43,10 @@ public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEnti
         //定义图片后缀格式
         String suffix = ".jpg,.png,.jpeg,.gif";
 
-        //File对象封装文件路径
-        ApplicationHome applicationHome = new ApplicationHome(this.getClass());
-        log.info(applicationHome.getDir().getAbsolutePath());
-        String pre = applicationHome.getDir().getAbsolutePath() + "/upload";
-//        System.out.println(pre);
 
+
+//        System.out.println(pre);
+        List<GoodImageEntity> goodImageEntities=new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
 
             //获取原始图片名称
@@ -95,10 +99,10 @@ public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEnti
                     .main(main)
                     .goodId(id)
                     .build();
-            mapper.insert(goodImage);
+            goodImageEntities.add(goodImage);
             root.add(ImageVo.success(url, imageWidth, imageHeight));
         }
-
+        goodImageService.saveBatch(goodImageEntities);
 
         return root;
     }
@@ -129,19 +133,25 @@ public class ImageServiceImpl extends ServiceImpl<GoodImageMapper, GoodImageEnti
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteImgs(String id) {
-
-        //File对象封装文件路径
-        ApplicationHome applicationHome = new ApplicationHome(this.getClass());
-        String pre = applicationHome.getDir().getParentFile().
-                getParentFile().getAbsolutePath() + "/upload";
-        System.out.println(pre);
-
+        // 删除数据库中的记录
+        if(!goodImageService.remove(GOOD_IMAGE_ENTITY.URL.likeRaw("/upload/"+id+"/%"))){
+            throw new RuntimeException("图片删除失败，数据库回滚");
+        }
         File file = new File(pre + "/" + id);   //目标文件或文件夹
 
-        boolean flag = FileUtil.deleteFile(file);    //工具类实现删除
+        return FileUtil.deleteFile(file);
+    }
 
-        return flag;
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean deleteImgByUrl(String url) {
+        if(!goodImageService.remove(GOOD_IMAGE_ENTITY.URL.eq(url))){
+            throw new RuntimeException("图片删除失败，数据库回滚");
+        }
+        File f= cn.hutool.core.io.FileUtil.file(pre+url);
+        return cn.hutool.core.io.FileUtil.del(f);
     }
 
 }

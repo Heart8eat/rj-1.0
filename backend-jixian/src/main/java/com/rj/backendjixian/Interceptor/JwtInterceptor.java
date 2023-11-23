@@ -4,6 +4,7 @@ import cn.hutool.cache.impl.TimedCache;
 import cn.hutool.core.util.StrUtil;
 import com.rj.backendjixian.annotation.LoginToken;
 import com.rj.backendjixian.annotation.Role;
+import com.rj.backendjixian.exception.RolesAuthorizationException;
 import com.rj.backendjixian.model.entity.BuyerEntity;
 import com.rj.backendjixian.model.entity.MerchantEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
@@ -125,7 +126,7 @@ public class JwtInterceptor implements HandlerInterceptor {
 //            log.info(resToken.toString());
             return true;
         }
-        return false;
+        throw new RolesAuthorizationException("用户没有分配到角色");
     }
 
 //    @Override

@@ -11,5 +11,7 @@ import com.rj.backendjixian.model.entity.GoodImageEntity;
  * @since 1.0
  */
 public interface IGoodImageService extends IService<GoodImageEntity> {
+    boolean bindGoodId(String fakeId,String goodId);
 
+    boolean deleteAllGoodImageByGoodId(String goodId);
 }

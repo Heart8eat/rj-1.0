@@ -34,7 +34,7 @@ public class GoodPriceLogEntity {
     @Column(value = "price")
     private Float price;
 
-    @Column(value = "create_time", onInsertValue = "datetime('now')")
+    @Column(value = "create_time", onInsertValue = "datetime('now','localtime')")
     private String createTime;
 
 

@@ -28,12 +28,8 @@ public class GoodEntity {
     @Id(keyType = KeyType.Generator, value = KeyGenerators.uuid)
     private String id;
 
-//    @Column(value = "price")
-//    private Float price;
-
     @Column(value = "name")
     private String name;
-
 
     @Column(value = "quantity")
     private Integer quantity;
@@ -68,4 +64,5 @@ public class GoodEntity {
     @Column(value = "description")
     @Schema(description = "商品描述(可选)")
     private String description;
+
 }

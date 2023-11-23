@@ -4,9 +4,12 @@ import lombok.Getter;
 
 @Getter
 public class RolesAuthorizationException extends RuntimeException{
-    private final String[] missingRole;
+    private  String[] missingRole;
     public RolesAuthorizationException(String message, String[] missingRole) {
         super(message);
         this.missingRole = missingRole;
+    }
+    public RolesAuthorizationException(String message) {
+        super(message);
     }
 }

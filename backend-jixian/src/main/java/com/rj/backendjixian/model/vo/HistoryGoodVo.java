@@ -6,8 +6,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-
-public class HistoryGoodVo extends BasicGoodVo {
+public class HistoryGoodVo extends BaseGoodVo {
 
 
     @Schema(description = "0为下架，1为上架 ，2为冻结")

@@ -2,7 +2,10 @@ package com.rj.backendjixian.controller;
 
 import com.mybatisflex.core.paginate.Page;
 import com.rj.backendjixian.annotation.LoginToken;
+import com.rj.backendjixian.annotation.RequiresRoles;
+import com.rj.backendjixian.annotation.Role;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
+import com.rj.backendjixian.model.dto.GoodUpdateDto;
 import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
 import com.rj.backendjixian.model.entity.ShopEntity;
@@ -17,13 +20,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -103,9 +102,9 @@ public class GoodController {
     @LoginToken
     @SecurityRequirement(name = "token")
     @PutMapping("/update")
-    @Operation(summary = "根据主键更新")
-    public Response<Boolean> update(@RequestBody GoodEntity good) {
-        return Response.success(goodService.updateById(good));
+    @Operation(summary = "修改商品")
+    public Response<Boolean> update(@RequestBody GoodUpdateDto good) {
+        return Response.success(goodService.updateGood(good));
     }
 
 
@@ -201,6 +200,7 @@ public class GoodController {
      * @return 所有待发布商品
      */
     @LoginToken
+    @RequiresRoles(roles = Role.MERCHANT)
     @SecurityRequirement(name = "token")
     @GetMapping("/getPublishGoodList")
     @Operation(summary = "查询所有待发布商品接口")
@@ -216,6 +216,7 @@ public class GoodController {
      * @return 分页待发布商品对象
      */
     @LoginToken
+    @RequiresRoles(roles = Role.MERCHANT)
     @SecurityRequirement(name = "token")
     @GetMapping("/getPublishGoodPage")
     @Operation(summary = "分页查询所有待发布商品接口")

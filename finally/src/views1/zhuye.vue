@@ -10,6 +10,7 @@
             <el-input
               class="search-input"
               placeholder="请输入关键词进行搜索"
+              prefix-icon="el-icon-search"
               v-model="searchQuery"
               clearable
             />

@@ -15,6 +15,8 @@ import java.util.List;
  * @since 1.0
  */
 public interface GoodPriceLogService extends IService<GoodPriceLogEntity> {
+    boolean save(String id, Float price);
+
     Boolean saveLog(GoodPriceLogDto goodPriceLogDto);
 
     List<GoodPriceLogVo> getGoodPriceLogVoList(String good_id);

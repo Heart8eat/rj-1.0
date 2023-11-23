@@ -4,12 +4,14 @@ package com.rj.backendjixian.service;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.service.IService;
 import com.rj.backendjixian.model.dto.GoodCreateDto;
+import com.rj.backendjixian.model.dto.GoodUpdateDto;
 import com.rj.backendjixian.model.dto.PublishGoodDto;
 import com.rj.backendjixian.model.entity.GoodEntity;
-import com.rj.backendjixian.model.vo.*;
-import org.springframework.web.multipart.MultipartFile;
+import com.rj.backendjixian.model.vo.GoodBriefVo;
+import com.rj.backendjixian.model.vo.GoodDetailsVo;
+import com.rj.backendjixian.model.vo.HistoryGoodVo;
+import com.rj.backendjixian.model.vo.PublishGoodVo;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -34,5 +36,6 @@ public interface IGoodService extends IService<GoodEntity> {
     GoodDetailsVo getGoodDetails(String id);
 
     boolean publish(PublishGoodDto publishGoodDto);
+    boolean updateGood(GoodUpdateDto goodUpdateDto);
 
 }

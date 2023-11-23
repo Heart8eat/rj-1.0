@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HistoryOrderVo {
     @Schema(description = "订单ID")
-    private String order_id;
+    private String orderId;
 
     @Schema(description = "总价格")
     private String sum;
@@ -29,7 +29,7 @@ public class HistoryOrderVo {
     private String pay = "手动支付";
 
     @Schema(description = "买家地址ID")
-    private String buyer_address_id;
+    private String buyerAddressId;
 
     @Schema(description = "买家地址")
     private BuyerAddressEntity buyerAddress;
