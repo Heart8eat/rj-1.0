@@ -44,7 +44,17 @@ export const goodstatue =(token,id,statue)=>{
         }
     })
 }
-
+//发布商品
+export const listgoods =(token,id)=>{
+    return http.put(`/goods/publish`,{
+        // statue:statue,
+        ids:id
+    }, {
+        headers: {
+            Authorization:' Bearer '+token
+        }
+    })
+}
 //测试用
 // export const create2 = (token) => {
 //     return http.post('/goods/create', {

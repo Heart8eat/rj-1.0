@@ -144,7 +144,7 @@
                   flex: 4;
                 "
               >
-                <el-button class="el-button1" type="danger" plain
+                <el-button class="el-button1" type="danger" @click="list(good.id)" plain
                   >发布商品</el-button
                 >
               </el-aside>
@@ -159,7 +159,7 @@
             plain
             >全选</el-button
           >
-          <el-button type="primary">发布</el-button>
+          <el-button type="primary" @click="listmore()">发布</el-button>
         </div>
       </el-main>
     </el-container>
@@ -169,7 +169,7 @@
       <script>
 import Cookie from "js-cookie";
 import { getpublishgoodlist } from "@/api/goods";
-
+import { listgoods } from "@/api/goods";
 export default {
   data() {
     return {
@@ -199,8 +199,11 @@ export default {
         },
       ],
       value: "",
+      //所有选框状态
       isChecked: [],
+      //被选中商品的id
       checkedid: [],
+      //所有商品id
       allid: [],
     };
   },
@@ -220,15 +223,15 @@ export default {
       if (this.isChecked[index] === true) {
         //console.log(event.target.value, this.isChecked[index]);
         this.checkedid.push(event.target.value);
-        console.log(this.checkedid);
-        console.log(this.isChecked);
+        //console.log(this.checkedid);
+        //console.log(this.isChecked);
       } else {
         console.log(event.target.value, this.isChecked[index]);
         this.checkedid = this.checkedid.filter(
           (item) => item !== event.target.value
         );
-        console.log(this.checkedid);
-        console.log(this.isChecked);
+        //console.log(this.checkedid);
+        //console.log(this.isChecked);
       }
     },
     //全选按钮
@@ -254,13 +257,45 @@ export default {
       // console.log(this.isChecked)
       this.$forceUpdate();
     },
+    //单个发布
+    list(id){
+      const token = Cookie.get("token");
+      listgoods(token,[id]).then((res)=>{
+        console.log(res.data)
+      });
+      this.$message({
+        message: "商品发布成功",
+        type: "success",
+      });
+      setTimeout(() => this.refresh(), 1000);
+    },
+    //多个发布
+    listmore(){
+      const token = Cookie.get("token");
+      if(this.checkedid.length!=0){
+        listgoods(token,this.checkedid).then((res)=>{
+        console.log(res.data)
+      });
+      this.$message({
+        message: "商品发布成功",
+        type: "success",
+      });
+      setTimeout(() => this.refresh(), 1000);
+      }else{
+        this.$message({
+        message: "请选择要发布的商品",
+        type: "error",
+      });
+      }
+      
+    }
   },
   //获取历史商品
   mounted() {
     const token = Cookie.get("token");
     getpublishgoodlist(token).then((data) => {
       this.goodslist = data.data.data;
-      console.log(this.goodslist);
+      //console.log(this.goodslist);
       for (let g of this.goodslist) {
         this.allid.push(g.id);
         this.isChecked.push(false);
