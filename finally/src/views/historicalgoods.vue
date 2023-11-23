@@ -160,7 +160,7 @@
                   <el-col :span="9">
                     <span>
                       <el-tag
-                        class=""
+                        class="tag3"
                         type="success"
                         effect="dark"
                       >
@@ -314,6 +314,13 @@ export default {
   border-radius: 5px;
 }
 .tag3{
-  
+  height: auto;
+  text-align: center;
+  font-size: 20px;
+  padding: 10px 40px;
+  border: 3px solid rgba(44, 194, 172, 1);
+  color: rgba(44, 194, 172, 1);
+  background-color: white;
+  border-radius: 5px;
 }
 </style>
