@@ -32,6 +32,7 @@
             placeholder="请输入内容"
             prefix-icon="el-icon-search"
             v-model="search"
+            
             style="margin-top: 10px; width: 300px"
           >
           </el-input>
