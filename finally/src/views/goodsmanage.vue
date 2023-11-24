@@ -54,6 +54,7 @@
           </el-select>
           <el-select
             v-model="variety"
+            value-key="id"
             clearable
             placeholder="水果品种"
             style="width: 180px; margin-left: 15px"
@@ -176,13 +177,13 @@
         <div>
           <el-button
             type="primary"
-            style="margin-left: 1200px"
+            style="margin-left: 1140px"
             @click="checkall"
             plain
             >全选</el-button
           >
-          <el-button type="primary" @click="listmore()">上架</el-button>
-          <el-button type="primary" @click="removemore()">下架</el-button>
+          <el-button type="primary" @click="listmore()">批量上架</el-button>
+          <el-button type="primary" @click="removemore()">批量下架</el-button>
         </div>
       </el-main>
     </el-container>
@@ -399,8 +400,8 @@ export default {
   font-size: 25px;
   padding: 24px 40px;
   border: 3px solid rgba(44, 194, 172, 1);
-  color: rgba(44, 194, 172, 1);
-  background-color: white;
+  color: white;
+  background-color: rgba(44, 194, 172, 1);
   border-radius: 5px;
 }
 </style>
