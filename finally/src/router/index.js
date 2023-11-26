@@ -14,12 +14,14 @@ import creategoods from '../views/creategoods.vue'
 import pricemanage from '../views/pricemanage.vue'
 import listbooks from '../views1/listbooks.vue'
 import usercenter from '../views1/usercenter.vue'
+import test from '../views1/test.vue'
 import Cookie from 'js-cookie';
 
 Vue.use(VueRouter)
 
 const routes = [
   { path: '/zhuye', name: 'zhuye', component: zhuye },
+  { path: '/test', name: 'test', component: test },
   { path: '/listbooks', name: 'listbooks', component: listbooks },
   { path: '/usercenter', name: 'usercenter', component: usercenter },
   {

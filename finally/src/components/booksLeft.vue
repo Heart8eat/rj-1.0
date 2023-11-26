@@ -20,13 +20,12 @@
               <span class="sp-text3">数量：</span>
             </el-col>
             <el-col :span="16">
-              <el-input-number
+              <el-input-number  size="small"
                 v-model="num"
                 @change="handleChange"
                 :min="1"
                 :max="100"
                 label="描述文字"
-                class="custom-input-number"
               ></el-input-number>
             </el-col>
           </el-row>
@@ -159,11 +158,12 @@ export default {
 .custom-button {
   flex: 1; /* 均分容器宽度，使按钮并行 */
   /* 如果需要，您可以添加其他样式，如大小、颜色等 */
+  font-size: 18px;
+  font-weight: bold;
 }
-.custom-input-number .el-input-number__decrease {
-  color: #3894ff; /* 更改加减符号的颜色 */
+.custom-input-number {
+  font-size: 20px !important;
+  /* ...其他样式 */
 }
-.custom-input-number .el-input-number__increase {
-  color: #3894ff; /* 更改加减符号的颜色*/
-}
+
 </style>

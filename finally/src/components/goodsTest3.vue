@@ -1,7 +1,13 @@
 <template>
   <el-carousel :interval="4000" type="card" height="480px">
     <el-carousel-item v-for="(item, index) in image" :key="index">
-      <img :src="bindsrc(item.url)" :alt="`图片 ${index + 1}`" :width="item.width" :height="item.height" />
+      <img
+        :src="bindsrc(item.url)"
+        :alt="`图片 ${index + 1}`"
+        :width="item.width"
+        :height="item.height"
+        style="object-fit: cover; width: 100% !important; height: 100% !important;"
+      />
     </el-carousel-item>
   </el-carousel>
 </template>
@@ -10,7 +16,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      image:[],
+      image: [],
     };
   },
   methods: {
@@ -29,7 +35,7 @@ export default {
     axios
       .get(url)
       .then((response) => {
-        this.image=response.data.data.image;
+        this.image = response.data.data.images;
         console.log("图：", response.data.data.image);
         // 更新其他属性以匹配您的数据结构
       })
@@ -40,7 +46,6 @@ export default {
 };
 </script>
   <style>
-
 .el-carousel__item:nth-child(2n) {
   background-color: #99a9bf;
 }

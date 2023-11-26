@@ -63,12 +63,29 @@ export default {
     zhuyeHeader,
   },
   methods: {
-    bindsrc(img) { 
+    bindsrc(img) {
       return "http://localhost:8080" + img;
     },
     searchProducts() {
-      // 在这里实现搜索产品的逻辑，根据searchQuery过滤产品列表
-      // 更新this.products以显示搜索结果
+      const keyword = this.searchQuery;
+
+      // 使用encodeURIComponent处理中文关键词
+      const encodedKeyword = encodeURIComponent(keyword);
+
+      axios
+        .get(
+          `http://localhost:8080/goods/getGoodBriefList?name=${encodedKeyword}`
+        )
+        .then((response) => {
+          console.log(response.data);
+          // 可以将响应数据存储在组件的数据属性中，以供在模板中使用
+          // this.products = response.data;
+          this.products = response.data.data;
+        })
+        .catch((error) => {
+          // 处理错误
+          console.error("Error fetching data:", error);
+        });
     },
   },
   mounted() {
@@ -109,7 +126,7 @@ export default {
 }
 </style>
 <style lang="less" scoped>
-.box-card{
+.box-card {
   margin-right: 10px;
   margin-top: 10px;
 }
