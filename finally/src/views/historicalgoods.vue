@@ -39,7 +39,7 @@
             v-model="value"
             clearable
             placeholder="水果类别"
-            style="width: 180px;margin-left: 15px;"
+            style="width: 180px; margin-left: 15px"
           >
             <el-option
               v-for="item in options"
@@ -54,7 +54,7 @@
             v-model="value"
             clearable
             placeholder="水果品种"
-            style="width: 180px;margin-left: 15px;"
+            style="width: 180px; margin-left: 15px"
           >
             <el-option
               v-for="item in options"
@@ -71,7 +71,7 @@
         </div>
         <ul class="infinite-list myul" style="overflow: auto; padding: 0 5px">
           <li style="width: 1400px" v-for="good in goodslist" :key="good.id">
-            <el-container style="display: flex">
+            <el-container>
               <el-aside
                 style="
                   align-items: center;
@@ -81,13 +81,13 @@
                 "
                 ><img class="img1" :src="bindsrc(good.image.url)"
               /></el-aside>
-              <el-container style="flex: 3">
+              <el-main style="flex: 2">
                 <!-- <el-header
                   ><h2 style="margin-top: 5px">
                     {{ good.name }}
                   </h2></el-header
                 > -->
-                <el-container style="display: flex">
+                <!-- <el-container style="display: flex">
                   <el-main
                     style="
                       padding-top: 0;
@@ -115,30 +115,77 @@
                     <h5>类别:{{ good.type }}</h5>
                     <h5>贮存条件:{{ good.store }}</h5>
                   </el-aside>
-                </el-container>
-              </el-container>
+                </el-container> -->
+                <el-row>
+                  <el-col :span="24"
+                    ><h2 style="margin-top: 5px">
+                      {{ good.name }}
+                    </h2></el-col
+                  >
+                </el-row>
+                <el-row>
+                  <el-col :span="12"
+                    ><h5>商品名称:{{ good.name }}</h5></el-col
+                  >
+                  <el-col :span="12"
+                    ><h5>品种:{{ good.variety }}</h5></el-col
+                  >
+                </el-row>
+                <el-row>
+                  <el-col :span="12"
+                    ><h5>上架日期:{{ good.shelfDate }}</h5></el-col
+                  >
+                  <el-col :span="12"
+                    ><h5>类别:{{ good.type }}</h5></el-col
+                  >
+                </el-row>
+                <el-row>
+                  <el-col :span="12"
+                    ><h5>重量:{{ good.weight }}</h5></el-col
+                  >
+                  <el-col :span="12"
+                    ><h5>贮存条件:{{ good.store }}</h5></el-col
+                  >
+                </el-row>
+              </el-main>
               <el-aside
                 style="
                   align-items: center;
                   justify-content: center;
                   display: flex;
-                  flex: 1;
+                  flex: 2;
                 "
-                ><span v-if="good.status == '1'"
-                  ><el-button class="el-button1" @click="dongjie(good.id)"
-                    >冻结商品</el-button
-                  ></span
-                >
-                <span v-if="good.status == '0'"
-                  ><el-tag class="tag2" style="margin-left: 20px"
-                    >商品已下架
-                  </el-tag></span
-                >
-                <span v-if="good.status == '2'"
-                  ><el-tag class="tag1" style="margin-left: 20px"
-                    >补货中
-                  </el-tag></span
-                ></el-aside
+              >
+                <el-row>
+                  <el-col :span="9">
+                    <span>
+                      <el-tag
+                        class="tag3"
+                        type="success"
+                        effect="dark"
+                      >
+                        有货
+                      </el-tag>
+                    </span>
+                  </el-col>
+                  <el-col :span="15">
+                    <span v-if="good.status == '1'"
+                      ><el-button class="el-button1" @click="dongjie(good.id)"
+                        >下架商品</el-button
+                      ></span
+                    >
+                    <span v-if="good.status == '0'"
+                      ><el-tag class="tag2" style="margin-left: 20px"
+                        >商品已下架
+                      </el-tag></span
+                    >
+                    <span v-if="good.status == '2'"
+                      ><el-tag class="tag1" style="margin-left: 20px"
+                        >补货中
+                      </el-tag></span
+                    >
+                  </el-col>
+                </el-row></el-aside
               >
             </el-container>
           </li>
@@ -217,6 +264,12 @@ export default {
 </script>
   
   <style scoped>
+.el-row {
+  margin-bottom: 0;
+}
+.el-row :last-child {
+  margin-bottom: 0;
+}
 .myul li {
   border-radius: 20px;
   /* height: 200px; */
@@ -257,6 +310,16 @@ export default {
   padding: 10px 40px;
   border: 3px solid #96a0aa;
   color: #96a0aa;
+  background-color: white;
+  border-radius: 5px;
+}
+.tag3{
+  height: auto;
+  text-align: center;
+  font-size: 20px;
+  padding: 10px 40px;
+  border: 3px solid rgba(44, 194, 172, 1);
+  color: rgba(44, 194, 172, 1);
   background-color: white;
   border-radius: 5px;
 }

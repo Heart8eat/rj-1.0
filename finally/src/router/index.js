@@ -14,9 +14,9 @@ import creategoods from '../views/creategoods.vue'
 import pricemanage from '../views/pricemanage.vue'
 import listbooks from '../views1/listbooks.vue'
 import usercenter from '../views1/usercenter.vue'
-import test from '../views1/test.vue'
 import Cookie from 'js-cookie';
-
+import goodsmanage from '../views/goodsmanage.vue'
+import test from '../views1/test.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -43,6 +43,7 @@ const routes = [
   { path: '/historicalgoods', name: 'historicalgoods', component: historicalgoods },
   { path: '/creategoods', name: 'creategoods', component: creategoods },
   { path: '/pricemanage', name: 'pricemanage', component: pricemanage },
+  { path: '/goodsmanage', name: 'goodsmanage', component: goodsmanage },
 ]
 
 const router = new VueRouter({

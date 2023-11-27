@@ -20,7 +20,7 @@
           align-items: center;
         "
       >
-        <h1 class="word" style="margin: 0">发布商品</h1>
+        <h1 class="word" style="margin: 0">商品管理</h1>
       </div>
     </el-header>
     <el-container>
@@ -36,31 +36,34 @@
           >
           </el-input>
           <el-select
-            v-model="value"
+            v-model="type1"
+            value-key="id"
             clearable
             placeholder="水果类别"
-            style="width: 180px;margin-left: 15px;"
+            @change="($event) => getvariety(type1.id)"
+            style="width: 180px; margin-left: 15px"
           >
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="t in types"
+              :key="t.id"
+              :label="t.typeName"
+              :value="t"
               style="width: 180px"
             >
             </el-option>
           </el-select>
           <el-select
-            v-model="value"
+            v-model="variety"
+            value-key="id"
             clearable
             placeholder="水果品种"
-            style="width: 180px;margin-left: 15px;"
+            style="width: 180px; margin-left: 15px"
           >
             <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              v-for="v in varieties"
+              :key="v.id"
+              :label="v.varietyName"
+              :value="v"
               style="width: 180px"
             >
             </el-option>
@@ -101,52 +104,72 @@
                   flex: 4;
                 "
               >
-                <img class="img1" :src="bindsrc(good.image.url)"
+                <img class="img1" :src="bindsrc(good.mainImage.url)"
               /></el-aside>
-              <el-container style="flex: 12">
-                <el-header
-                  ><h2 style="margin-top: 5px">
-                    {{ good.name }}
-                  </h2></el-header
-                >
-                <el-container style="display: flex">
-                  <el-main
-                    style="
-                      padding-top: 0;
-                      padding-bottom: 0;
-                      padding-left: 20px;
-                      flex: 1;
-                    "
-                  >
-                    <h5>商品名称:{{ good.name }}</h5>
-                    <h5>上架日期:{{ good.shelfDate }}</h5>
-                    <h5>重量:{{ good.weight }}</h5>
-                  </el-main>
-                  <el-aside
-                    style="
-                      padding-top: 0;
-                      padding-bottom: 0;
-                      padding-left: 20px;
-                      flex: 2;
-                    "
-                  >
-                    <h5>品种:{{ good.variety }}</h5>
-                    <h5>类别:{{ good.type }}</h5>
-                    <h5>贮存条件:{{ good.store }}</h5>
-                  </el-aside>
-                </el-container>
+              <el-container style="flex: 8">
+                <el-main>
+                  <el-row>
+                    <el-col :span="24"
+                      ><h2 style="margin-top: 5px">
+                        {{ good.name }}
+                      </h2></el-col
+                    >
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12"
+                      ><h5>商品名称:{{ good.name }}</h5></el-col
+                    >
+                    <el-col :span="12"
+                      ><h5>品种:{{ good.variety }}</h5></el-col
+                    >
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12"
+                      ><h5>上架日期:{{ good.shelfDate }}</h5></el-col
+                    >
+                    <el-col :span="12"
+                      ><h5>类别:{{ good.type }}</h5></el-col
+                    >
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12"
+                      ><h5>重量:{{ good.weight }}</h5></el-col
+                    >
+                    <el-col :span="12"
+                      ><h5>贮存条件:{{ good.store }}</h5></el-col
+                    >
+                  </el-row>
+                </el-main>
               </el-container>
               <el-aside
                 style="
                   align-items: center;
                   justify-content: center;
                   display: flex;
-                  flex: 4;
+                  flex: 8;
                 "
               >
-                <el-button class="el-button1" type="danger" @click="list(good.id)" plain
-                  >发布商品</el-button
-                >
+                <el-row>
+                  <el-col :span="12">
+                    <span>
+                      <el-tag class="tag3" type="success" effect="dark">
+                        有货
+                      </el-tag>
+                    </span>
+                  </el-col>
+                  <el-col :span="12">
+                    <span v-if="good.status == '1'"
+                      ><el-button class="el-button1" @click="remove(good.id)"
+                        >下架商品</el-button
+                      ></span
+                    >
+                    <span v-if="good.status == '0'"
+                      ><el-button class="el-button2" @click="list(good.id)"
+                        >上架商品</el-button
+                      ></span
+                    >
+                  </el-col>
+                </el-row>
               </el-aside>
             </el-container>
           </li>
@@ -154,51 +177,35 @@
         <div>
           <el-button
             type="primary"
-            style="margin-left: 1300px"
+            style="margin-left: 1140px"
             @click="checkall"
             plain
             >全选</el-button
           >
-          <el-button type="primary" @click="listmore()">发布</el-button>
+          <el-button type="primary" @click="listmore()">批量上架</el-button>
+          <el-button type="primary" @click="removemore()">批量下架</el-button>
         </div>
       </el-main>
     </el-container>
   </el-container>
 </template>
-      
-      <script>
+        
+        <script>
 import Cookie from "js-cookie";
-import { getpublishgoodlist } from "@/api/goods";
-import { listgoods } from "@/api/goods";
+import { gethistorygoodlist } from "@/api/goods";
+import { goodsstatue } from "@/api/goods";
+import { getlistType } from "@/api/goods";
+import { getlistVariety } from "@/api/goods";
 export default {
   data() {
     return {
       count: 0,
       goodslist: [],
       search: "",
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕",
-        },
-        {
-          value: "选项2",
-          label: "双皮奶",
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎",
-        },
-        {
-          value: "选项4",
-          label: "龙须面",
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭",
-        },
-      ],
-      value: "",
+      types: [],
+      varieties: [],
+      type1: "",
+      variety: "",
       //所有选框状态
       isChecked: [],
       //被选中商品的id
@@ -245,55 +252,92 @@ export default {
       }
       if (flag === false) {
         //已经全选需取消全选
-        for (let i = 0; i < this.isChecked.length; i++) {    
-            this.isChecked[i] = false;
+        for (let i = 0; i < this.isChecked.length; i++) {
+          this.isChecked[i] = false;
         }
-        this.checkedid=[];
-      }
-      else{
+        this.checkedid = [];
+      } else {
         this.checkedid = this.allid;
       }
       // console.log(this.checkedid)
       // console.log(this.isChecked)
       this.$forceUpdate();
     },
-    //单个发布
-    list(id){
+    //单个上架
+    list(id) {
       const token = Cookie.get("token");
-      listgoods(token,[id]).then((res)=>{
-        console.log(res.data)
+      goodsstatue(token, [id], 1).then((res) => {
+        console.log(res.data);
       });
       this.$message({
-        message: "商品发布成功",
+        message: "商品上架成功",
         type: "success",
       });
       setTimeout(() => this.refresh(), 1000);
     },
-    //多个发布
-    listmore(){
+    //多个上架
+    listmore() {
       const token = Cookie.get("token");
-      if(this.checkedid.length!=0){
-        listgoods(token,this.checkedid).then((res)=>{
-        console.log(res.data)
+      if (this.checkedid.length != 0) {
+        goodsstatue(token, this.checkedid, 1).then((res) => {
+          console.log(res.data);
+        });
+        this.$message({
+          message: "商品上架成功",
+          type: "success",
+        });
+        setTimeout(() => this.refresh(), 1000);
+      } else {
+        this.$message({
+          message: "请选择要上架的商品",
+          type: "error",
+        });
+      }
+    },
+    //单个下架
+    remove(id) {
+      const token = Cookie.get("token");
+      goodsstatue(token, [id], 0).then((res) => {
+        console.log(res.data);
       });
       this.$message({
-        message: "商品发布成功",
+        message: "商品下架成功",
         type: "success",
       });
       setTimeout(() => this.refresh(), 1000);
-      }else{
+    },
+    //多个下架
+    removemore() {
+      const token = Cookie.get("token");
+      if (this.checkedid.length != 0) {
+        goodsstatue(token, this.checkedid, 0).then((res) => {
+          console.log(res.data);
+        });
         this.$message({
-        message: "请选择要发布的商品",
-        type: "error",
-      });
+          message: "商品下架成功",
+          type: "success",
+        });
+        setTimeout(() => this.refresh(), 1000);
+      } else {
+        this.$message({
+          message: "请选择要下架的商品",
+          type: "error",
+        });
       }
-      
-    }
+    },
+    //获取品种
+    getvariety(id) {
+      const token = Cookie.get("token");
+      getlistVariety(token, id).then((res) => {
+        this.varieties = res.data.data;
+      });
+      this.variety="";
+    },
   },
-  //获取历史商品
+  //获取商品
   mounted() {
     const token = Cookie.get("token");
-    getpublishgoodlist(token).then((data) => {
+    gethistorygoodlist(token).then((data) => {
       this.goodslist = data.data.data;
       //console.log(this.goodslist);
       for (let g of this.goodslist) {
@@ -303,18 +347,27 @@ export default {
       //console.log(this.allid)
       //console.log(this.isChecked)
     });
+    getlistType(token).then((res) => {
+      this.types = res.data.data;
+    });
   },
 };
 </script>
-      
-      <style scoped>
+        
+<style scoped>
+.el-row {
+  margin-bottom: 0;
+}
+.el-row :last-child {
+  margin-bottom: 0;
+}
 .myul li {
   border-radius: 20px;
   /* height: 200px; */
   background-color: rgba(114, 181, 255, 0.66);
   list-style-type: none;
   margin-top: 20px;
-  padding: 20px;
+  padding: 10px;
   align-items: center;
 }
 .img1 {
@@ -325,30 +378,30 @@ export default {
 .el-button1 {
   width: 200px;
   height: 86px;
-  font-size: 18px;
+  font-size: 25px;
   border: 3px solid red;
   background-color: white;
   color: red;
   border-radius: 5px;
 }
-.tag1 {
-  height: auto;
-  text-align: center;
-  font-size: 20px;
-  padding: 10px 40px;
+.el-button2 {
+  width: 200px;
+  height: 86px;
+  font-size: 25px;
   border: 3px solid #268cfd;
-  color: #268cfd;
   background-color: white;
+  color: #268cfd;
   border-radius: 5px;
 }
-.tag2 {
-  height: auto;
+.tag3 {
+  width: 150px;
+  height: 86px;
   text-align: center;
-  font-size: 20px;
-  padding: 10px 40px;
-  border: 3px solid #96a0aa;
-  color: #96a0aa;
-  background-color: white;
+  font-size: 25px;
+  padding: 24px 40px;
+  border: 3px solid rgba(44, 194, 172, 1);
+  color: white;
+  background-color: rgba(44, 194, 172, 1);
   border-radius: 5px;
 }
 </style>

@@ -88,10 +88,10 @@
       </el-main>
       <el-footer style="display: flex; justify-content: center"
         ><el-button
-          @click="historicalgoods"
+          @click="goodsmanage"
           class="button2"
           type="info"
-          icon="el-icon-time"
+          icon="el-icon-goods"
           style="color: black; margin-top: 250px"
           >历史商品</el-button
         ></el-footer
@@ -135,6 +135,10 @@ export default {
     //历史商品
     historicalgoods() {
       this.$router.push("/historicalgoods");
+    },
+    //商品管理
+    goodsmanage(){
+      this.$router.push("/goodsmanage");
     },
     //刷新页面
     refresh() {

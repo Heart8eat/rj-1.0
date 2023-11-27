@@ -34,7 +34,7 @@ export const gethistorygoodlist =(token)=>{
         }
     })
 }
-//修改商品状态
+//修改商品状态(单个)
 export const goodstatue =(token,id,statue)=>{
     return http.put(`/goods/changeGoodStatue/${id}?statue=${statue}`,{
         // statue:statue,
@@ -44,22 +44,41 @@ export const goodstatue =(token,id,statue)=>{
         }
     })
 }
-
-//测试用
-// export const create2 = (token) => {
-//     return http.post('/goods/create', {
-//         shopId: "630e807bdf604941b89192af2eb7396e",
-//         price: 1,
-//         name: "name",
-//         image: ["image"],
-//         type: "type",
-//         variety: "variety",
-//         weight: 1.1,
-//         store: "store",//储存条件
-//         description: "description",
-//     }, {
-//         headers: {
-//             Authorization: ' Bearer ' + token
-//         }
-//     },)
-// }
+//修改商品状态(多个)
+export const goodsstatue =(token,ids,status)=>{
+    return http.put(`/goods/batchChangeGoodStatue`,{
+        ids:ids,
+        status:status,
+    }, {
+        headers: {
+            Authorization:' Bearer '+token
+        }
+    })
+}
+//发布商品
+export const listgoods =(token,id)=>{
+    return http.put(`/goods/publish`,{
+        // statue:statue,
+        ids:id,
+    }, {
+        headers: {
+            Authorization:' Bearer '+token
+        }
+    })
+}
+//获取一级分类(类别)
+export const getlistType =(token)=>{
+    return http.get('/goodType/listType', {
+        headers: {
+            Authorization:' Bearer '+token
+        }
+    })
+}
+//获取二级分类(品种)
+export const getlistVariety =(token,id)=>{
+    return http.get(`/goodType/listVariety?typeId=${id}`, {
+        headers: {
+            Authorization:' Bearer '+token
+        }
+    })
+}
