@@ -74,10 +74,37 @@
       </el-card>
 
       <!-- 右侧收货地址表单 -->
-      <el-card class="form-container" header="我的收货地址">
-        <el-form ref="addressForm" :model="formData" label-width="80px">
-          <el-form-item>
-            <!-- 新增收货地址按钮 -->
+      <el-card
+        class="form-container"
+        header="我的收货地址"
+        style="height: 780px; display: flex; flex-direction: column"
+      >
+        <el-form
+          ref="addressForm"
+          :model="formData"
+          label-width="80px"
+          style="flex: 1; overflow: auto"
+        >
+          <el-form-item
+            class="right-side-zhu"
+            v-for="savedData in savedDatas"
+            :key="savedData.id"
+          >
+            <div
+              v-if="savedData.receiver || savedData.address || savedData.phone"
+              :class="{ 'default-address': savedData.defaultAddress === 1 }"
+              class="Xx-container"
+            >
+              <span class="Xinxi">
+                {{ savedData.receiver }} {{ savedData.phone }}
+                <span v-if="savedData.defaultAddress === 1" class="default-text"
+                  >默认</span
+                >
+                <i class="el-icon-edit"></i>
+                <br />
+                {{ savedData.address }}
+              </span>
+            </div>
           </el-form-item>
         </el-form>
         <button @click="openBooksRightDialog" class="dzbutton">
@@ -126,12 +153,14 @@ export default {
         address: "", // 详细地址
         phone: "",
         email: "",
+        defaultAddress: 0,
       },
       gorders: {
         status: 0,
         buyerId: "",
         shopId: "630e807bdf604941b89192af2eb7396e",
       },
+      savedDatas: [],
       // 我的收货地址表单数据
     };
   },
@@ -159,13 +188,23 @@ export default {
       } else {
         try {
           // 构建HTTP POST请求
+          const authToken = document.cookie
+            .split("; ")
+            .find((row) => row.startsWith("token="))
+            .split("=")[1];
           const response = await axios.post(
-            "http://localhost:8080/buyers/create",
+            "http://localhost:8080/buyers/saveAddress",
             {
-              name: this.formData.name,
+              receiver: this.formData.name,
               address: this.formData.address,
               phone: this.formData.phone,
               email: this.formData.email,
+              defaultAddress: this.formData.defaultAddress,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${authToken}`,
+              },
             }
           );
           // 请求成功，根据需要处理响应
@@ -176,7 +215,7 @@ export default {
             message: "恭喜你，保存成功",
             type: "success",
           });
-          this.showBooksRightDialog = false;
+          this.showDialog = false;
         } catch (error) {
           // 请求失败，处理错误
           console.error("保存失败:", error);
@@ -259,40 +298,55 @@ export default {
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '取消更改密码'
-          }); 
-          this.cancel()
+            type: "info",
+            message: "取消更改密码",
+          });
+          this.cancel();
         });
     },
   },
+  async mounted() {
+    try {
+      const authToken = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("token="))
+        .split("=")[1];
 
-  mounted() {
-    const authToken = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="))
-      .split("=")[1];
+      // 发起第一个HTTP请求获取数据
+      const response1 = await axios.get(
+        "http://localhost:8080/buyers/getInfo",
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json", // 根据服务器要求添加其他头信息
+          },
+        }
+      );
 
-    // 发起HTTP请求获取数据
-    axios
-      .get("http://localhost:8080/buyers/getInfo", {
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          Accept: "application/json", // 根据服务器要求添加其他头信息
-        },
-      })
-      .then((response) => {
-        console.log("成功获取数据：", response.data);
+      console.log("成功获取第一个数据：", response1.data);
 
-        this.accountForm.id = response.data.data.id;
-        this.accountForm.name = response.data.data.name;
-        this.accountForm.password = response.data.data.password;
+      this.accountForm.id = response1.data.data.id;
+      this.accountForm.name = response1.data.data.name;
+      this.accountForm.password = response1.data.data.password;
 
-        // 更新其他属性以匹配您的数据结构
-      })
-      .catch((error) => {
-        console.error("获取数据时出错：", error);
-      });
+      // 使用第一个请求的结果发起第二个HTTP请求
+      const response2 = await axios.get(
+        `http://localhost:8080/buyers/listAddress?buyerId=${this.accountForm.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+            Accept: "application/json", // 根据服务器要求添加其他头信息
+          },
+        }
+      );
+
+      console.log("成功获取第二个数据：", response2.data);
+
+      this.savedDatas = response2.data.data;
+      // 更新其他属性以匹配您的数据结构
+    } catch (error) {
+      console.error("获取数据时出错：", error);
+    }
   },
 };
 </script>
@@ -344,11 +398,39 @@ export default {
   padding: 15px 30px; /* 增加内边距以增加按钮的大小 */
   font-size: 20px; /* 设置按钮字体大小 */
   cursor: pointer; /* 鼠标指针形状 */
-  margin-right: 200px;
-  margin-bottom: 20px;
+  margin-left: 350px;
+  position: absolute;
+  bottom: 80px;
+  left: 1000px;
 }
 /* 让label文本居中 */
 .center-label .el-form-item__label {
   text-align: center;
+}
+.Xx-container {
+  width: 574px;
+  height: 120px;
+  border: 1px solid #cecece; /* 边框样式，可以根据需要更改颜色和宽度 */
+  box-sizing: border-box; /* 让边框大小包括在元素的宽度和高度内 */
+  border-radius: 10px; /* 添加圆角效果 */
+  font-size: 24px;
+  color: #cecece;
+  padding: 18px 40px;
+  font-weight: bold; /* 如果需要粗体 */
+}
+.default-address {
+  border: 1px solid #268cfd;
+  color: #268cfd;
+}
+
+.default-text {
+  color: #268cfd;
+  font-size: 16px;
+  font-weight:normal;
+  border: 1px solid #268cfd;
+  border-radius: 5px; /* 添加圆角效果 */
+  padding: 5px 15px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 </style>
